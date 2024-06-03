@@ -1,1 +1,529 @@
-Hello world
+<!DOCTYPE html>
+<!-- saved from url=(0014)about:internet -->
+<html lang="de"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+	<script src="./3D Druck_files/stopExecutionOnTimeout-2c7831bb44f98c1391d6a4ffda0e1fd302503391ca806e7fcc7b9b87197aec26.js.Herunterladen"></script>
+	<title>3D Druck </title>
+	<link rel="stylesheet" href="./3D Druck_files/normalize.min.css">
+<style>
+* {
+  box-sizing: border-box;
+}
+:root {
+  --bg: #1a1a1a;
+  --min-size: 200px;
+}
+body {
+  display: grid;
+  place-items: center;
+  min-height: 100vh;
+  padding: 0;
+  margin: 0;
+  overflow-y: hidden;
+  background: var(--bg);
+}
+.drag-proxy {
+  visibility: hidden;
+  position: absolute;
+}
+.controls {
+  position: absolute;
+  top: calc(50% + clamp(var(--min-size), 20vmin, 20vmin));
+  left: 50%;
+  transform: translate(-50%, -50%) scale(1.5);
+  display: flex;
+  justify-content: space-between;
+  min-width: var(--min-size);
+  height: 44px;
+  width: 20vmin;
+  z-index: 300;
+}
+button {
+  height: 48px;
+  width: 48px;
+  border-radius: 50%;
+  position: absolute;
+  top: 0%;
+  outline: transparent;
+  cursor: pointer;
+  background: none;
+  -webkit-appearance: none;
+     -moz-appearance: none;
+          appearance: none;
+  border: 0;
+  transition: transform 0.1s;
+  transform: translate(0, calc(var(--y, 0)));
+}
+button:before {
+  border: 2px solid #e6e6e6;
+  background: linear-gradient(rgba(204,204,204,0.65), #000) #000;
+  content: '';
+  box-sizing: border-box;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  height: 80%;
+  width: 80%;
+  border-radius: 50%;
+}
+button:active:before {
+  background: linear-gradient(#000, rgba(204,204,204,0.65)) #000;
+}
+button:nth-of-type(1) {
+  right: 100%;
+}
+button:nth-of-type(2) {
+  left: 100%;
+}
+button span {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}
+button:hover {
+  --y: -5%;
+}
+button svg {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) rotate(0deg) translate(2%, 0);
+  height: 30%;
+  fill: #e6e6e6;
+}
+button:nth-of-type(1) svg {
+  transform: translate(-50%, -50%) rotate(180deg) translate(2%, 0);
+}
+.scroll-icon {
+  height: 30px;
+  position: fixed;
+  top: 1rem;
+  right: 1rem;
+  color: #e6e6e6;
+  -webkit-animation: action 4s infinite;
+          animation: action 4s infinite;
+}
+.boxes {
+  height: 100vh;
+  width: 100%;
+  overflow: hidden;
+  position: absolute;
+  transform-style: preserve-3d;
+  perspective: 800px;
+  touch-action: none;
+}
+.box {
+  transform-style: preserve-3d;
+  position: absolute;
+  top: 40%;
+  left: 50%;
+  height: 40vmin;
+  width: 40vmin;
+  min-height: var(--min-size);
+  min-width: var(--min-size);
+  display: none;
+}
+.box:after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  height: 100%;
+  width: 100%;
+  background-image: var(--src);
+  background-size: cover;
+  transform: translate(-50%, -50%) rotate(180deg) translate(0, -100%) translate(0, -0.5vmin);
+  opacity: 0.75;
+}
+.box:before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  height: 100%;
+  width: 100%;
+  background: linear-gradient(var(--bg) 50%, transparent);
+  transform: translate(-50%, -50%) rotate(180deg) translate(0, -100%) translate(0, -0.5vmin) scale(1.01);
+  z-index: 2;
+}
+.box img {
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  top: 0;
+  left: 0;
+  -o-object-fit: cover;
+     object-fit: cover;
+}
+.box:nth-of-type(odd) {
+  background: #b3f075;
+}
+.box:nth-of-type(even) {
+  background: #66b814;
+}
+@supports (-webkit-box-reflect: below) {
+  .box {
+    -webkit-box-reflect: below 0.5vmin linear-gradient(transparent 0 50%, #fff 100%);
+  }
+  .box:after,
+  .box:before {
+    display: none;
+  }
+}
+@-webkit-keyframes action {
+  0%, 25%, 50%, 100% {
+    transform: translate(0, 0);
+  }
+  12.5%, 37.5% {
+    transform: translate(0, 25%);
+  }
+}
+@keyframes action {
+  0%, 25%, 50%, 100% {
+    transform: translate(0, 0);
+  }
+  12.5%, 37.5% {
+    transform: translate(0, 25%);
+  }
+}
+</style>
+
+  <script>
+  window.console = window.console || function(t) {};
+</script>
+
+  
+  
+</head>
+
+<body translate="no" style="overflow-y: scroll;">
+	<div class="pin-spacer" style="place-self: auto; grid-area: auto; z-index: auto; float: none; flex-shrink: 1; display: block; margin: 0px; inset: 0px; position: absolute; overflow: visible; box-sizing: border-box; width: 1897px; height: 2932px; padding: 0px 0px 2000px;"><div class="boxes" style="transform: translate(0px, 0px); left: 0px; top: 0.001px; margin: 0px; max-width: 1897px; width: 1897px; max-height: 932px; height: 932px; padding: 0px; box-sizing: border-box; position: fixed;">
+		<div class="box" style="--src: url(http://hdmedia-universe.com/3d/Mario.jpg; transform: translate(-157.039%, -50%) translate3d(0px, 0px, 1.99px) rotateY(33.4102deg) scale(1.005, 1.00497); opacity: 1; z-index: 18; display: block; touch-action: pan-y; cursor: grab; user-select: none;"><span style="touch-action: pan-y;">1</span><img src="./3D Druck_files/Mario.jpg" style="touch-action: pan-y;"></div>
+		<div class="box" style="--src: url(http://hdmedia-universe.com/3d/Hund.jpg; transform: translate(-48.8012%, -50%) translate3d(0px, 0px, 99.99px) rotateY(-0.498deg) scale(1.25, 1.24998); opacity: 1; z-index: 22; display: block; touch-action: pan-y; cursor: grab; user-select: none;"><span style="touch-action: pan-y;">2</span><img src="./3D Druck_files/Hund.jpg" style="touch-action: pan-y;"></div>
+		<div class="box" style="--src: url(http://hdmedia-universe.com/3d/HundBulldoge.jpg; transform: translate(58.9588%, -50%) translate3d(0px, 0px, 0px) rotateY(-33.8198deg); opacity: 1; z-index: 18; display: block; touch-action: pan-y; cursor: grab; user-select: none;"><span style="touch-action: pan-y;">3</span><img src="./3D Druck_files/HundBulldoge.jpg" style="touch-action: pan-y;"></div>
+		<div class="box" style="--src: url(http://hdmedia-universe.com/3d/Katze.jpg; transform: translate(142.719%, -50%) translate3d(0px, 0px, 0px) rotateY(-46.1764deg); opacity: 1; z-index: 14; display: block; touch-action: pan-y; cursor: grab; user-select: none;"><span style="touch-action: pan-y;">4</span><img src="./3D Druck_files/Katze.jpg" style="touch-action: pan-y;"></div>
+		<div class="box" style="--src: url(http://hdmedia-universe.com/3d/NormaleKugel.jpg; transform: translate(202.479%, -50%) translate3d(0px, 0px, 0px) rotateY(-49.5007deg); opacity: 1; z-index: 9; display: block; touch-action: pan-y; cursor: grab; user-select: none;"><span style="touch-action: pan-y;">5</span><img src="./3D Druck_files/NormaleKugel.jpg" style="touch-action: pan-y;"></div>
+		<div class="box" style="--src: url(http://hdmedia-universe.com/3d/lionking.jpg; transform: translate(238.239%, -50%) translate3d(0px, 0px, 0px) rotateY(-49.9848deg) scale(0.9999, 0.99995); opacity: 0.9999; z-index: 5; display: block; touch-action: pan-y; cursor: grab; user-select: none;"><span style="touch-action: pan-y;">6</span><img src="./3D Druck_files/lionking.jpg" style="touch-action: pan-y;"></div>
+		<div class="box" style="--src: url(http://hdmedia-universe.com/3d/Elsa.jpg; transform: translate(-350%, -50%) rotateY(50deg) scale(0.5, 0.5); opacity: 0; z-index: 1; display: block; touch-action: pan-y; cursor: grab; user-select: none;"><span style="touch-action: pan-y;">7</span><img src="./3D Druck_files/Elsa.jpg" style="touch-action: pan-y;"></div>
+		<div class="box" style="--src: url(http://hdmedia-universe.com/3d/Stitch.jpg; transform: translate(-350%, -50%) rotateY(50deg) scale(0.5, 0.5); opacity: 0; z-index: 1; display: block; touch-action: pan-y; cursor: grab; user-select: none;"><span style="touch-action: pan-y;">8</span><img src="./3D Druck_files/Stitch.jpg" style="touch-action: pan-y;"></div>
+		<div class="box" style="--src: url(http://hdmedia-universe.com/3d/Harrypotter.jpg; transform: translate(-350%, -50%) rotateY(50deg) scale(0.5, 0.5); opacity: 0; z-index: 1; display: block; touch-action: pan-y; cursor: grab; user-select: none;"><span style="touch-action: pan-y;">9</span><img src="./3D Druck_files/Harrypotter.jpg" style="touch-action: pan-y;"></div>
+		<div class="box" style="--src: url(http://hdmedia-universe.com/3d/MickeyMausName.jpg; transform: translate(-350%, -50%) rotateY(50deg) scale(0.5, 0.5); opacity: 0; z-index: 1; display: block; touch-action: pan-y; cursor: grab; user-select: none;"><span style="touch-action: pan-y;">10</span><img src="./3D Druck_files/MickeyMausName.jpg" style="touch-action: pan-y;"></div>
+		<div class="box" style="--src: url(http://hdmedia-universe.com/3d/Bisasam.jpg; transform: translate(-350%, -50%) rotateY(50deg) scale(0.5, 0.5); opacity: 0; z-index: 1; display: block; touch-action: pan-y; cursor: grab; user-select: none;"><span style="touch-action: pan-y;">11</span><img src="./3D Druck_files/Bisasam.jpg" style="touch-action: pan-y;"></div>
+		<div class="box" style="--src: url(http://hdmedia-universe.com/3d/Pikachu.jpg; transform: translate(-350%, -50%) rotateY(50deg) scale(0.5, 0.5); opacity: 0; z-index: 1; display: block; touch-action: pan-y; cursor: grab; user-select: none;"><span style="touch-action: pan-y;">12</span><img src="./3D Druck_files/Pikachu.jpg" style="touch-action: pan-y;"></div>
+		<div class="box" style="--src: url(http://hdmedia-universe.com/3d/Glumanda.jpg; transform: translate(-350%, -50%) rotateY(50deg) scale(0.5, 0.5); opacity: 0; z-index: 1; display: block; touch-action: pan-y; cursor: grab; user-select: none;"><span style="touch-action: pan-y;">13</span><img src="./3D Druck_files/Glumanda.jpg" style="touch-action: pan-y;"></div>
+		<div class="box" style="--src: url(http://hdmedia-universe.com/3d/Husky.jpg; transform: translate(-350%, -50%) rotateY(50deg) scale(0.5, 0.5); opacity: 0; z-index: 1; display: block; touch-action: pan-y; cursor: grab; user-select: none;"><span style="touch-action: pan-y;">14</span><img src="./3D Druck_files/Husky.jpg" style="touch-action: pan-y;"></div>
+		<div class="box" style="--src: url(http://hdmedia-universe.com/3d/Hundeknochen.jpg; transform: translate(-350%, -50%) rotateY(50deg) scale(0.5, 0.5); opacity: 0; z-index: 1; display: block; touch-action: pan-y; cursor: grab; user-select: none;"><span style="touch-action: pan-y;">15</span><img src="./3D Druck_files/Hundeknochen.jpg" style="touch-action: pan-y;"></div>
+		<div class="box" style="--src: url(http://hdmedia-universe.com/3d/Naruto.jpg; transform: translate(-350%, -50%) rotateY(50deg) scale(0.5, 0.5); opacity: 0; z-index: 1; display: block; touch-action: pan-y; cursor: grab; user-select: none;"><span style="touch-action: pan-y;">16</span><img src="./3D Druck_files/Naruto.jpg" style="touch-action: pan-y;"></div>
+		<div class="box" style="--src: url(http://hdmedia-universe.com/3d/Supernatural.jpg; transform: translate(-350%, -50%) rotateY(50deg) scale(0.5, 0.5); opacity: 0; z-index: 1; display: block; touch-action: pan-y; cursor: grab; user-select: none;"><span style="touch-action: pan-y;">17</span><img src="./3D Druck_files/Supernatural.jpg" style="touch-action: pan-y;"></div>
+		<div class="box" style="--src: url(http://hdmedia-universe.com/3d/Schalke.jpg; transform: translate(-350%, -50%) rotateY(50deg) scale(0.5, 0.5); opacity: 0; z-index: 1; display: block; touch-action: pan-y; cursor: grab; user-select: none;"><span style="touch-action: pan-y;">18</span><img src="./3D Druck_files/Schalke.jpg" style="touch-action: pan-y;"></div>
+		<div class="box" style="--src: url(http://hdmedia-universe.com/3d/Vfl.jpg; transform: translate(-349.999%, -50%) translate3d(0px, 0px, 0px) rotateY(50deg) scale(0.5001, 0.50005); opacity: 0.0001; z-index: 1; display: block; touch-action: pan-y; cursor: grab; user-select: none;"><span style="touch-action: pan-y;">19</span><img src="./3D Druck_files/vfl.jpg" style="touch-action: pan-y;"></div>
+		<div class="box" style="--src: url(http://hdmedia-universe.com/3d/islandpferd.jpg; transform: translate(-337.759%, -50%) translate3d(0px, 0px, 0px) rotateY(49.9832deg); opacity: 1; z-index: 5; display: block; touch-action: pan-y; cursor: grab; user-select: none;"><span style="touch-action: pan-y;">20</span><img src="./3D Druck_files/islandpferd.jpg" style="touch-action: pan-y;"></div>
+		<div class="box" style="--src: url(http://hdmedia-universe.com/3d/familie.jpg; transform: translate(-301.519%, -50%) translate3d(0px, 0px, 0px) rotateY(49.4751deg); opacity: 1; z-index: 9; display: block; touch-action: pan-y; cursor: grab; user-select: none;"><span style="touch-action: pan-y;">21</span><img src="./3D Druck_files/familie.jpg" style="touch-action: pan-y;"></div>
+		<div class="box" style="--src: url(http://hdmedia-universe.com/3d/onkelzjpg; transform: translate(-241.279%, -50%) translate3d(0px, 0px, 0px) rotateY(46.0468deg); opacity: 1; z-index: 14; display: block; touch-action: pan-y; cursor: grab; user-select: none;"><span style="touch-action: pan-y;">22</span><img src="./3D Druck_files/onkelz.jpg" style="touch-action: pan-y;"></div>
+		<div class="controls">
+			<button class="next" style="transform: translate3d(0px, 0px, 200px);"><span>Previous album</span>
+				<svg viewBox="0 0 448 512" width="100" title="Previous Album">
+					<path d="M424.4 214.7L72.4 6.6C43.8-10.3 0 6.1 0 47.9V464c0 37.5 40.7 60.1 72.4 41.3l352-208c31.4-18.5 31.5-64.1 0-82.6z"></path>
+				</svg>
+			</button>
+			<button class="prev" style="transform: translate3d(0px, 0px, 200px);"><span>Next album</span>
+				<svg viewBox="0 0 448 512" width="100" title="Next Album">
+					<path d="M424.4 214.7L72.4 6.6C43.8-10.3 0 6.1 0 47.9V464c0 37.5 40.7 60.1 72.4 41.3l352-208c31.4-18.5 31.5-64.1 0-82.6z"></path>
+				</svg>
+			</button>
+		</div>
+	</div></div>
+<svg class="scroll-icon" viewBox="0 0 24 24">
+	<path fill="currentColor" d="M20 6H23L19 2L15 6H18V18H15L19 22L23 18H20V6M9 3.09C11.83 3.57 14 6.04 14 9H9V3.09M14 11V15C14 18.3 11.3 21 8 21S2 18.3 2 15V11H14M7 9H2C2 6.04 4.17 3.57 7 3.09V9Z"></path>
+</svg>
+<div class="drag-proxy" style="z-index: 1000;"></div>
+  
+<script id="rendered-js" type="module">
+import gsap from 'https://cdn.skypack.dev/gsap@3.7.0';
+import ScrollTrigger from 'https://cdn.skypack.dev/gsap@3.7.0/ScrollTrigger';
+import Draggable from 'https://cdn.skypack.dev/gsap@3.7.0/Draggable';
+
+gsap.registerPlugin(ScrollTrigger);
+gsap.registerPlugin(Draggable);
+
+gsap.set('.box', {
+  yPercent: -50 });
+
+
+const STAGGER = 0.1;
+const DURATION = 1;
+const OFFSET = 0;
+const BOXES = gsap.utils.toArray('.box');
+
+const LOOP = gsap.timeline({
+  paused: true,
+  repeat: -1,
+  ease: 'none' });
+
+
+const SHIFTS = [...BOXES, ...BOXES, ...BOXES];
+
+SHIFTS.forEach((BOX, index) => {
+  const BOX_TL = gsap.
+  timeline().
+  set(BOX, {
+    xPercent: 250,
+    rotateY: -50,
+    opacity: 0,
+    scale: 0.5 })
+
+  // Opacity && Scale
+  .to(
+  BOX,
+  {
+    opacity: 1,
+    scale: 1,
+    duration: 0.1 },
+
+  0).
+
+  to(
+  BOX,
+  {
+    opacity: 0,
+    scale: 0.5,
+    duration: 0.1 },
+
+  0.9)
+
+  // Panning
+  .fromTo(
+  BOX,
+  {
+    xPercent: 250 },
+
+  {
+    xPercent: -350,
+    duration: 1,
+    immediateRender: false,
+    ease: 'power1.inOut' },
+
+  0)
+
+  // Rotations
+  .fromTo(
+  BOX,
+  {
+    rotateY: -50 },
+
+  {
+    rotateY: 50,
+    immediateRender: false,
+    duration: 1,
+    ease: 'power4.inOut' },
+
+  0)
+
+  // Scale && Z
+  .to(
+  BOX,
+  {
+    z: 100,
+    scale: 1.25,
+    duration: 0.1,
+    repeat: 1,
+    yoyo: true },
+
+  0.4).
+
+  fromTo(
+  BOX,
+  {
+    zIndex: 1 },
+
+  {
+    zIndex: BOXES.length,
+    repeat: 1,
+    yoyo: true,
+    ease: 'none',
+    duration: 0.5,
+    immediateRender: false },
+
+  0);
+
+  LOOP.add(BOX_TL, index * STAGGER);
+});
+
+const CYCLE_DURATION = STAGGER * BOXES.length;
+const START_TIME = CYCLE_DURATION + DURATION * 0.5 + OFFSET;
+
+const LOOP_HEAD = gsap.fromTo(
+LOOP,
+{
+  totalTime: START_TIME },
+
+{
+  totalTime: `+=${CYCLE_DURATION}`,
+  duration: 1,
+  ease: 'none',
+  repeat: -1,
+  paused: true });
+
+
+
+const PLAYHEAD = {
+  position: 0 };
+
+
+const POSITION_WRAP = gsap.utils.wrap(0, LOOP_HEAD.duration());
+
+const SCRUB = gsap.to(PLAYHEAD, {
+  position: 0,
+  onUpdate: () => {
+    LOOP_HEAD.totalTime(POSITION_WRAP(PLAYHEAD.position));
+  },
+  paused: true,
+  duration: 0.25,
+  ease: 'power3' });
+
+
+let iteration = 0;
+const TRIGGER = ScrollTrigger.create({
+  start: 0,
+  end: '+=2000',
+  horizontal: false,
+  pin: '.boxes',
+  onUpdate: self => {
+    const SCROLL = self.scroll();
+    if (SCROLL > self.end - 1) {
+      // Go forwards in time
+      WRAP(1, 1);
+    } else if (SCROLL < 1 && self.direction < 0) {
+      // Go backwards in time
+      WRAP(-1, self.end - 1);
+    } else {
+      const NEW_POS = (iteration + self.progress) * LOOP_HEAD.duration();
+      SCRUB.vars.position = NEW_POS;
+      SCRUB.invalidate().restart();
+    }
+  } });
+
+
+const WRAP = (iterationDelta, scrollTo) => {
+  iteration += iterationDelta;
+  TRIGGER.scroll(scrollTo);
+  TRIGGER.update();
+};
+
+const SNAP = gsap.utils.snap(1 / BOXES.length);
+
+const progressToScroll = (progress) =>
+gsap.utils.clamp(
+1,
+TRIGGER.end - 1,
+gsap.utils.wrap(0, 1, progress) * TRIGGER.end);
+
+
+const scrollToPosition = position => {
+  const SNAP_POS = SNAP(position);
+  const PROGRESS =
+  (SNAP_POS - LOOP_HEAD.duration() * iteration) / LOOP_HEAD.duration();
+  const SCROLL = progressToScroll(PROGRESS);
+  if (PROGRESS >= 1 || PROGRESS < 0) return WRAP(Math.floor(PROGRESS), SCROLL);
+  TRIGGER.scroll(SCROLL);
+};
+
+ScrollTrigger.addEventListener('scrollEnd', () =>
+scrollToPosition(SCRUB.vars.position));
+
+
+const NEXT = () => scrollToPosition(SCRUB.vars.position - 1 / BOXES.length);
+const PREV = () => scrollToPosition(SCRUB.vars.position + 1 / BOXES.length);
+
+document.addEventListener('keydown', event => {
+  if (event.code === 'ArrowLeft' || event.code === 'KeyA') NEXT();
+  if (event.code === 'ArrowRight' || event.code === 'KeyD') PREV();
+});
+
+document.querySelector('.boxes').addEventListener('click', e => {
+  const BOX = e.target.closest('.box');
+  if (BOX) {
+    let TARGET = BOXES.indexOf(BOX);
+    let CURRENT = gsap.utils.wrap(
+    0,
+    BOXES.length,
+    Math.floor(BOXES.length * SCRUB.vars.position));
+
+    let BUMP = TARGET - CURRENT;
+    if (TARGET > CURRENT && TARGET - CURRENT > BOXES.length * 0.5) {
+      BUMP = (BOXES.length - BUMP) * -1;
+    }
+    if (CURRENT > TARGET && CURRENT - TARGET > BOXES.length * 0.5) {
+      BUMP = BOXES.length + BUMP;
+    }
+    scrollToPosition(SCRUB.vars.position + BUMP * (1 / BOXES.length));
+  }
+});
+
+window.BOXES = BOXES;
+
+document.querySelector('.next').addEventListener('click', NEXT);
+document.querySelector('.prev').addEventListener('click', PREV);
+
+// Dragging
+// let startX = 0
+// let startOffset = 0
+
+// const onPointerMove = e => {
+//   e.preventDefault()
+//   SCRUB.vars.position = startOffset + (startX - e.pageX) * 0.001
+//   SCRUB.invalidate().restart() // same thing as we do in the ScrollTrigger's onUpdate
+// }
+
+// const onPointerUp = e => {
+//   document.removeEventListener('pointermove', onPointerMove)
+//   document.removeEventListener('pointerup', onPointerUp)
+//   document.removeEventListener('pointercancel', onPointerUp)
+//   scrollToPosition(SCRUB.vars.position)
+// }
+
+// // when the user presses on anything except buttons, start a drag...
+// document.addEventListener('pointerdown', e => {
+//   if (e.target.tagName.toLowerCase() !== 'button') {
+//     document.addEventListener('pointermove', onPointerMove)
+//     document.addEventListener('pointerup', onPointerUp)
+//     document.addEventListener('pointercancel', onPointerUp)
+//     startX = e.pageX
+//     startOffset = SCRUB.vars.position
+//   }
+// })
+
+gsap.set('.box', { display: 'block' });
+
+gsap.set('button', {
+  z: 200 });
+
+
+Draggable.create('.drag-proxy', {
+  type: 'x',
+  trigger: '.box',
+  onPress() {
+    this.startOffset = SCRUB.vars.position;
+  },
+  onDrag() {
+    SCRUB.vars.position = this.startOffset + (this.startX - this.x) * 0.001;
+    SCRUB.invalidate().restart(); // same thing as we do in the ScrollTrigger's onUpdate
+  },
+  onDragEnd() {
+    scrollToPosition(SCRUB.vars.position);
+  } });
+//# sourceURL=pen.js
+    </script>
+
+  
+
+
+
+</body></html>
