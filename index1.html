@@ -5,97 +5,124 @@
 <head>
   <meta charset="UTF-8">
 
-    <link rel="canonical" href="https://codepen.io/ariona/pen/KMRoge">
   
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css">
-
-  <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.6.0/slick.min.css'>
+  
+  <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css'>
+<link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css'>
   
 <style>
-@import 'https://fonts.googleapis.com/css?family=Josefin+Slab';
-body {
-  font-family: "Josefin Slab";
-  height: 100vh;
-  background-color: #222;
+#gallery {
+  padding-top: 40px;
+}
+@media screen and (min-width: 991px) {
+  #gallery {
+    padding: 60px 30px 0 30px;
+  }
 }
 
-.section-project {
-  padding: 50px 0;
+.img-wrapper {
   position: relative;
-  background-color: #222;
+  margin-top: 15px;
 }
-
-.section__title, .section__subtitle {
-  text-align: center;
-  color: white;
-  display: block;
-}
-
-.section__title {
-  font-size: 3em;
-  line-height: 1;
-  margin: 0 0 20px;
-}
-
-.section__subtitle {
-  font-size: 1.2em;
-  line-height: 1.5;
-  opacity: 0.5;
-}
-.section__subtitle a {
-  color: inherit;
-}
-
-.project-carousel {
-  position: relative;
-  padding: 50px 0;
-}
-
-.project-strip {
-  margin: 150px 0 150px;
-  filter: blur(10px);
-}
-.project-strip .project {
-  cursor: pointer;
-}
-.project-strip img {
-  max-width: 100%;
+.img-wrapper img {
   width: 100%;
-  height: auto;
 }
 
-.project-screen {
-  width: 768px;
-  height: 451px;
+.img-overlay {
+  background: rgba(0, 0, 0, 0.7);
+  width: 100%;
+  height: 100%;
   position: absolute;
-  left: 0;
-  right: 0;
   top: 0;
-  bottom: 0;
-  margin: auto;
-}
-.project-screen .project-detail {
-  position: absolute;
   left: 0;
-  right: 0;
-  width: 578px;
-  height: 361px;
-  margin: 32px auto 0;
-  z-index: 1;
-  background-color: #333;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  opacity: 0;
 }
-.project-screen .screen-frame {
-  content: " ";
-  width: 768px;
-  height: 451px;
+.img-overlay i {
+  color: #fff;
+  font-size: 3em;
+}
+
+#overlay {
+  background: rgba(0, 0, 0, 0.7);
+  width: 100%;
+  height: 100%;
+  position: fixed;
+  top: 0;
+  left: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 999;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+#overlay img {
+  margin: 0;
+  width: 80%;
+  height: auto;
+  -o-object-fit: contain;
+     object-fit: contain;
+  padding: 5%;
+}
+@media screen and (min-width: 768px) {
+  #overlay img {
+    width: 60%;
+  }
+}
+@media screen and (min-width: 1200px) {
+  #overlay img {
+    width: 50%;
+  }
+}
+
+#nextButton {
+  color: #fff;
+  font-size: 2em;
+  transition: opacity 0.8s;
+}
+#nextButton:hover {
+  opacity: 0.7;
+}
+@media screen and (min-width: 768px) {
+  #nextButton {
+    font-size: 3em;
+  }
+}
+
+#prevButton {
+  color: #fff;
+  font-size: 2em;
+  transition: opacity 0.8s;
+}
+#prevButton:hover {
+  opacity: 0.7;
+}
+@media screen and (min-width: 768px) {
+  #prevButton {
+    font-size: 3em;
+  }
+}
+
+#exitButton {
+  color: #fff;
+  font-size: 2em;
+  transition: opacity 0.8s;
   position: absolute;
-  background-image: url("https://dl.dropboxusercontent.com/u/26808427/cdn/experiments/training/macbook-frame.png");
-  background-repeat: no-repeat;
+  top: 15px;
+  right: 15px;
 }
-.project-screen .project {
-  margin-right: -100%;
-  float: left;
-  cursor: move;
+#exitButton:hover {
+  opacity: 0.7;
+}
+@media screen and (min-width: 768px) {
+  #exitButton {
+    font-size: 3em;
+  }
 }
 </style>
 
@@ -108,55 +135,272 @@ body {
 </head>
 
 <body translate="no">
-  <div class="section section-project">
-  <div class="project-carousel">
-    <div class="project-strip">
-      <div class="project"><img src="http://unsplash.it/578/360/?image=26&amp;blur" alt=""/></div>
-      <div class="project"><img src="http://unsplash.it/578/360/?image=39&amp;blur" alt=""/></div>
-      <div class="project"><img src="http://unsplash.it/578/360/?image=52&amp;blur" alt=""/></div>
-      <div class="project"><img src="http://unsplash.it/578/360/?image=65&amp;blur" alt=""/></div>
-      <div class="project"><img src="http://unsplash.it/578/360/?image=78&amp;blur" alt=""/></div>
-      <div class="project"><img src="http://unsplash.it/578/360/?image=91&amp;blur" alt=""/></div>
-      <div class="project"><img src="http://unsplash.it/578/360/?image=104&amp;blur" alt=""/></div>
-      <div class="project"><img src="http://unsplash.it/578/360/?image=117&amp;blur" alt=""/></div>
-      <div class="project"><img src="http://unsplash.it/578/360/?image=130&amp;blur" alt=""/></div>
-    </div>
-    <div class="project-screen">
-      <div class="project-detail">
-        <div class="project"><img src="https://hdmu.github.io/Mario.jp6" alt=""/></div>
-        <div class="project"><img src="https://hdmu.github.io/Mario.jpg" alt=""/></div>
-        <div class="project"><img src="https://hdmu.github.io/Mario.jpg" alt=""/></div>
-        <div class="project"><img src="https://hdmu.github.io/Mario.jpg" alt=""/></div>
-        <div class="project"><img src="https://hdmu.github.io/Mario.jpg" alt=""/></div>
-        <div class="project"><img src="https://hdmu.github.io/Mario.jpg" alt=""/></div>
-        <div class="project"><img src="https://hdmu.github.io/Mario.jpg" alt=""/></div>
-        <div class="project"><img src="https://hdmu.github.io/Mario.jpg7" alt=""/></div>
-        <div class="project"><img src="https://hdmu.github.io/Mario.jpg" alt=""/></div>
-      </div>
-      <div class="screen-frame"></div>
-    </div>
-  </div>
-</div>
-  <script src='https://code.jquery.com/jquery-2.2.4.min.js'></script>
-<script src='https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.6.0/slick.min.js'></script>
+  <section id="gallery">
+  <div class="container">
+    <div id="image-gallery">
+      <div class="row">
+        <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12 image">
+          <div class="img-wrapper">
+            <a href="https://hdmu.github.io/Bisasam.jpg"><img src="https://hdmu.github.io/Bisasam.jpg" class="img-responsive"></a>
+            <div class="img-overlay">
+              <i class="fa fa-plus-circle" aria-hidden="true"></i>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12 image">
+          <div class="img-wrapper">
+            <a href="https://hdmu.github.io/Elsa.jpg"><img src="https://hdmu.github.io/Elsa.jpg" class="img-responsive"></a>
+            <div class="img-overlay">
+              <i class="fa fa-plus-circle" aria-hidden="true"></i>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12 image">
+          <div class="img-wrapper">
+            <a href="https://hdmu.github.io/Glumanda.jpg"><img src="https://hdmu.github.io/Glumanda.jpg" class="img-responsive"></a>
+            <div class="img-overlay">
+              <i class="fa fa-plus-circle" aria-hidden="true"></i>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12 image">
+          <div class="img-wrapper">
+            <a href="https://hdmu.github.io/Harrypotter.jpg"><img src="https://hdmu.github.io/Harrypotter.jpg" class="img-responsive"></a>
+            <div class="img-overlay">
+              <i class="fa fa-plus-circle" aria-hidden="true"></i>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12 image">
+          <div class="img-wrapper">
+            <a href="https://hdmu.github.io/Hund.jpg"><img src="https://hdmu.github.io/Hund.jpg" class="img-responsive"></a>
+            <div class="img-overlay">
+              <i class="fa fa-plus-circle" aria-hidden="true"></i>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12 image">
+          <div class="img-wrapper">
+            <a href="https://hdmu.github.io/HundBulldoge.jpg"><img src="https://hdmu.github.io/HundBulldoge.jpg" class="img-responsive"></a>
+            <div class="img-overlay">
+              <i class="fa fa-plus-circle" aria-hidden="true"></i>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12 image">
+          <div class="img-wrapper">
+            <a href="https://hdmu.github.io/Hundeknochen.jpg"><img src="https://hdmu.github.io/Hundeknochen.jpg" class="img-responsive"></a>
+            <div class="img-overlay">
+              <i class="fa fa-plus-circle" aria-hidden="true"></i>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12 image">
+          <div class="img-wrapper">
+            <a href="https://hdmu.github.io/Husky.jpg"><img src="https://hdmu.github.io/Husky.jpg" class="img-responsive"></a>
+            <div class="img-overlay">
+              <i class="fa fa-plus-circle" aria-hidden="true"></i>
+            </div>
+          </div>
+        </div>
+                <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12 image">
+          <div class="img-wrapper">
+            <a href="https://hdmu.github.io/Katze.jpg"><img src="https://hdmu.github.io/Katze.jpg" class="img-responsive"></a>
+            <div class="img-overlay">
+              <i class="fa fa-plus-circle" aria-hidden="true"></i>
+            </div>
+          </div>
+        </div>
+                <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12 image">
+          <div class="img-wrapper">
+            <a href="https://hdmu.github.io/Mario.jpg"><img src="https://hdmu.github.io/Mario.jpg" class="img-responsive"></a>
+            <div class="img-overlay">
+              <i class="fa fa-plus-circle" aria-hidden="true"></i>
+            </div>
+          </div>
+        </div>
+                <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12 image">
+          <div class="img-wrapper">
+            <a href="https://hdmu.github.io/MickeyMausName.jpg"><img src="https://hdmu.github.io/MickeyMausName.jpg" class="img-responsive"></a>
+            <div class="img-overlay">
+              <i class="fa fa-plus-circle" aria-hidden="true"></i>
+            </div>
+          </div>
+        </div>
+                <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12 image">
+          <div class="img-wrapper">
+            <a href="https://hdmu.github.io/Naruto.jpg"><img src="https://hdmu.github.io/Naruto.jpg" class="img-responsive"></a>
+            <div class="img-overlay">
+              <i class="fa fa-plus-circle" aria-hidden="true"></i>
+            </div>
+          </div>
+        </div>
+                <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12 image">
+          <div class="img-wrapper">
+            <a href="https://hdmu.github.io/NormaleKugel.jpg"><img src="https://hdmu.github.io/NormaleKugel.jpg" class="img-responsive"></a>
+            <div class="img-overlay">
+              <i class="fa fa-plus-circle" aria-hidden="true"></i>
+            </div>
+          </div>
+        </div>
+                        <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12 image">
+          <div class="img-wrapper">
+            <a href="https://hdmu.github.io/Pikachu.jpg"><img src="https://hdmu.github.io/Pikachu.jpg" class="img-responsive"></a>
+            <div class="img-overlay">
+              <i class="fa fa-plus-circle" aria-hidden="true"></i>
+            </div>
+          </div>
+        </div>
+                        <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12 image">
+          <div class="img-wrapper">
+            <a href="https://hdmu.github.io/Schalke.jpg"><img src="https://hdmu.github.io/Schalke.jpg" class="img-responsive"></a>
+            <div class="img-overlay">
+              <i class="fa fa-plus-circle" aria-hidden="true"></i>
+            </div>
+          </div>
+        </div>
+                        <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12 image">
+          <div class="img-wrapper">
+            <a href="https://hdmu.github.io/Stitch.jpg"><img src="https://hdmu.github.io/Stitch.jpg" class="img-responsive"></a>
+            <div class="img-overlay">
+              <i class="fa fa-plus-circle" aria-hidden="true"></i>
+            </div>
+          </div>
+        </div>
+                        <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12 image">
+          <div class="img-wrapper">
+            <a href="https://hdmu.github.io/Supernatural.jpg"><img src="https://hdmu.github.io/Supernatural.jpg" class="img-responsive"></a>
+            <div class="img-overlay">
+              <i class="fa fa-plus-circle" aria-hidden="true"></i>
+            </div>
+          </div>
+        </div>
+                                <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12 image">
+          <div class="img-wrapper">
+            <a href="https://hdmu.github.io/islandpferd.jpg"><img src="https://hdmu.github.io/islandpferd.jpg" class="img-responsive"></a>
+            <div class="img-overlay">
+              <i class="fa fa-plus-circle" aria-hidden="true"></i>
+            </div>
+          </div>
+        </div>
+                                <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12 image">
+          <div class="img-wrapper">
+            <a href="https://hdmu.github.io/lionking.jpg"><img src="https://hdmu.github.io/lionking.jpg" class="img-responsive"></a>
+            <div class="img-overlay">
+              <i class="fa fa-plus-circle" aria-hidden="true"></i>
+            </div>
+          </div>
+        </div>
+                                <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12 image">
+          <div class="img-wrapper">
+            <a href="https://hdmu.github.io/onkelz.jpg"><img src="https://hdmu.github.io/onkelz.jpg" class="img-responsive"></a>
+            <div class="img-overlay">
+              <i class="fa fa-plus-circle" aria-hidden="true"></i>
+            </div>
+          </div>
+        </div>
+
+                                        <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12 image">
+          <div class="img-wrapper">
+            <a href="https://hdmu.github.io/vfl.jpg"><img src="https://hdmu.github.io/vfl.jpg" class="img-responsive"></a>
+            <div class="img-overlay">
+              <i class="fa fa-plus-circle" aria-hidden="true"></i>
+            </div>
+          </div>
+        </div>
+      </div><!-- End row -->
+    </div><!-- End image gallery -->
+  </div><!-- End container --> 
+</section>
+  <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js'></script>
+<script src='https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js'></script>
       <script id="rendered-js" >
-$(".project-detail").slick({
-  slidesToShow: 1,
-  arrows: false,
-  asNavFor: '.project-strip',
-  autoplay: true,
-  autoplaySpeed: 3000 });
+// Gallery image hover
+$(".img-wrapper").hover(
+function () {
+  $(this).find(".img-overlay").animate({ opacity: 1 }, 600);
+}, function () {
+  $(this).find(".img-overlay").animate({ opacity: 0 }, 600);
+});
 
 
-$(".project-strip").slick({
-  slidesToShow: 5,
-  slidesToScroll: 1,
-  arrows: false,
-  asNavFor: '.project-detail',
-  dots: false,
-  infinite: true,
-  centerMode: true,
-  focusOnSelect: true });
+// Lightbox
+var $overlay = $('<div id="overlay"></div>');
+var $image = $("<img>");
+var $prevButton = $('<div id="prevButton"><i class="fa fa-chevron-left"></i></div>');
+var $nextButton = $('<div id="nextButton"><i class="fa fa-chevron-right"></i></div>');
+var $exitButton = $('<div id="exitButton"><i class="fa fa-times"></i></div>');
+
+// Add overlay
+$overlay.append($image).prepend($prevButton).append($nextButton).append($exitButton);
+$("#gallery").append($overlay);
+
+// Hide overlay on default
+$overlay.hide();
+
+// When an image is clicked
+$(".img-overlay").click(function (event) {
+  // Prevents default behavior
+  event.preventDefault();
+  // Adds href attribute to variable
+  var imageLocation = $(this).prev().attr("href");
+  // Add the image src to $image
+  $image.attr("src", imageLocation);
+  // Fade in the overlay
+  $overlay.fadeIn("slow");
+});
+
+// When the overlay is clicked
+$overlay.click(function () {
+  // Fade out the overlay
+  $(this).fadeOut("slow");
+});
+
+// When next button is clicked
+$nextButton.click(function (event) {
+  // Hide the current image
+  $("#overlay img").hide();
+  // Overlay image location
+  var $currentImgSrc = $("#overlay img").attr("src");
+  // Image with matching location of the overlay image
+  var $currentImg = $('#image-gallery img[src="' + $currentImgSrc + '"]');
+  // Finds the next image
+  var $nextImg = $($currentImg.closest(".image").next().find("img"));
+  // All of the images in the gallery
+  var $images = $("#image-gallery img");
+  // If there is a next image
+  if ($nextImg.length > 0) {
+    // Fade in the next image
+    $("#overlay img").attr("src", $nextImg.attr("src")).fadeIn(800);
+  } else {
+    // Otherwise fade in the first image
+    $("#overlay img").attr("src", $($images[0]).attr("src")).fadeIn(800);
+  }
+  // Prevents overlay from being hidden
+  event.stopPropagation();
+});
+
+// When previous button is clicked
+$prevButton.click(function (event) {
+  // Hide the current image
+  $("#overlay img").hide();
+  // Overlay image location
+  var $currentImgSrc = $("#overlay img").attr("src");
+  // Image with matching location of the overlay image
+  var $currentImg = $('#image-gallery img[src="' + $currentImgSrc + '"]');
+  // Finds the next image
+  var $nextImg = $($currentImg.closest(".image").prev().find("img"));
+  // Fade in the next image
+  $("#overlay img").attr("src", $nextImg.attr("src")).fadeIn(800);
+  // Prevents overlay from being hidden
+  event.stopPropagation();
+});
+
+// When the exit button is clicked
+$exitButton.click(function () {
+  // Fade out the overlay
+  $("#overlay").fadeOut("slow");
+});
 //# sourceURL=pen.js
     </script>
 
