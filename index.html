@@ -51,6 +51,7 @@
     .pill { display:inline-block; padding:6px 10px; border-radius:999px; background:#eef2ff; color:#3949ab; font-size:12px; font-weight:600; }
 
     .site-footer { padding:40px 0 30px; color:#777; text-align:center; font-size:13px; }
+      .hidden{ display:none !important; }
   </style>
 </head>
 
@@ -121,8 +122,7 @@
         <h2>Galerie</h2>
         <span class="pill" id="gallery-category"></span>
       </div>
-      $1
-          <!-- Christbaumdeko / Geschenkschmuck -->
+                <!-- Christbaumdeko / Geschenkschmuck -->
           <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12 image" data-category="christbaum"><div class="img-wrapper"><a href="https://hdmu.github.io/Bisasam.jpg"><img src="https://hdmu.github.io/Bisasam.jpg" class="img-responsive" alt="Bisasam"></a><div class="img-overlay"><i class="fa fa-plus-circle"></i></div></div></div>
           <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12 image" data-category="christbaum"><div class="img-wrapper"><a href="https://hdmu.github.io/Elsa.jpg"><img src="https://hdmu.github.io/Elsa.jpg" class="img-responsive" alt="Elsa"></a><div class="img-overlay"><i class="fa fa-plus-circle"></i></div></div></div>
           <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12 image" data-category="christbaum"><div class="img-wrapper"><a href="https://hdmu.github.io/Glumanda.jpg"><img src="https://hdmu.github.io/Glumanda.jpg" class="img-responsive" alt="Glumanda"></a><div class="img-overlay"><i class="fa fa-plus-circle"></i></div></div></div>
@@ -184,20 +184,25 @@ $2
     $('.img-overlay').on('click', function(e){ e.preventDefault(); var imageLocation=$(this).prev().attr('href'); $image.attr('src', imageLocation); $overlay.fadeIn('fast'); });
     $overlay.on('click', function(){ $(this).fadeOut('fast'); });
 
-    function vis(){ return $('#image-gallery .image:visible img'); }
+    function vis(){ return $('#image-gallery .image').not('.hidden').find('img'); }
     function nextImg(){ var imgs=vis(); if(!imgs.length) return; var cur=$('#overlay img').attr('src'); var i=imgs.index(imgs.filter('[src="'+cur+'"]').first()); var n=imgs.eq((i+1)%imgs.length); $('#overlay img').attr('src', n.attr('src')).fadeIn(150); }
     function prevImg(){ var imgs=vis(); if(!imgs.length) return; var cur=$('#overlay img').attr('src'); var i=imgs.index(imgs.filter('[src="'+cur+'"]').first()); var p=imgs.eq((i-1+imgs.length)%imgs.length); $('#overlay img').attr('src', p.attr('src')).fadeIn(150); }
     $nextButton.on('click', function(e){ e.stopPropagation(); nextImg(); });
     $prevButton.on('click', function(e){ e.stopPropagation(); prevImg(); });
     $exitButton.on('click', function(){ $('#overlay').fadeOut('fast'); });
 
+    // Kategorien-Klick + Filter
+    function filterBy(category){
+      var $all = $('#image-gallery .image');
+      $all.addClass('hidden');
+      $all.filter('[data-category="'+category+'"]').removeClass('hidden');
+    }
     $('.show-gallery').on('click', function(e){
       e.preventDefault();
       var category=$(this).data('category');
       $('#gallery').fadeIn();
       $('#gallery-category').text($(this).find('.category-title').text());
-      $('#image-gallery .image').hide();
-      $('#image-gallery .image[data-category="'+category+'"]').show();
+      filterBy(category);
       $('html, body').animate({scrollTop:$('#gallery').offset().top-50},500);
     });
   </script>
