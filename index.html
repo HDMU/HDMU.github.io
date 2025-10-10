@@ -218,7 +218,7 @@ $2
     $closeBtn.on('click', function(e){ e.stopPropagation(); $overlay.fadeOut('fast'); });
 
     function activeCat(){ return $('#image-gallery').attr('data-active'); }
-    function visibleImgs(){ var cat = activeCat(); return $('#image-gallery .image[data-category="'+cat+'"] img'); }
+    function visibleImgs(){ return $('#image-gallery .image:visible img'); }
 
     function nextImg(){
       var imgs = visibleImgs(); if(!imgs.length) return;
@@ -238,9 +238,23 @@ $2
     $nextBtn.on('click', function(e){ e.stopPropagation(); nextImg(); });
     $prevBtn.on('click', function(e){ e.stopPropagation(); prevImg(); });
 
-    // Kategorie-Klick → Attribut setzen, CSS macht den Rest
+    // Kategorie-Klick → Attribut + sicheres Hide/Show
+    function filterBy(category){
+      $('#image-gallery').attr('data-active', category);
+      var $items = $('#image-gallery .image');
+      $items.each(function(){
+        var $it = $(this);
+        if ($it.data('category') === category) { $it.show(); } else { $it.hide(); }
+      });
+    }
     $('.show-gallery').on('click', function(e){
       e.preventDefault();
+      var category = $(this).data('category');
+      $('#gallery').fadeIn('fast');
+      $('#gallery-category').text($(this).find('.category-title').text());
+      filterBy(category);
+      $('html, body').animate({scrollTop: $('#gallery').offset().top - 50}, 500);
+    });
       var category = $(this).data('category');
       $('#gallery').fadeIn('fast');
       $('#gallery-category').text($(this).find('.category-title').text());
