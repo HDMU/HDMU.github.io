@@ -240,7 +240,28 @@ $2
 
     // Kategorie-Klick → Attribut + sicheres Hide/Show
     function filterBy(category){
-      $('#image-gallery').attr('data-active', category);
+      var gallery = document.getElementById('image-gallery');
+      if(!gallery){ return; }
+      gallery.setAttribute('data-active', category);
+      var items = gallery.querySelectorAll('.image');
+      items.forEach(function(el){
+        var ok = el.getAttribute('data-category') === category;
+        el.style.display = ok ? 'block' : 'none';
+      });
+    }
+
+    // Default: beim Laden NICHTS zeigen, erst nach Klick aktivieren
+    // Optional: hier standardmäßig eine Kategorie aktivieren (auskommentiert lassen)
+    // filterBy('christbaum');
+
+    $(document).on('click', '.show-gallery', function(e){
+      e.preventDefault();
+      var category = $(this).data('category');
+      $('#gallery').fadeIn('fast');
+      $('#gallery-category').text($(this).find('.category-title').text());
+      filterBy(category);
+      $('html, body').animate({scrollTop: $('#gallery').offset().top - 50}, 500);
+    });
       var $items = $('#image-gallery .image');
       $items.each(function(){
         var $it = $(this);
