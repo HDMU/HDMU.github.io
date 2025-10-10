@@ -37,6 +37,9 @@
     .img-overlay { background:rgba(0,0,0,.5); width:100%; height:100%; position:absolute; top:0; left:0; display:flex; justify-content:center; align-items:center; opacity:0; transition:opacity .4s ease; }
     .img-overlay i { color:#fff; font-size:3em; }
 
+    /* Hover-Effekt rein in CSS, kein JS nötig */
+    .img-wrapper:hover .img-overlay{ opacity:1; }
+
     #overlay { background:rgba(0,0,0,0.85); width:100%; height:100%; position:fixed; top:0; left:0; display:flex; justify-content:center; align-items:center; z-index:999; user-select:none; }
     #overlay img { margin:0; width:80%; height:auto; object-fit:contain; padding:5%; }
     @media (min-width:768px){ #overlay img{ width:60%; } }
@@ -182,107 +185,62 @@ $2
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
   <script>
-  (function($){
+  document.addEventListener('DOMContentLoaded', function(){
     // Jahr
     var yearEl = document.getElementById('year');
     if (yearEl) { yearEl.textContent = new Date().getFullYear(); }
 
-    // Hover-Effekt
-    $(document).on('mouseenter', '.img-wrapper', function(){
-      $(this).find('.img-overlay').css('opacity', 1);
-    }).on('mouseleave', '.img-wrapper', function(){
-      $(this).find('.img-overlay').css('opacity', 0);
+    // Lightbox Elemente
+    var overlay = document.createElement('div'); overlay.id = 'overlay';
+    var img = document.createElement('img');
+    var prevBtn = document.createElement('div'); prevBtn.id = 'prevButton'; prevBtn.innerHTML = '<i class="fa fa-chevron-left"></i>';
+    var nextBtn = document.createElement('div'); nextBtn.id = 'nextButton'; nextBtn.innerHTML = '<i class="fa fa-chevron-right"></i>';
+    var closeBtn= document.createElement('div'); closeBtn.id = 'exitButton'; closeBtn.innerHTML = '<i class="fa fa-times"></i>';
+    overlay.appendChild(img); overlay.insertBefore(prevBtn, overlay.firstChild); overlay.appendChild(nextBtn); overlay.appendChild(closeBtn);
+    document.body.appendChild(overlay);
+    overlay.style.display = 'none';
+
+    function visibleImgs(){
+      var gallery = document.getElementById('image-gallery');
+      var cat = gallery.getAttribute('data-active');
+      return Array.prototype.slice.call(gallery.querySelectorAll('.image[data-category="'+cat+'"] img')).filter(function(el){ return el.offsetParent !== null; });
+    }
+    function setImg(newImg){ img.setAttribute('src', newImg.getAttribute('src')); }
+    function nextImg(){ var imgs = visibleImgs(); if(!imgs.length) return; var cur = img.getAttribute('src'); var idx = imgs.findIndex(function(e){ return e.getAttribute('src')===cur; }); var nxt = imgs[(idx+1+imgs.length)%imgs.length]; setImg(nxt); }
+    function prevImg(){ var imgs = visibleImgs(); if(!imgs.length) return; var cur = img.getAttribute('src'); var idx = imgs.findIndex(function(e){ return e.getAttribute('src')===cur; }); var prv = imgs[(idx-1+imgs.length)%imgs.length]; setImg(prv); }
+
+    // Delegierte Klicks
+    document.addEventListener('click', function(e){
+      var overlayIcon = e.target.closest('.img-overlay');
+      if(overlayIcon){ e.preventDefault(); var href = overlayIcon.previousElementSibling.getAttribute('href'); img.setAttribute('src', href); overlay.style.display='flex'; return; }
+
+      if(e.target.closest('#overlay')){ overlay.style.display='none'; return; }
+      if(e.target.closest('#exitButton')){ overlay.style.display='none'; return; }
+      if(e.target.closest('#nextButton')){ e.stopPropagation(); nextImg(); return; }
+      if(e.target.closest('#prevButton')){ e.stopPropagation(); prevImg(); return; }
+
+      var catBtn = e.target.closest('.show-gallery');
+      if(catBtn){
+        e.preventDefault();
+        var category = catBtn.getAttribute('data-category');
+        document.getElementById('gallery').style.display = 'block';
+        var titleEl = catBtn.querySelector('.category-title');
+        var pill = document.getElementById('gallery-category');
+        if (titleEl && pill) { pill.textContent = titleEl.textContent; }
+        filterBy(category);
+        // Scrollen
+        var top = document.getElementById('gallery').getBoundingClientRect().top + window.pageYOffset - 50;
+        window.scrollTo({ top: top, behavior: 'smooth' });
+      }
     });
 
-    // Lightbox-Overlay
-    var $overlay = $('<div id="overlay"></div>');
-    var $image   = $('<img>');
-    var $prevBtn = $('<div id="prevButton"><i class="fa fa-chevron-left"></i></div>');
-    var $nextBtn = $('<div id="nextButton"><i class="fa fa-chevron-right"></i></div>');
-    var $closeBtn= $('<div id="exitButton"><i class="fa fa-times"></i></div>');
-
-    $overlay.append($image).prepend($prevBtn).append($nextBtn).append($closeBtn);
-    $('body').append($overlay);
-    $overlay.hide();
-
-    // Bild öffnen (delegiert)
-    $(document).on('click', '.img-overlay', function(e){
-      e.preventDefault();
-      var imageLocation = $(this).prev().attr('href');
-      $image.attr('src', imageLocation);
-      $overlay.fadeIn('fast');
-    });
-
-    // Overlay schließen
-    $overlay.on('click', function(){ $overlay.fadeOut('fast'); });
-    $closeBtn.on('click', function(e){ e.stopPropagation(); $overlay.fadeOut('fast'); });
-
-    function activeCat(){ return $('#image-gallery').attr('data-active'); }
-    function visibleImgs(){ return $('#image-gallery .image:visible img'); }
-
-    function nextImg(){
-      var imgs = visibleImgs(); if(!imgs.length) return;
-      var cur  = $image.attr('src');
-      var idx  = imgs.index(imgs.filter('[src="'+cur+'"]').first());
-      var nxt  = imgs.eq((idx+1) % imgs.length);
-      $image.attr('src', nxt.attr('src')).fadeIn(150);
-    }
-    function prevImg(){
-      var imgs = visibleImgs(); if(!imgs.length) return;
-      var cur  = $image.attr('src');
-      var idx  = imgs.index(imgs.filter('[src="'+cur+'"]').first());
-      var prv  = imgs.eq((idx-1+imgs.length) % imgs.length);
-      $image.attr('src', prv.attr('src')).fadeIn(150);
-    }
-
-    $nextBtn.on('click', function(e){ e.stopPropagation(); nextImg(); });
-    $prevBtn.on('click', function(e){ e.stopPropagation(); prevImg(); });
-
-    // Kategorie-Klick → Attribut + sicheres Hide/Show
     function filterBy(category){
       var gallery = document.getElementById('image-gallery');
-      if(!gallery){ return; }
       gallery.setAttribute('data-active', category);
       var items = gallery.querySelectorAll('.image');
-      items.forEach(function(el){
-        var ok = el.getAttribute('data-category') === category;
-        el.style.display = ok ? 'block' : 'none';
-      });
+      items.forEach(function(el){ el.style.display = (el.getAttribute('data-category')===category) ? 'block' : 'none'; });
     }
-
-    // Default: beim Laden NICHTS zeigen, erst nach Klick aktivieren
-    // Optional: hier standardmäßig eine Kategorie aktivieren (auskommentiert lassen)
-    // filterBy('christbaum');
-
-    $(document).on('click', '.show-gallery', function(e){
-      e.preventDefault();
-      var category = $(this).data('category');
-      $('#gallery').fadeIn('fast');
-      $('#gallery-category').text($(this).find('.category-title').text());
-      filterBy(category);
-      $('html, body').animate({scrollTop: $('#gallery').offset().top - 50}, 500);
-    });
-      var $items = $('#image-gallery .image');
-      $items.each(function(){
-        var $it = $(this);
-        if ($it.data('category') === category) { $it.show(); } else { $it.hide(); }
-      });
-    }
-    $('.show-gallery').on('click', function(e){
-      e.preventDefault();
-      var category = $(this).data('category');
-      $('#gallery').fadeIn('fast');
-      $('#gallery-category').text($(this).find('.category-title').text());
-      filterBy(category);
-      $('html, body').animate({scrollTop: $('#gallery').offset().top - 50}, 500);
-    });
-      var category = $(this).data('category');
-      $('#gallery').fadeIn('fast');
-      $('#gallery-category').text($(this).find('.category-title').text());
-      $('#image-gallery').attr('data-active', category);
-      $('html, body').animate({scrollTop: $('#gallery').offset().top - 50}, 500);
-    });
-  })(jQuery);
+  });
   </script>
 </body>
 </html>
