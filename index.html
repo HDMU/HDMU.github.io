@@ -23,22 +23,21 @@
     .category-title { font-size:18px; font-weight:600; }
     .category-sub { color:#777; font-size:13px; }
 
-    .category-disabled { cursor:not-allowed; opacity:.55; }
-    .category-disabled:hover { transform:none; box-shadow:0 8px 24px rgba(0,0,0,.06); }
-
     #gallery { padding:40px 0; display:none; }
-
-    /* WICHTIG: Bilder standardmäßig ausblenden, nur per Filter zeigen */
-    
 
     .img-wrapper { position:relative; margin-top:15px; border-radius:12px; overflow:hidden; box-shadow:0 6px 18px rgba(0,0,0,.06); background:#fff; }
     .img-wrapper img { width:100%; display:block; }
 
-    .img-overlay { background:rgba(0,0,0,.5); width:100%; height:100%; position:absolute; top:0; left:0; display:flex; justify-content:center; align-items:center; opacity:0; transition:opacity .4s ease; }
+    .img-overlay { background:rgba(0,0,0,.5); width:100%; height:100%; position:absolute; top:0; left:0; display:flex; justify-content:center; align-items:center; opacity:0; transition:opacity .3s ease; }
     .img-overlay i { color:#fff; font-size:3em; }
-
-    /* Hover-Effekt rein in CSS, kein JS nötig */
     .img-wrapper:hover .img-overlay{ opacity:1; }
+
+    /* CSS-Filter: nur aktive Kategorie anzeigen */
+    #image-gallery[data-active] .image { display:none !important; }
+    #image-gallery[data-active="christbaum"] .image[data-category="christbaum"],
+    #image-gallery[data-active="tuerrahmen"] .image[data-category="tuerrahmen"],
+    #image-gallery[data-active="schluessel"] .image[data-category="schluessel"],
+    #image-gallery[data-active="schriftzuege"] .image[data-category="schriftzuege"] { display:block !important; }
 
     #overlay { background:rgba(0,0,0,0.85); width:100%; height:100%; position:fixed; top:0; left:0; display:flex; justify-content:center; align-items:center; z-index:999; user-select:none; }
     #overlay img { margin:0; width:80%; height:auto; object-fit:contain; padding:5%; }
@@ -57,17 +56,8 @@
     .pill { display:inline-block; padding:6px 10px; border-radius:999px; background:#eef2ff; color:#3949ab; font-size:12px; font-weight:600; }
 
     .site-footer { padding:40px 0 30px; color:#777; text-align:center; font-size:13px; }
-      .hidden{ display:none !important; }
-      .hidden{ display:none !important; }
-      /* CSS-basierter Kategorie-Filter */
-    #image-gallery[data-active] .image { display:none !important; }
-    #image-gallery[data-active="christbaum"] .image[data-category="christbaum"],
-    #image-gallery[data-active="tuerrahmen"] .image[data-category="tuerrahmen"],
-    #image-gallery[data-active="schluessel"] .image[data-category="schluessel"],
-    #image-gallery[data-active="schriftzuege"] .image[data-category="schriftzuege"] { display:block !important; }
   </style>
 </head>
-
 <body>
   <nav class="navbar navbar-default">
     <div class="container">
@@ -119,7 +109,7 @@
           </a>
         </div>
         <div class="col-sm-6 col-md-3">
-          <span class="category-card category-disabled" title="Demnächst">
+          <span class="category-card" title="Demnächst" style="opacity:.55; cursor:not-allowed;">
             <div class="category-icon"><i class="fa fa-ellipsis-h"></i></div>
             <div class="category-title">Sonstiges</div>
             <div class="category-sub">Bald verfügbar</div>
@@ -135,7 +125,9 @@
         <h2>Galerie</h2>
         <span class="pill" id="gallery-category"></span>
       </div>
-                <!-- Christbaumdeko / Geschenkschmuck -->
+      <div id="image-gallery">
+        <div class="row">
+          <!-- Christbaumdeko / Geschenkschmuck -->
           <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12 image" data-category="christbaum"><div class="img-wrapper"><a href="https://hdmu.github.io/Bisasam.jpg"><img src="https://hdmu.github.io/Bisasam.jpg" class="img-responsive" alt="Bisasam"></a><div class="img-overlay"><i class="fa fa-plus-circle"></i></div></div></div>
           <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12 image" data-category="christbaum"><div class="img-wrapper"><a href="https://hdmu.github.io/Elsa.jpg"><img src="https://hdmu.github.io/Elsa.jpg" class="img-responsive" alt="Elsa"></a><div class="img-overlay"><i class="fa fa-plus-circle"></i></div></div></div>
           <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12 image" data-category="christbaum"><div class="img-wrapper"><a href="https://hdmu.github.io/Glumanda.jpg"><img src="https://hdmu.github.io/Glumanda.jpg" class="img-responsive" alt="Glumanda"></a><div class="img-overlay"><i class="fa fa-plus-circle"></i></div></div></div>
@@ -175,18 +167,15 @@
           <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12 image" data-category="tuerrahmen"><div class="img-wrapper"><a href="https://hdmu.github.io/wichteltür.jpg"><img src="https://hdmu.github.io/wichteltür.jpg" class="img-responsive" alt="Wichteltür"></a><div class="img-overlay"><i class="fa fa-plus-circle"></i></div></div></div>
           <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12 image" data-category="tuerrahmen"><div class="img-wrapper"><a href="https://hdmu.github.io/weihnachtenkatzetür.jpg"><img src="https://hdmu.github.io/weihnachtenkatzetür.jpg" class="img-responsive" alt="Weihnachten Katze Tür"></a><div class="img-overlay"><i class="fa fa-plus-circle"></i></div></div></div>
           <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12 image" data-category="tuerrahmen"><div class="img-wrapper"><a href="https://hdmu.github.io/pawpatroltuerrahmen.jpg"><img src="https://hdmu.github.io/pawpatroltuerrahmen.jpg" class="img-responsive" alt="Paw Patrol Türrahmen"></a><div class="img-overlay"><i class="fa fa-plus-circle"></i></div></div></div>
-$2
+        </div><!-- row -->
       </div><!-- image-gallery -->
     </div>
   </section>
 
   <footer class="site-footer"><div class="container">© <span id="year"></span> Handgemachte Deko</div></footer>
 
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
   <script>
   document.addEventListener('DOMContentLoaded', function(){
-    // Jahr
     var yearEl = document.getElementById('year');
     if (yearEl) { yearEl.textContent = new Date().getFullYear(); }
 
@@ -203,18 +192,18 @@ $2
     function visibleImgs(){
       var gallery = document.getElementById('image-gallery');
       var cat = gallery.getAttribute('data-active');
-      return Array.prototype.slice.call(gallery.querySelectorAll('.image[data-category="'+cat+'"] img')).filter(function(el){ return el.offsetParent !== null; });
+      var list = gallery.querySelectorAll('.image[data-category="'+cat+'"] img');
+      return Array.prototype.filter.call(list, function(el){ return el.offsetParent !== null; });
     }
     function setImg(newImg){ img.setAttribute('src', newImg.getAttribute('src')); }
     function nextImg(){ var imgs = visibleImgs(); if(!imgs.length) return; var cur = img.getAttribute('src'); var idx = imgs.findIndex(function(e){ return e.getAttribute('src')===cur; }); var nxt = imgs[(idx+1+imgs.length)%imgs.length]; setImg(nxt); }
     function prevImg(){ var imgs = visibleImgs(); if(!imgs.length) return; var cur = img.getAttribute('src'); var idx = imgs.findIndex(function(e){ return e.getAttribute('src')===cur; }); var prv = imgs[(idx-1+imgs.length)%imgs.length]; setImg(prv); }
 
-    // Delegierte Klicks
+    // Delegierte Klicks: Bild öffnen
     document.addEventListener('click', function(e){
       var overlayIcon = e.target.closest('.img-overlay');
       if(overlayIcon){ e.preventDefault(); var href = overlayIcon.previousElementSibling.getAttribute('href'); img.setAttribute('src', href); overlay.style.display='flex'; return; }
 
-      if(e.target.closest('#overlay')){ overlay.style.display='none'; return; }
       if(e.target.closest('#exitButton')){ overlay.style.display='none'; return; }
       if(e.target.closest('#nextButton')){ e.stopPropagation(); nextImg(); return; }
       if(e.target.closest('#prevButton')){ e.stopPropagation(); prevImg(); return; }
@@ -227,19 +216,19 @@ $2
         var titleEl = catBtn.querySelector('.category-title');
         var pill = document.getElementById('gallery-category');
         if (titleEl && pill) { pill.textContent = titleEl.textContent; }
-        filterBy(category);
+        // CSS-Filter aktivieren und zusätzlich inline absichern
+        var gallery = document.getElementById('image-gallery');
+        gallery.setAttribute('data-active', category);
+        var items = gallery.querySelectorAll('.image');
+        for (var i=0; i<items.length; i++) {
+          var it = items[i];
+          it.style.display = (it.getAttribute('data-category')===category) ? 'block' : 'none';
+        }
         // Scrollen
         var top = document.getElementById('gallery').getBoundingClientRect().top + window.pageYOffset - 50;
         window.scrollTo({ top: top, behavior: 'smooth' });
       }
     });
-
-    function filterBy(category){
-      var gallery = document.getElementById('image-gallery');
-      gallery.setAttribute('data-active', category);
-      var items = gallery.querySelectorAll('.image');
-      items.forEach(function(el){ el.style.display = (el.getAttribute('data-category')===category) ? 'block' : 'none'; });
-    }
   });
   </script>
 </body>
