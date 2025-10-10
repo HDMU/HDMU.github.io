@@ -182,53 +182,72 @@ $2
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
   <script>
-    document.getElementById('year').textContent = new Date().getFullYear();
+  (function($){
+    // Jahr
+    var yearEl = document.getElementById('year');
+    if (yearEl) { yearEl.textContent = new Date().getFullYear(); }
 
-    $('.img-wrapper').hover(function(){ $(this).find('.img-overlay').css('opacity',1); }, function(){ $(this).find('.img-overlay').css('opacity',0); });
+    // Hover-Effekt
+    $(document).on('mouseenter', '.img-wrapper', function(){
+      $(this).find('.img-overlay').css('opacity', 1);
+    }).on('mouseleave', '.img-wrapper', function(){
+      $(this).find('.img-overlay').css('opacity', 0);
+    });
 
-    var $overlay=$('<div id="overlay"></div>'); var $image=$('<img>'); var $prevButton=$('<div id="prevButton"><i class="fa fa-chevron-left"></i></div>'); var $nextButton=$('<div id="nextButton"><i class="fa fa-chevron-right"></i></div>'); var $exitButton=$('<div id="exitButton"><i class="fa fa-times"></i></div>');
-    $overlay.append($image).prepend($prevButton).append($nextButton).append($exitButton);
+    // Lightbox-Overlay
+    var $overlay = $('<div id="overlay"></div>');
+    var $image   = $('<img>');
+    var $prevBtn = $('<div id="prevButton"><i class="fa fa-chevron-left"></i></div>');
+    var $nextBtn = $('<div id="nextButton"><i class="fa fa-chevron-right"></i></div>');
+    var $closeBtn= $('<div id="exitButton"><i class="fa fa-times"></i></div>');
+
+    $overlay.append($image).prepend($prevBtn).append($nextBtn).append($closeBtn);
     $('body').append($overlay);
     $overlay.hide();
 
-    // Bild öffnen
-    $('.img-overlay').on('click', function(e){ e.preventDefault(); var imageLocation=$(this).prev().attr('href'); $image.attr('src', imageLocation); $overlay.fadeIn('fast'); });
-    $overlay.on('click', function(){ $(this).fadeOut('fast'); });
+    // Bild öffnen (delegiert)
+    $(document).on('click', '.img-overlay', function(e){
+      e.preventDefault();
+      var imageLocation = $(this).prev().attr('href');
+      $image.attr('src', imageLocation);
+      $overlay.fadeIn('fast');
+    });
 
-    // Nur durch sichtbare Bilder der gewählten Kategorie blättern
-    function vis(){
-      var cat = $('#image-gallery').attr('data-active');
-      return $('#image-gallery .image[data-category="'+cat+'"] img');
+    // Overlay schließen
+    $overlay.on('click', function(){ $overlay.fadeOut('fast'); });
+    $closeBtn.on('click', function(e){ e.stopPropagation(); $overlay.fadeOut('fast'); });
+
+    function activeCat(){ return $('#image-gallery').attr('data-active'); }
+    function visibleImgs(){ var cat = activeCat(); return $('#image-gallery .image[data-category="'+cat+'"] img'); }
+
+    function nextImg(){
+      var imgs = visibleImgs(); if(!imgs.length) return;
+      var cur  = $image.attr('src');
+      var idx  = imgs.index(imgs.filter('[src="'+cur+'"]').first());
+      var nxt  = imgs.eq((idx+1) % imgs.length);
+      $image.attr('src', nxt.attr('src')).fadeIn(150);
     }
-    function nextImg(){ var imgs=vis(); if(!imgs.length) return; var cur=$('#overlay img').attr('src'); var i=imgs.index(imgs.filter('[src="'+cur+'"]').first()); var n=imgs.eq((i+1)%imgs.length); $('#overlay img').attr('src', n.attr('src')).fadeIn(150); }
-    function prevImg(){ var imgs=vis(); if(!imgs.length) return; var cur=$('#overlay img').attr('src'); var i=imgs.index(imgs.filter('[src="'+cur+'"]').first()); var p=imgs.eq((i-1+imgs.length)%imgs.length); $('#overlay img').attr('src', p.attr('src')).fadeIn(150); }
-    $nextButton.on('click', function(e){ e.stopPropagation(); nextImg(); });
-    $prevButton.on('click', function(e){ e.stopPropagation(); prevImg(); });
-    $exitButton.on('click', function(){ $('#overlay').fadeOut('fast'); });
+    function prevImg(){
+      var imgs = visibleImgs(); if(!imgs.length) return;
+      var cur  = $image.attr('src');
+      var idx  = imgs.index(imgs.filter('[src="'+cur+'"]').first());
+      var prv  = imgs.eq((idx-1+imgs.length) % imgs.length);
+      $image.attr('src', prv.attr('src')).fadeIn(150);
+    }
 
-    // Kategorien-Klick via CSS-Attribut
+    $nextBtn.on('click', function(e){ e.stopPropagation(); nextImg(); });
+    $prevBtn.on('click', function(e){ e.stopPropagation(); prevImg(); });
+
+    // Kategorie-Klick → Attribut setzen, CSS macht den Rest
     $('.show-gallery').on('click', function(e){
       e.preventDefault();
-      var category=$(this).data('category');
+      var category = $(this).data('category');
       $('#gallery').fadeIn('fast');
       $('#gallery-category').text($(this).find('.category-title').text());
       $('#image-gallery').attr('data-active', category);
-      $('html, body').animate({scrollTop:$('#gallery').offset().top-50},500);
-      return false;
+      $('html, body').animate({scrollTop: $('#gallery').offset().top - 50}, 500);
     });
-      $all.hide(); // alles verstecken
-      var $match = $all.filter('[data-category="'+category+'"]').show(); // nur die gewünschte Kategorie anzeigen
-      // Fallback: falls nichts gefunden, alles wieder zeigen (damit die Seite nicht "leer" wirkt)
-      if(!$match.length){ $all.show(); }
-    }
-    $('.show-gallery').on('click', function(e){
-      e.preventDefault();
-      var category=$(this).data('category');
-      $('#gallery').fadeIn('fast');
-      $('#gallery-category').text($(this).find('.category-title').text());
-      filterBy(category);
-      $('html, body').animate({scrollTop:$('#gallery').offset().top-50},500);
-    });
+  })(jQuery);
   </script>
 </body>
 </html>
