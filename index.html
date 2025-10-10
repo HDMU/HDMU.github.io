@@ -1,467 +1,191 @@
-
 <!DOCTYPE html>
-<html lang="en" >
-
+<html lang="de">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Handgemachte Deko</title>
 
-  
-  
-  <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css'>
-<link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css'>
-  
-<style>
-#gallery {
-  padding-top: 40px;
-}
-@media screen and (min-width: 991px) {
-  #gallery {
-    padding: 60px 30px 0 30px;
-  }
-}
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
-.img-wrapper {
-  position: relative;
-  margin-top: 15px;
-}
-.img-wrapper img {
-  width: 100%;
-}
+  <style>
+    body { background:#fafafa; color:#222; }
+    a { color:#111; }
+    a:hover, a:focus { color:#555; text-decoration:none; }
 
-.img-overlay {
-  background: rgba(0, 0, 0, 0.7);
-  width: 100%;
-  height: 100%;
-  position: absolute;
-  top: 0;
-  left: 0;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  opacity: 0;
-}
-.img-overlay i {
-  color: #fff;
-  font-size: 3em;
-}
+    .navbar { border:none; background:#fff; box-shadow:0 2px 12px rgba(0,0,0,.04); }
+    .navbar-brand { font-weight:700; letter-spacing:.3px; }
 
-#overlay {
-  background: rgba(0, 0, 0, 0.7);
-  width: 100%;
-  height: 100%;
-  position: fixed;
-  top: 0;
-  left: 0;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 999;
-  -webkit-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
-  user-select: none;
-}
-#overlay img {
-  margin: 0;
-  width: 80%;
-  height: auto;
-  -o-object-fit: contain;
-     object-fit: contain;
-  padding: 5%;
-}
-@media screen and (min-width: 768px) {
-  #overlay img {
-    width: 60%;
-  }
-}
-@media screen and (min-width: 1200px) {
-  #overlay img {
-    width: 50%;
-  }
-}
+    .hero { padding:70px 0 40px; text-align:center; background:linear-gradient(180deg,#ffffff 0%,#f5f7fa 100%); border-bottom:1px solid rgba(0,0,0,.05); }
+    .hero h1 { font-size:34px; margin:0 0 10px; font-weight:700; }
+    .hero p { color:#555; font-size:16px; margin:0; }
 
-#nextButton {
-  color: #fff;
-  font-size: 2em;
-  transition: opacity 0.8s;
-}
-#nextButton:hover {
-  opacity: 0.7;
-}
-@media screen and (min-width: 768px) {
-  #nextButton {
-    font-size: 3em;
-  }
-}
+    .categories { padding:35px 0 10px; }
+    .category-card { background:#fff; border-radius:16px; box-shadow:0 8px 24px rgba(0,0,0,.06); transition:all .25s ease; border:1px solid rgba(0,0,0,.06); display:block; padding:26px 22px; height:140px; }
+    .category-card:hover { transform:translateY(-3px); box-shadow:0 12px 28px rgba(0,0,0,.09); }
+    .category-icon { font-size:28px; margin-bottom:12px; }
+    .category-title { font-size:18px; font-weight:600; }
+    .category-sub { color:#777; font-size:13px; }
 
-#prevButton {
-  color: #fff;
-  font-size: 2em;
-  transition: opacity 0.8s;
-}
-#prevButton:hover {
-  opacity: 0.7;
-}
-@media screen and (min-width: 768px) {
-  #prevButton {
-    font-size: 3em;
-  }
-}
+    .category-disabled { cursor:not-allowed; opacity:.55; }
+    .category-disabled:hover { transform:none; box-shadow:0 8px 24px rgba(0,0,0,.06); }
 
-#exitButton {
-  color: #fff;
-  font-size: 2em;
-  transition: opacity 0.8s;
-  position: absolute;
-  top: 15px;
-  right: 15px;
-}
-#exitButton:hover {
-  opacity: 0.7;
-}
-@media screen and (min-width: 768px) {
-  #exitButton {
-    font-size: 3em;
-  }
-}
-</style>
+    #gallery { padding:40px 0; display:none; }
 
-  <script>
-  window.console = window.console || function(t) {};
-</script>
+    .img-wrapper { position:relative; margin-top:15px; border-radius:12px; overflow:hidden; box-shadow:0 6px 18px rgba(0,0,0,.06); background:#fff; }
+    .img-wrapper img { width:100%; display:block; }
 
-  
-  
+    .img-overlay { background:rgba(0,0,0,.5); width:100%; height:100%; position:absolute; top:0; left:0; display:flex; justify-content:center; align-items:center; opacity:0; transition:opacity .4s ease; }
+    .img-overlay i { color:#fff; font-size:3em; }
+
+    #overlay { background:rgba(0,0,0,0.85); width:100%; height:100%; position:fixed; top:0; left:0; display:flex; justify-content:center; align-items:center; z-index:999; user-select:none; }
+    #overlay img { margin:0; width:80%; height:auto; object-fit:contain; padding:5%; }
+    @media (min-width:768px){ #overlay img{ width:60%; } }
+    @media (min-width:1200px){ #overlay img{ width:50%; } }
+
+    #nextButton, #prevButton, #exitButton { color:#fff; transition:opacity .3s; }
+    #nextButton:hover, #prevButton:hover, #exitButton:hover { opacity:.75; }
+    #nextButton, #prevButton { font-size:2em; }
+    @media (min-width:768px){ #nextButton, #prevButton { font-size:3em; } }
+    #exitButton { position:absolute; top:15px; right:15px; font-size:2em; }
+    @media (min-width:768px){ #exitButton{ font-size:3em; } }
+
+    .section-header { margin:10px 0 20px; display:flex; align-items:center; justify-content:space-between; }
+    .section-header h2 { margin:0; font-weight:700; font-size:22px; }
+    .pill { display:inline-block; padding:6px 10px; border-radius:999px; background:#eef2ff; color:#3949ab; font-size:12px; font-weight:600; }
+
+    .site-footer { padding:40px 0 30px; color:#777; text-align:center; font-size:13px; }
+  </style>
 </head>
 
-<body translate="no">
-  <section id="gallery">
-  <div class="container">
-    <div id="image-gallery">
+<body>
+  <nav class="navbar navbar-default">
+    <div class="container">
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#nav-main">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="#">Handgemachte Deko</a>
+      </div>
+      <div class="collapse navbar-collapse" id="nav-main">
+        <ul class="nav navbar-nav navbar-right">
+          <li><a href="#kategorien">Kategorien</a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <header class="hero">
+    <div class="container">
+      <h1>Schöne Dinge, schlicht & modern</h1>
+      <p>Christbaumdeko, Geschenkschmuck, Türrahmen-Deko, Schlüsselanhänger & mehr.</p>
+    </div>
+  </header>
+
+  <section id="kategorien" class="categories">
+    <div class="container">
       <div class="row">
-        <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12 image">
-          <div class="img-wrapper">
-            <a href="https://hdmu.github.io/Bisasam.jpg"><img src="https://hdmu.github.io/Bisasam.jpg" class="img-responsive"></a>
-            <div class="img-overlay">
-              <i class="fa fa-plus-circle" aria-hidden="true"></i>
-            </div>
-          </div>
+        <div class="col-sm-6 col-md-3">
+          <a href="#" class="category-card show-gallery" data-category="christbaum">
+            <div class="category-icon"><i class="fa fa-star-o"></i></div>
+            <div class="category-title">Christbaumdeko / Geschenkschmuck</div>
+            <div class="category-sub">Alle verfügbaren Bilder</div>
+          </a>
         </div>
-        <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12 image">
-          <div class="img-wrapper">
-            <a href="https://hdmu.github.io/Elsa.jpg"><img src="https://hdmu.github.io/Elsa.jpg" class="img-responsive"></a>
-            <div class="img-overlay">
-              <i class="fa fa-plus-circle" aria-hidden="true"></i>
-            </div>
-          </div>
+        <div class="col-sm-6 col-md-3">
+          <span class="category-card category-disabled"><div class="category-icon"><i class="fa fa-home"></i></div><div class="category-title">Türrahmen‑Deko</div><div class="category-sub">Bald verfügbar</div></span>
         </div>
-        <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12 image">
-          <div class="img-wrapper">
-            <a href="https://hdmu.github.io/Glumanda.jpg"><img src="https://hdmu.github.io/Glumanda.jpg" class="img-responsive"></a>
-            <div class="img-overlay">
-              <i class="fa fa-plus-circle" aria-hidden="true"></i>
-            </div>
-          </div>
+        <div class="col-sm-6 col-md-3">
+          <span class="category-card category-disabled"><div class="category-icon"><i class="fa fa-key"></i></div><div class="category-title">Schlüsselanhänger</div><div class="category-sub">Bald verfügbar</div></span>
         </div>
-        <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12 image">
-          <div class="img-wrapper">
-            <a href="https://hdmu.github.io/Harrypotter.jpg"><img src="https://hdmu.github.io/Harrypotter.jpg" class="img-responsive"></a>
-            <div class="img-overlay">
-              <i class="fa fa-plus-circle" aria-hidden="true"></i>
-            </div>
-          </div>
+        <div class="col-sm-6 col-md-3">
+          <span class="category-card category-disabled"><div class="category-icon"><i class="fa fa-ellipsis-h"></i></div><div class="category-title">Sonstiges</div><div class="category-sub">Bald verfügbar</div></span>
         </div>
-        <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12 image">
-          <div class="img-wrapper">
-            <a href="https://hdmu.github.io/Hund.jpg"><img src="https://hdmu.github.io/Hund.jpg" class="img-responsive"></a>
-            <div class="img-overlay">
-              <i class="fa fa-plus-circle" aria-hidden="true"></i>
-            </div>
-          </div>
-        </div>
-        <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12 image">
-          <div class="img-wrapper">
-            <a href="https://hdmu.github.io/HundBulldoge.jpg"><img src="https://hdmu.github.io/HundBulldoge.jpg" class="img-responsive"></a>
-            <div class="img-overlay">
-              <i class="fa fa-plus-circle" aria-hidden="true"></i>
-            </div>
-          </div>
-        </div>
-        <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12 image">
-          <div class="img-wrapper">
-            <a href="https://hdmu.github.io/Hundeknochen.jpg"><img src="https://hdmu.github.io/Hundeknochen.jpg" class="img-responsive"></a>
-            <div class="img-overlay">
-              <i class="fa fa-plus-circle" aria-hidden="true"></i>
-            </div>
-          </div>
-        </div>
-        <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12 image">
-          <div class="img-wrapper">
-            <a href="https://hdmu.github.io/Husky.jpg"><img src="https://hdmu.github.io/Husky.jpg" class="img-responsive"></a>
-            <div class="img-overlay">
-              <i class="fa fa-plus-circle" aria-hidden="true"></i>
-            </div>
-          </div>
-        </div>
-                <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12 image">
-          <div class="img-wrapper">
-            <a href="https://hdmu.github.io/Katze.jpg"><img src="https://hdmu.github.io/Katze.jpg" class="img-responsive"></a>
-            <div class="img-overlay">
-              <i class="fa fa-plus-circle" aria-hidden="true"></i>
-            </div>
-          </div>
-        </div>
-                <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12 image">
-          <div class="img-wrapper">
-            <a href="https://hdmu.github.io/Mario.jpg"><img src="https://hdmu.github.io/Mario.jpg" class="img-responsive"></a>
-            <div class="img-overlay">
-              <i class="fa fa-plus-circle" aria-hidden="true"></i>
-            </div>
-          </div>
-        </div>
-                <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12 image">
-          <div class="img-wrapper">
-            <a href="https://hdmu.github.io/MickeyMausName.jpg"><img src="https://hdmu.github.io/MickeyMausName.jpg" class="img-responsive"></a>
-            <div class="img-overlay">
-              <i class="fa fa-plus-circle" aria-hidden="true"></i>
-            </div>
-          </div>
-        </div>
-                <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12 image">
-          <div class="img-wrapper">
-            <a href="https://hdmu.github.io/Naruto.jpg"><img src="https://hdmu.github.io/Naruto.jpg" class="img-responsive"></a>
-            <div class="img-overlay">
-              <i class="fa fa-plus-circle" aria-hidden="true"></i>
-            </div>
-          </div>
-        </div>
-                <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12 image">
-          <div class="img-wrapper">
-            <a href="https://hdmu.github.io/NormaleKugel.jpg"><img src="https://hdmu.github.io/NormaleKugel.jpg" class="img-responsive"></a>
-            <div class="img-overlay">
-              <i class="fa fa-plus-circle" aria-hidden="true"></i>
-            </div>
-          </div>
-        </div>
-                        <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12 image">
-          <div class="img-wrapper">
-            <a href="https://hdmu.github.io/Pikachu.jpg"><img src="https://hdmu.github.io/Pikachu.jpg" class="img-responsive"></a>
-            <div class="img-overlay">
-              <i class="fa fa-plus-circle" aria-hidden="true"></i>
-            </div>
-          </div>
-        </div>
-                        <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12 image">
-          <div class="img-wrapper">
-            <a href="https://hdmu.github.io/Schalke.jpg"><img src="https://hdmu.github.io/Schalke.jpg" class="img-responsive"></a>
-            <div class="img-overlay">
-              <i class="fa fa-plus-circle" aria-hidden="true"></i>
-            </div>
-          </div>
-        </div>
-                        <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12 image">
-          <div class="img-wrapper">
-            <a href="https://hdmu.github.io/Stitch.jpg"><img src="https://hdmu.github.io/Stitch.jpg" class="img-responsive"></a>
-            <div class="img-overlay">
-              <i class="fa fa-plus-circle" aria-hidden="true"></i>
-            </div>
-          </div>
-        </div>
-                        <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12 image">
-          <div class="img-wrapper">
-            <a href="https://hdmu.github.io/Supernatural.jpg"><img src="https://hdmu.github.io/Supernatural.jpg" class="img-responsive"></a>
-            <div class="img-overlay">
-              <i class="fa fa-plus-circle" aria-hidden="true"></i>
-            </div>
-          </div>
-        </div>
-                                <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12 image">
-          <div class="img-wrapper">
-            <a href="https://hdmu.github.io/islandpferd.jpg"><img src="https://hdmu.github.io/islandpferd.jpg" class="img-responsive"></a>
-            <div class="img-overlay">
-              <i class="fa fa-plus-circle" aria-hidden="true"></i>
-            </div>
-          </div>
-        </div>
-                                <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12 image">
-          <div class="img-wrapper">
-            <a href="https://hdmu.github.io/lionking.jpg"><img src="https://hdmu.github.io/lionking.jpg" class="img-responsive"></a>
-            <div class="img-overlay">
-              <i class="fa fa-plus-circle" aria-hidden="true"></i>
-            </div>
-          </div>
-        </div>
-                                <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12 image">
-          <div class="img-wrapper">
-            <a href="https://hdmu.github.io/onkelz.jpg"><img src="https://hdmu.github.io/onkelz.jpg" class="img-responsive"></a>
-            <div class="img-overlay">
-              <i class="fa fa-plus-circle" aria-hidden="true"></i>
-            </div>
-          </div>
-        </div>
+      </div>
+    </div>
+  </section>
 
-                                        <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12 image">
-          <div class="img-wrapper">
-            <a href="https://hdmu.github.io/vfl.jpg"><img src="https://hdmu.github.io/vfl.jpg" class="img-responsive"></a>
-            <div class="img-overlay">
-              <i class="fa fa-plus-circle" aria-hidden="true"></i>
-            </div>
-          </div>
-        </div>
-        
-         <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12 image">
-          <div class="img-wrapper">
-            <a href="https://hdmu.github.io/herz.jpg"><img src="https://hdmu.github.io/herz.jpg" class="img-responsive"></a>
-            <div class="img-overlay">
-              <i class="fa fa-plus-circle" aria-hidden="true"></i>
-            </div>
-          </div>
-        </div>
-                 <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12 image">
-          <div class="img-wrapper">
-            <a href="https://hdmu.github.io/tennis.jpg"><img src="https://hdmu.github.io/tennis.jpg" class="img-responsive"></a>
-            <div class="img-overlay">
-              <i class="fa fa-plus-circle" aria-hidden="true"></i>
-            </div>
-          </div>
-        </div>
-                 <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12 image">
-          <div class="img-wrapper">
-            <a href="https://hdmu.github.io/mickey2.jpg"><img src="https://hdmu.github.io/mickey2.jpg" class="img-responsive"></a>
-            <div class="img-overlay">
-              <i class="fa fa-plus-circle" aria-hidden="true"></i>
-            </div>
-          </div>
-        </div>
-                         <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12 image">
-          <div class="img-wrapper">
-            <a href="https://hdmu.github.io/arielle.jpg"><img src="https://hdmu.github.io/arielle.jpg" class="img-responsive"></a>
-            <div class="img-overlay">
-              <i class="fa fa-plus-circle" aria-hidden="true"></i>
-            </div>
-          </div>
-        </div>
-                                 <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12 image">
-          <div class="img-wrapper">
-            <a href="https://hdmu.github.io/spidey.jpg"><img src="https://hdmu.github.io/spidey.jpg" class="img-responsive"></a>
-            <div class="img-overlay">
-              <i class="fa fa-plus-circle" aria-hidden="true"></i>
-            </div>
-          </div>
-        </div>
-                                         <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12 image">
-          <div class="img-wrapper">
-            <a href="https://hdmu.github.io/spidermaus.jpg"><img src="https://hdmu.github.io/spidermaus.jpg" class="img-responsive"></a>
-            <div class="img-overlay">
-              <i class="fa fa-plus-circle" aria-hidden="true"></i>
-            </div>
-          </div>
-        </div>
-                                                 <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12 image">
-          <div class="img-wrapper">
-            <a href="https://hdmu.github.io/vaiana.jpg"><img src="https://hdmu.github.io/vaiana.jpg" class="img-responsive"></a>
-            <div class="img-overlay">
-              <i class="fa fa-plus-circle" aria-hidden="true"></i>
-            </div>
-          </div>
-        </div>
-      </div><!-- End row -->
-    </div><!-- End image gallery -->
-  </div><!-- End container --> 
-</section>
-  <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js'></script>
-<script src='https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js'></script>
-      <script id="rendered-js" >
-// Gallery image hover
-$(".img-wrapper").hover(
-function () {
-  $(this).find(".img-overlay").animate({ opacity: 1 }, 600);
-}, function () {
-  $(this).find(".img-overlay").animate({ opacity: 0 }, 600);
-});
+  <section id="gallery">
+    <div class="container">
+      <div class="section-header">
+        <h2>Galerie</h2>
+        <span class="pill" id="gallery-category"></span>
+      </div>
+      <div id="image-gallery">
+        <div class="row">
+          <!-- ALLE BILDER: Kategorie aktuell "christbaum" -->
+          <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12 image" data-category="christbaum"><div class="img-wrapper"><a href="https://hdmu.github.io/Bisasam.jpg"><img src="https://hdmu.github.io/Bisasam.jpg" class="img-responsive" alt="Bisasam"></a><div class="img-overlay"><i class="fa fa-plus-circle"></i></div></div></div>
+          <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12 image" data-category="christbaum"><div class="img-wrapper"><a href="https://hdmu.github.io/Elsa.jpg"><img src="https://hdmu.github.io/Elsa.jpg" class="img-responsive" alt="Elsa"></a><div class="img-overlay"><i class="fa fa-plus-circle"></i></div></div></div>
+          <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12 image" data-category="christbaum"><div class="img-wrapper"><a href="https://hdmu.github.io/Glumanda.jpg"><img src="https://hdmu.github.io/Glumanda.jpg" class="img-responsive" alt="Glumanda"></a><div class="img-overlay"><i class="fa fa-plus-circle"></i></div></div></div>
+          <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12 image" data-category="christbaum"><div class="img-wrapper"><a href="https://hdmu.github.io/Harrypotter.jpg"><img src="https://hdmu.github.io/Harrypotter.jpg" class="img-responsive" alt="Harry Potter"></a><div class="img-overlay"><i class="fa fa-plus-circle"></i></div></div></div>
+          <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12 image" data-category="christbaum"><div class="img-wrapper"><a href="https://hdmu.github.io/Hund.jpg"><img src="https://hdmu.github.io/Hund.jpg" class="img-responsive" alt="Hund"></a><div class="img-overlay"><i class="fa fa-plus-circle"></i></div></div></div>
+          <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12 image" data-category="christbaum"><div class="img-wrapper"><a href="https://hdmu.github.io/HundBulldoge.jpg"><img src="https://hdmu.github.io/HundBulldoge.jpg" class="img-responsive" alt="Hund Bulldogge"></a><div class="img-overlay"><i class="fa fa-plus-circle"></i></div></div></div>
+          <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12 image" data-category="christbaum"><div class="img-wrapper"><a href="https://hdmu.github.io/Hundeknochen.jpg"><img src="https://hdmu.github.io/Hundeknochen.jpg" class="img-responsive" alt="Hundeknochen"></a><div class="img-overlay"><i class="fa fa-plus-circle"></i></div></div></div>
+          <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12 image" data-category="christbaum"><div class="img-wrapper"><a href="https://hdmu.github.io/Husky.jpg"><img src="https://hdmu.github.io/Husky.jpg" class="img-responsive" alt="Husky"></a><div class="img-overlay"><i class="fa fa-plus-circle"></i></div></div></div>
+          <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12 image" data-category="christbaum"><div class="img-wrapper"><a href="https://hdmu.github.io/Katze.jpg"><img src="https://hdmu.github.io/Katze.jpg" class="img-responsive" alt="Katze"></a><div class="img-overlay"><i class="fa fa-plus-circle"></i></div></div></div>
+          <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12 image" data-category="christbaum"><div class="img-wrapper"><a href="https://hdmu.github.io/Mario.jpg"><img src="https://hdmu.github.io/Mario.jpg" class="img-responsive" alt="Mario"></a><div class="img-overlay"><i class="fa fa-plus-circle"></i></div></div></div>
+          <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12 image" data-category="christbaum"><div class="img-wrapper"><a href="https://hdmu.github.io/MickeyMausName.jpg"><img src="https://hdmu.github.io/MickeyMausName.jpg" class="img-responsive" alt="Mickey Maus Name"></a><div class="img-overlay"><i class="fa fa-plus-circle"></i></div></div></div>
+          <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12 image" data-category="christbaum"><div class="img-wrapper"><a href="https://hdmu.github.io/Naruto.jpg"><img src="https://hdmu.github.io/Naruto.jpg" class="img-responsive" alt="Naruto"></a><div class="img-overlay"><i class="fa fa-plus-circle"></i></div></div></div>
+          <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12 image" data-category="christbaum"><div class="img-wrapper"><a href="https://hdmu.github.io/NormaleKugel.jpg"><img src="https://hdmu.github.io/NormaleKugel.jpg" class="img-responsive" alt="Normale Kugel"></a><div class="img-overlay"><i class="fa fa-plus-circle"></i></div></div></div>
+          <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12 image" data-category="christbaum"><div class="img-wrapper"><a href="https://hdmu.github.io/Pikachu.jpg"><img src="https://hdmu.github.io/Pikachu.jpg" class="img-responsive" alt="Pikachu"></a><div class="img-overlay"><i class="fa fa-plus-circle"></i></div></div></div>
+          <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12 image" data-category="christbaum"><div class="img-wrapper"><a href="https://hdmu.github.io/Schalke.jpg"><img src="https://hdmu.github.io/Schalke.jpg" class="img-responsive" alt="Schalke"></a><div class="img-overlay"><i class="fa fa-plus-circle"></i></div></div></div>
+          <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12 image" data-category="christbaum"><div class="img-wrapper"><a href="https://hdmu.github.io/Stitch.jpg"><img src="https://hdmu.github.io/Stitch.jpg" class="img-responsive" alt="Stitch"></a><div class="img-overlay"><i class="fa fa-plus-circle"></i></div></div></div>
+          <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12 image" data-category="christbaum"><div class="img-wrapper"><a href="https://hdmu.github.io/Supernatural.jpg"><img src="https://hdmu.github.io/Supernatural.jpg" class="img-responsive" alt="Supernatural"></a><div class="img-overlay"><i class="fa fa-plus-circle"></i></div></div></div>
+          <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12 image" data-category="christbaum"><div class="img-wrapper"><a href="https://hdmu.github.io/islandpferd.jpg"><img src="https://hdmu.github.io/islandpferd.jpg" class="img-responsive" alt="Islandpferd"></a><div class="img-overlay"><i class="fa fa-plus-circle"></i></div></div></div>
+          <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12 image" data-category="christbaum"><div class="img-wrapper"><a href="https://hdmu.github.io/lionking.jpg"><img src="https://hdmu.github.io/lionking.jpg" class="img-responsive" alt="Lion King"></a><div class="img-overlay"><i class="fa fa-plus-circle"></i></div></div></div>
+          <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12 image" data-category="christbaum"><div class="img-wrapper"><a href="https://hdmu.github.io/onkelz.jpg"><img src="https://hdmu.github.io/onkelz.jpg" class="img-responsive" alt="Onkelz"></a><div class="img-overlay"><i class="fa fa-plus-circle"></i></div></div></div>
+          <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12 image" data-category="christbaum"><div class="img-wrapper"><a href="https://hdmu.github.io/vfl.jpg"><img src="https://hdmu.github.io/vfl.jpg" class="img-responsive" alt="VfL"></a><div class="img-overlay"><i class="fa fa-plus-circle"></i></div></div></div>
+          <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12 image" data-category="christbaum"><div class="img-wrapper"><a href="https://hdmu.github.io/herz.jpg"><img src="https://hdmu.github.io/herz.jpg" class="img-responsive" alt="Herz"></a><div class="img-overlay"><i class="fa fa-plus-circle"></i></div></div></div>
+          <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12 image" data-category="christbaum"><div class="img-wrapper"><a href="https://hdmu.github.io/tennis.jpg"><img src="https://hdmu.github.io/tennis.jpg" class="img-responsive" alt="Tennis"></a><div class="img-overlay"><i class="fa fa-plus-circle"></i></div></div></div>
+          <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12 image" data-category="christbaum"><div class="img-wrapper"><a href="https://hdmu.github.io/mickey2.jpg"><img src="https://hdmu.github.io/mickey2.jpg" class="img-responsive" alt="Mickey 2"></a><div class="img-overlay"><i class="fa fa-plus-circle"></i></div></div></div>
+          <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12 image" data-category="christbaum"><div class="img-wrapper"><a href="https://hdmu.github.io/arielle.jpg"><img src="https://hdmu.github.io/arielle.jpg" class="img-responsive" alt="Arielle"></a><div class="img-overlay"><i class="fa fa-plus-circle"></i></div></div></div>
+          <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12 image" data-category="christbaum"><div class="img-wrapper"><a href="https://hdmu.github.io/spidey.jpg"><img src="https://hdmu.github.io/spidey.jpg" class="img-responsive" alt="Spidey"></a><div class="img-overlay"><i class="fa fa-plus-circle"></i></div></div></div>
+          <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12 image" data-category="christbaum"><div class="img-wrapper"><a href="https://hdmu.github.io/spidermaus.jpg"><img src="https://hdmu.github.io/spidermaus.jpg" class="img-responsive" alt="Spidermaus"></a><div class="img-overlay"><i class="fa fa-plus-circle"></i></div></div></div>
+          <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12 image" data-category="christbaum"><div class="img-wrapper"><a href="https://hdmu.github.io/vaiana.jpg"><img src="https://hdmu.github.io/vaiana.jpg" class="img-responsive" alt="Vaiana"></a><div class="img-overlay"><i class="fa fa-plus-circle"></i></div></div></div>
+        </div><!-- row -->
+      </div><!-- image-gallery -->
+    </div>
+  </section>
 
+  <footer class="site-footer"><div class="container">© <span id="year"></span> Handgemachte Deko</div></footer>
 
-// Lightbox
-var $overlay = $('<div id="overlay"></div>');
-var $image = $("<img>");
-var $prevButton = $('<div id="prevButton"><i class="fa fa-chevron-left"></i></div>');
-var $nextButton = $('<div id="nextButton"><i class="fa fa-chevron-right"></i></div>');
-var $exitButton = $('<div id="exitButton"><i class="fa fa-times"></i></div>');
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  <script>
+    document.getElementById('year').textContent = new Date().getFullYear();
 
-// Add overlay
-$overlay.append($image).prepend($prevButton).append($nextButton).append($exitButton);
-$("#gallery").append($overlay);
+    $('.img-wrapper').hover(function(){ $(this).find('.img-overlay').css('opacity',1); }, function(){ $(this).find('.img-overlay').css('opacity',0); });
 
-// Hide overlay on default
-$overlay.hide();
+    var $overlay=$('<div id="overlay"></div>'); var $image=$('<img>'); var $prevButton=$('<div id="prevButton"><i class="fa fa-chevron-left"></i></div>'); var $nextButton=$('<div id="nextButton"><i class="fa fa-chevron-right"></i></div>'); var $exitButton=$('<div id="exitButton"><i class="fa fa-times"></i></div>');
+    $overlay.append($image).prepend($prevButton).append($nextButton).append($exitButton);
+    $('body').append($overlay);
+    $overlay.hide();
 
-// When an image is clicked
-$(".img-overlay").click(function (event) {
-  // Prevents default behavior
-  event.preventDefault();
-  // Adds href attribute to variable
-  var imageLocation = $(this).prev().attr("href");
-  // Add the image src to $image
-  $image.attr("src", imageLocation);
-  // Fade in the overlay
-  $overlay.fadeIn("slow");
-});
+    // Bild öffnen
+    $('.img-overlay').on('click', function(e){ e.preventDefault(); var imageLocation=$(this).prev().attr('href'); $image.attr('src', imageLocation); $overlay.fadeIn('fast'); });
+    $overlay.on('click', function(){ $(this).fadeOut('fast'); });
 
-// When the overlay is clicked
-$overlay.click(function () {
-  // Fade out the overlay
-  $(this).fadeOut("slow");
-});
+    // Nur durch sichtbare Bilder der gewählten Kategorie blättern
+    function vis(){ return $('#image-gallery .image:visible img'); }
+    function nextImg(){ var imgs=vis(); if(!imgs.length) return; var cur=$('#overlay img').attr('src'); var i=imgs.index(imgs.filter('[src="'+cur+'"]').first()); var n=imgs.eq((i+1)%imgs.length); $('#overlay img').attr('src', n.attr('src')).fadeIn(150); }
+    function prevImg(){ var imgs=vis(); if(!imgs.length) return; var cur=$('#overlay img').attr('src'); var i=imgs.index(imgs.filter('[src="'+cur+'"]').first()); var p=imgs.eq((i-1+imgs.length)%imgs.length); $('#overlay img').attr('src', p.attr('src')).fadeIn(150); }
+    $nextButton.on('click', function(e){ e.stopPropagation(); nextImg(); });
+    $prevButton.on('click', function(e){ e.stopPropagation(); prevImg(); });
+    $exitButton.on('click', function(){ $('#overlay').fadeOut('fast'); });
 
-// When next button is clicked
-$nextButton.click(function (event) {
-  // Hide the current image
-  $("#overlay img").hide();
-  // Overlay image location
-  var $currentImgSrc = $("#overlay img").attr("src");
-  // Image with matching location of the overlay image
-  var $currentImg = $('#image-gallery img[src="' + $currentImgSrc + '"]');
-  // Finds the next image
-  var $nextImg = $($currentImg.closest(".image").next().find("img"));
-  // All of the images in the gallery
-  var $images = $("#image-gallery img");
-  // If there is a next image
-  if ($nextImg.length > 0) {
-    // Fade in the next image
-    $("#overlay img").attr("src", $nextImg.attr("src")).fadeIn(800);
-  } else {
-    // Otherwise fade in the first image
-    $("#overlay img").attr("src", $($images[0]).attr("src")).fadeIn(800);
-  }
-  // Prevents overlay from being hidden
-  event.stopPropagation();
-});
-
-// When previous button is clicked
-$prevButton.click(function (event) {
-  // Hide the current image
-  $("#overlay img").hide();
-  // Overlay image location
-  var $currentImgSrc = $("#overlay img").attr("src");
-  // Image with matching location of the overlay image
-  var $currentImg = $('#image-gallery img[src="' + $currentImgSrc + '"]');
-  // Finds the next image
-  var $nextImg = $($currentImg.closest(".image").prev().find("img"));
-  // Fade in the next image
-  $("#overlay img").attr("src", $nextImg.attr("src")).fadeIn(800);
-  // Prevents overlay from being hidden
-  event.stopPropagation();
-});
-
-// When the exit button is clicked
-$exitButton.click(function () {
-  // Fade out the overlay
-  $("#overlay").fadeOut("slow");
-});
-//# sourceURL=pen.js
-    </script>
-
-  
+    // Kategorien-Klick
+    $('.show-gallery').on('click', function(e){
+      e.preventDefault();
+      var category=$(this).data('category');
+      $('#gallery').fadeIn();
+      $('#gallery-category').text($(this).find('.category-title').text());
+      // nur passende Bilder zeigen
+      $('#image-gallery .image').hide();
+      $('#image-gallery .image[data-category="'+category+'"]').show();
+      $('html, body').animate({scrollTop:$('#gallery').offset().top-50},500);
+    });
+  </script>
 </body>
-
 </html>
