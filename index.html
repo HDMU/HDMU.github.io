@@ -38,7 +38,7 @@
     #image-gallery[data-active="tuerrahmen"] .image[data-category="tuerrahmen"],
     #image-gallery[data-active="schluessel"] .image[data-category="schluessel"],
     #image-gallery[data-active="schriftzuege"] .image[data-category="schriftzuege"] { display:block !important; }
-
+    #image-gallery[data-active="einschulung"] .image[data-category="einschulung"] { display:block !important; }
     #overlay { background:rgba(0,0,0,0.85); width:100%; height:100%; position:fixed; top:0; left:0; display:flex; justify-content:center; align-items:center; z-index:999; user-select:none; }
     #overlay img { margin:0; width:80%; height:auto; object-fit:contain; padding:5%; }
     @media (min-width:768px){ #overlay img{ width:60%; } }
@@ -109,6 +109,13 @@
           </a>
         </div>
         <div class="col-sm-6 col-md-3">
+          <a href="#" class="category-card show-gallery" data-category="einschulung">
+            <div class="category-icon"><i class="fa fa-graduation-cap"></i></div>
+            <div class="category-title">Einschulung</div>
+            <div class="category-sub">Alle verfügbaren Bilder</div>
+          </a>
+        </div>
+        <div class="col-sm-6 col-md-3">
           <span class="category-card" title="Demnächst" style="opacity:.55; cursor:not-allowed;">
             <div class="category-icon"><i class="fa fa-ellipsis-h"></i></div>
             <div class="category-title">Sonstiges</div>
@@ -174,7 +181,15 @@
     <div class="img-overlay"><i class="fa fa-plus-circle"></i></div>
   </div>
 </div>
-  
+  <!-- Einschulung -->
+<div class="col-lg-3 col-md-6 col-sm-6 col-xs-12 image" data-category="einschulung">
+  <div class="img-wrapper">
+    <a href="https://hdmu.github.io/schriftschulkind2026.jpg">
+      <img src="https://hdmu.github.io/schriftschulkind2026.jpg" class="img-responsive" alt="Schulkind 2026">
+    </a>
+    <div class="img-overlay"><i class="fa fa-plus-circle"></i></div>
+  </div>
+</div>
 <!-- Schlüsselanhänger -->
 <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12 image" data-category="schluessel">
   <div class="img-wrapper">
