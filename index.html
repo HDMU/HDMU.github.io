@@ -284,62 +284,114 @@
 
   <footer class="site-footer"><div class="container">© <span id="year"></span> Handgemachte Deko</div></footer>
 
-  <script>
-  document.addEventListener('DOMContentLoaded', function(){
-    var yearEl = document.getElementById('year');
-    if (yearEl) { yearEl.textContent = new Date().getFullYear(); }
+<script>
+document.addEventListener('DOMContentLoaded', function(){
+  var yearEl = document.getElementById('year');
+  if (yearEl) { yearEl.textContent = new Date().getFullYear(); }
 
-    // Lightbox Elemente
-    var overlay = document.createElement('div'); overlay.id = 'overlay';
-    var img = document.createElement('img');
-    var prevBtn = document.createElement('div'); prevBtn.id = 'prevButton'; prevBtn.innerHTML = '<i class="fa fa-chevron-left"></i>';
-    var nextBtn = document.createElement('div'); nextBtn.id = 'nextButton'; nextBtn.innerHTML = '<i class="fa fa-chevron-right"></i>';
-    var closeBtn= document.createElement('div'); closeBtn.id = 'exitButton'; closeBtn.innerHTML = '<i class="fa fa-times"></i>';
-    overlay.appendChild(img); overlay.insertBefore(prevBtn, overlay.firstChild); overlay.appendChild(nextBtn); overlay.appendChild(closeBtn);
-    document.body.appendChild(overlay);
-    overlay.style.display = 'none';
+  // Lightbox Elemente
+  var overlay = document.createElement('div'); overlay.id = 'overlay';
+  var img = document.createElement('img');
+  var prevBtn = document.createElement('div'); prevBtn.id = 'prevButton'; prevBtn.innerHTML = '<i class="fa fa-chevron-left"></i>';
+  var nextBtn = document.createElement('div'); nextBtn.id = 'nextButton'; nextBtn.innerHTML = '<i class="fa fa-chevron-right"></i>';
+  var closeBtn= document.createElement('div'); closeBtn.id = 'exitButton'; closeBtn.innerHTML = '<i class="fa fa-times"></i>';
+  overlay.appendChild(img); overlay.insertBefore(prevBtn, overlay.firstChild); overlay.appendChild(nextBtn); overlay.appendChild(closeBtn);
+  document.body.appendChild(overlay);
+  overlay.style.display = 'none';
 
-    function visibleImgs(){
-      var gallery = document.getElementById('image-gallery');
-      var cat = gallery.getAttribute('data-active');
-      var list = gallery.querySelectorAll('.image[data-category="'+cat+'"] img');
-      return Array.prototype.filter.call(list, function(el){ return el.offsetParent !== null; });
-    }
-    function setImg(newImg){ img.setAttribute('src', newImg.getAttribute('src')); }
-    function nextImg(){ var imgs = visibleImgs(); if(!imgs.length) return; var cur = img.getAttribute('src'); var idx = imgs.findIndex(function(e){ return e.getAttribute('src')===cur; }); var nxt = imgs[(idx+1+imgs.length)%imgs.length]; setImg(nxt); }
-    function prevImg(){ var imgs = visibleImgs(); if(!imgs.length) return; var cur = img.getAttribute('src'); var idx = imgs.findIndex(function(e){ return e.getAttribute('src')===cur; }); var prv = imgs[(idx-1+imgs.length)%imgs.length]; setImg(prv); }
+  function visibleImgs(){
+    var gallery = document.getElementById('image-gallery');
+    var cat = gallery.getAttribute('data-active');
+    var list = gallery.querySelectorAll('.image[data-category="'+cat+'"] img');
+    return Array.prototype.filter.call(list, function(el){ return el.offsetParent !== null; });
+  }
+  function setImg(newImg){ img.setAttribute('src', newImg.getAttribute('src')); }
+  function nextImg(){ var imgs = visibleImgs(); if(!imgs.length) return; var cur = img.getAttribute('src'); var idx = imgs.findIndex(function(e){ return e.getAttribute('src')===cur; }); var nxt = imgs[(idx+1+imgs.length)%imgs.length]; setImg(nxt); }
+  function prevImg(){ var imgs = visibleImgs(); if(!imgs.length) return; var cur = img.getAttribute('src'); var idx = imgs.findIndex(function(e){ return e.getAttribute('src')===cur; }); var prv = imgs[(idx-1+imgs.length)%imgs.length]; setImg(prv); }
 
-    // Delegierte Klicks: Bild öffnen
-    document.addEventListener('click', function(e){
-      var overlayIcon = e.target.closest('.img-overlay');
-      if(overlayIcon){ e.preventDefault(); var href = overlayIcon.previousElementSibling.getAttribute('href'); img.setAttribute('src', href); overlay.style.display='flex'; return; }
+  // --------- Deep-Link-Logik ----------
+  var gallerySection = document.getElementById('gallery');
+  var gallery = document.getElementById('image-gallery');
+  var pill = document.getElementById('gallery-category');
 
-      if(e.target.closest('#exitButton')){ overlay.style.display='none'; return; }
-      if(e.target.closest('#nextButton')){ e.stopPropagation(); nextImg(); return; }
-      if(e.target.closest('#prevButton')){ e.stopPropagation(); prevImg(); return; }
+  // Alle gültigen Kategorien aus den Karten lesen
+  var cards = document.querySelectorAll('.show-gallery');
+  var validCategories = Array.prototype.map.call(cards, function(el){ return el.getAttribute('data-category'); });
 
-      var catBtn = e.target.closest('.show-gallery');
-      if(catBtn){
-        e.preventDefault();
-        var category = catBtn.getAttribute('data-category');
-        document.getElementById('gallery').style.display = 'block';
-        var titleEl = catBtn.querySelector('.category-title');
-        var pill = document.getElementById('gallery-category');
-        if (titleEl && pill) { pill.textContent = titleEl.textContent; }
-        // CSS-Filter aktivieren und zusätzlich inline absichern
-        var gallery = document.getElementById('image-gallery');
-        gallery.setAttribute('data-active', category);
-        var items = gallery.querySelectorAll('.image');
-        for (var i=0; i<items.length; i++) {
-          var it = items[i];
-          it.style.display = (it.getAttribute('data-category')===category) ? 'block' : 'none';
-        }
-        // Scrollen
-        var top = document.getElementById('gallery').getBoundingClientRect().top + window.pageYOffset - 50;
-        window.scrollTo({ top: top, behavior: 'smooth' });
-      }
-    });
+  // Karten bekommen ein korrektes href (#kategoriename)
+  Array.prototype.forEach.call(cards, function(el){
+    var cat = el.getAttribute('data-category');
+    el.setAttribute('href', '#' + encodeURIComponent(cat));
   });
-  </script>
+
+  function activateCategory(category){
+    if(!category || validCategories.indexOf(category) === -1) return;
+
+    // Galerie sichtbar machen
+    gallerySection.style.display = 'block';
+
+    // Pill-Text setzen (liest Titel aus Karte gleicher Kategorie)
+    var card = document.querySelector('.show-gallery[data-category="'+category+'"]');
+    var titleEl = card ? card.querySelector('.category-title') : null;
+    if (titleEl && pill) { pill.textContent = titleEl.textContent; }
+
+    // CSS-Filter aktivieren und zusätzlich inline absichern
+    gallery.setAttribute('data-active', category);
+    var items = gallery.querySelectorAll('.image');
+    for (var i=0; i<items.length; i++) {
+      var it = items[i];
+      it.style.display = (it.getAttribute('data-category')===category) ? 'block' : 'none';
+    }
+
+    // sanft zur Galerie scrollen
+    var top = gallerySection.getBoundingClientRect().top + window.pageYOffset - 50;
+    window.scrollTo({ top: top, behavior: 'smooth' });
+  }
+
+  function readHashAndActivate(){
+    var raw = window.location.hash.replace(/^#/, '');
+    if(!raw) return;
+
+    // #kategorien -> nur zum Kategorien-Bereich scrollen
+    if (raw.toLowerCase() === 'kategorien') {
+      var kat = document.getElementById('kategorien');
+      var top = kat.getBoundingClientRect().top + window.pageYOffset - 50;
+      window.scrollTo({ top: top, behavior: 'smooth' });
+      return;
+    }
+
+    // Kategorie aktivieren (Hash kann URL-encodiert sein)
+    var cat = decodeURIComponent(raw);
+    activateCategory(cat);
+  }
+
+  // Beim Laden ggf. Hash auswerten
+  readHashAndActivate();
+
+  // Hash-Änderungen (Back/Forward) beachten
+  window.addEventListener('hashchange', readHashAndActivate);
+
+  // Delegierte Klicks
+  document.addEventListener('click', function(e){
+    var overlayIcon = e.target.closest('.img-overlay');
+    if(overlayIcon){ e.preventDefault(); var href = overlayIcon.previousElementSibling.getAttribute('href'); img.setAttribute('src', href); overlay.style.display='flex'; return; }
+
+    if(e.target.closest('#exitButton')){ overlay.style.display='none'; return; }
+    if(e.target.closest('#nextButton')){ e.stopPropagation(); nextImg(); return; }
+    if(e.target.closest('#prevButton')){ e.stopPropagation(); prevImg(); return; }
+
+    // Kategorie-Karten: Hash setzen + direkt aktivieren (schnellere Reaktion)
+    var catBtn = e.target.closest('.show-gallery');
+    if(catBtn){
+      var category = catBtn.getAttribute('data-category');
+      // Kein preventDefault -> Browser setzt den Hash selbst.
+      // Für sofortige UI-Reaktion zusätzlich direkt aktivieren:
+      activateCategory(category);
+      return;
+    }
+  });
+});
+</script>
+
 </body>
 </html>
