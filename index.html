@@ -44,7 +44,7 @@
     #overlay img { margin:0; width:80%; height:auto; object-fit:contain; padding:5%; }
     @media (min-width:768px){ #overlay img{ width:60%; } }
     @media (min-width:1200px){ #overlay img{ width:50%; } }
-
+    .category-icon { font-size:28px; line-height:1; }
     #nextButton, #prevButton, #exitButton { color:#fff; transition:opacity .3s; }
     #nextButton:hover, #prevButton:hover, #exitButton:hover { opacity:.75; }
     #nextButton, #prevButton { font-size:2em; }
@@ -118,7 +118,7 @@
         </div>
         <div class="col-sm-6 col-md-3">
           <a href="#" class="category-card show-gallery" data-category="kommunion">
-            <div class="category-icon"><i class="fa fa-leaf"></i></div>
+            <div class="category-icon" aria-hidden="true">✝</div>
             <div class="category-title">Kommunion</div>
             <div class="category-sub">Alle verfügbaren Bilder</div>
           </a>
