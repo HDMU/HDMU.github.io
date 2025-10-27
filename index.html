@@ -19,7 +19,7 @@
     .categories { padding:35px 0 10px; }
     .category-card { background:#fff; border-radius:16px; box-shadow:0 8px 24px rgba(0,0,0,.06); transition:all .25s ease; border:1px solid rgba(0,0,0,.06); display:block; padding:26px 22px; height:140px; }
     .category-card:hover { transform:translateY(-3px); box-shadow:0 12px 28px rgba(0,0,0,.09); }
-    .category-icon { font-size:28px; margin-bottom:12px; }
+    .category-icon { font-size:28px; margin-bottom:12px; line-height:1; }
     .category-title { font-size:18px; font-weight:600; }
     .category-sub { color:#777; font-size:13px; }
 
@@ -37,25 +37,25 @@
     #image-gallery[data-active="christbaum"] .image[data-category="christbaum"],
     #image-gallery[data-active="tuerrahmen"] .image[data-category="tuerrahmen"],
     #image-gallery[data-active="schluessel"] .image[data-category="schluessel"],
-    #image-gallery[data-active="schriftzuege"] .image[data-category="schriftzuege"] { display:block !important; }
-    #image-gallery[data-active="einschulung"] .image[data-category="einschulung"] { display:block !important; }
-    #image-gallery[data-active="kommunion"] .image[data-category="kommunion"] { display:block !important; }
-    #image-gallery[data-active="geburt"] .image[data-category="geburt"] { display:block !important; }
-    #image-gallery[data-active="geburtstag"] .image[data-category="geburtstag"] { display:block !important; }
+    #image-gallery[data-active="schriftzuege"] .image[data-category="schriftzuege"],
+    #image-gallery[data-active="einschulung"] .image[data-category="einschulung"],
+    #image-gallery[data-active="kommunion"] .image[data-category="kommunion"],
+    #image-gallery[data-active="geburt"] .image[data-category="geburt"],
+    #image-gallery[data-active="geburtstag"] .image[data-category="geburtstag"],
     #image-gallery[data-active="zaubertonie"] .image[data-category="zaubertonie"] { display:block !important; }
 
-
-    #overlay { background:rgba(0,0,0,0.85); width:100%; height:100%; position:fixed; top:0; left:0; display:flex; justify-content:center; align-items:center; z-index:999; user-select:none; }
-    #overlay img { margin:0; width:80%; height:auto; object-fit:contain; padding:5%; }
-    @media (min-width:768px){ #overlay img{ width:60%; } }
-    @media (min-width:1200px){ #overlay img{ width:50%; } }
-    .category-icon { font-size:28px; line-height:1; }
-    #nextButton, #prevButton, #exitButton { color:#fff; transition:opacity .3s; }
-    #nextButton:hover, #prevButton:hover, #exitButton:hover { opacity:.75; }
-    #nextButton, #prevButton { font-size:2em; }
-    @media (min-width:768px){ #nextButton, #prevButton { font-size:3em; } }
-    #exitButton { position:absolute; top:15px; right:15px; font-size:2em; }
-    @media (min-width:768px){ #exitButton{ font-size:3em; } }
+    /* Preis-Chip (Fantasiewährung) */
+    .price-chip{
+      position:absolute; left:10px; bottom:10px;
+      background:rgba(255,255,255,.92);
+      backdrop-filter:saturate(1.4) blur(2px);
+      border:1px solid rgba(0,0,0,.06);
+      border-radius:999px; padding:6px 10px;
+      font-size:12px; font-weight:700; color:#333;
+      box-shadow:0 6px 16px rgba(0,0,0,.08);
+      display:flex; align-items:center; gap:6px;
+    }
+    .price-chip i{ font-size:12px; }
 
     .section-header { margin:10px 0 20px; display:flex; align-items:center; justify-content:space-between; }
     .section-header h2 { margin:0; font-weight:700; font-size:22px; }
@@ -115,15 +115,14 @@
           </a>
         </div>
 
-      
         <div class="col-sm-6 col-md-3">
-  <a href="#" class="category-card show-gallery" data-category="geburt">
-    <div class="category-icon"><i class="fa fa-child"></i></div>
-    <div class="category-title">Geburt</div>
-    <div class="category-sub">Alle verfügbaren Bilder</div>
-  </a>
-</div>  
-                <div class="col-sm-6 col-md-3">
+          <a href="#" class="category-card show-gallery" data-category="geburt">
+            <div class="category-icon"><i class="fa fa-child"></i></div>
+            <div class="category-title">Geburt</div>
+            <div class="category-sub">Alle verfügbaren Bilder</div>
+          </a>
+        </div>
+        <div class="col-sm-6 col-md-3">
           <a href="#" class="category-card show-gallery" data-category="einschulung">
             <div class="category-icon"><i class="fa fa-graduation-cap"></i></div>
             <div class="category-title">Einschulung</div>
@@ -138,20 +137,21 @@
           </a>
         </div>
         <div class="col-sm-6 col-md-3">
-  <a href="#" class="category-card show-gallery" data-category="geburtstag">
-    <div class="category-icon"><i class="fa fa-birthday-cake"></i></div>
-    <div class="category-title">Geburtstag</div>
-    <div class="category-sub">Alle verfügbaren Bilder</div>
-  </a>
-</div>
+          <a href="#" class="category-card show-gallery" data-category="geburtstag">
+            <div class="category-icon"><i class="fa fa-birthday-cake"></i></div>
+            <div class="category-title">Geburtstag</div>
+            <div class="category-sub">Alle verfügbaren Bilder</div>
+          </a>
+        </div>
 
+        <!-- Neue Kategorie: Zaubertonie -->
         <div class="col-sm-6 col-md-3">
-  <a href="#" class="category-card show-gallery" data-category="zaubertonie">
-    <div class="category-icon"><i class="fa fa-magic"></i></div>
-    <div class="category-title">Zaubertonie</div>
-    <div class="category-sub">Alle verfügbaren Bilder</div>
-  </a>
-</div>
+          <a href="#" class="category-card show-gallery" data-category="zaubertonie">
+            <div class="category-icon"><i class="fa fa-magic"></i></div>
+            <div class="category-title">Zaubertonie</div>
+            <div class="category-sub">Alle verfügbaren Bilder</div>
+          </a>
+        </div>
 
         <div class="col-sm-6 col-md-3">
           <span class="category-card" title="Demnächst" style="opacity:.55; cursor:not-allowed;">
@@ -173,206 +173,73 @@
       <div id="image-gallery">
         <div class="row">
           <!-- Christbaumdeko / Geschenkschmuck -->
-          <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12 image" data-category="christbaum"><div class="img-wrapper"><a href="https://hdmu.github.io/Bisasam.jpg"><img src="https://hdmu.github.io/Bisasam.jpg" class="img-responsive" alt="Bisasam"></a><div class="img-overlay"><i class="fa fa-plus-circle"></i></div></div></div>
-          <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12 image" data-category="christbaum"><div class="img-wrapper"><a href="https://hdmu.github.io/Elsa.jpg"><img src="https://hdmu.github.io/Elsa.jpg" class="img-responsive" alt="Elsa"></a><div class="img-overlay"><i class="fa fa-plus-circle"></i></div></div></div>
-          <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12 image" data-category="christbaum"><div class="img-wrapper"><a href="https://hdmu.github.io/Glumanda.jpg"><img src="https://hdmu.github.io/Glumanda.jpg" class="img-responsive" alt="Glumanda"></a><div class="img-overlay"><i class="fa fa-plus-circle"></i></div></div></div>
-          <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12 image" data-category="christbaum"><div class="img-wrapper"><a href="https://hdmu.github.io/Harrypotter.jpg"><img src="https://hdmu.github.io/Harrypotter.jpg" class="img-responsive" alt="Harry Potter"></a><div class="img-overlay"><i class="fa fa-plus-circle"></i></div></div></div>
-          <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12 image" data-category="christbaum"><div class="img-wrapper"><a href="https://hdmu.github.io/Hund.jpg"><img src="https://hdmu.github.io/Hund.jpg" class="img-responsive" alt="Hund"></a><div class="img-overlay"><i class="fa fa-plus-circle"></i></div></div></div>
-          <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12 image" data-category="christbaum"><div class="img-wrapper"><a href="https://hdmu.github.io/HundBulldoge.jpg"><img src="https://hdmu.github.io/HundBulldoge.jpg" class="img-responsive" alt="Hund Bulldogge"></a><div class="img-overlay"><i class="fa fa-plus-circle"></i></div></div></div>
-          <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12 image" data-category="christbaum"><div class="img-wrapper"><a href="https://hdmu.github.io/Hundeknochen.jpg"><img src="https://hdmu.github.io/Hundeknochen.jpg" class="img-responsive" alt="Hundeknochen"></a><div class="img-overlay"><i class="fa fa-plus-circle"></i></div></div></div>
-          <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12 image" data-category="christbaum"><div class="img-wrapper"><a href="https://hdmu.github.io/Husky.jpg"><img src="https://hdmu.github.io/Husky.jpg" class="img-responsive" alt="Husky"></a><div class="img-overlay"><i class="fa fa-plus-circle"></i></div></div></div>
-          <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12 image" data-category="christbaum"><div class="img-wrapper"><a href="https://hdmu.github.io/Katze.jpg"><img src="https://hdmu.github.io/Katze.jpg" class="img-responsive" alt="Katze"></a><div class="img-overlay"><i class="fa fa-plus-circle"></i></div></div></div>
-          <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12 image" data-category="christbaum"><div class="img-wrapper"><a href="https://hdmu.github.io/Mario.jpg"><img src="https://hdmu.github.io/Mario.jpg" class="img-responsive" alt="Mario"></a><div class="img-overlay"><i class="fa fa-plus-circle"></i></div></div></div>
-          <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12 image" data-category="christbaum"><div class="img-wrapper"><a href="https://hdmu.github.io/MickeyMausName.jpg"><img src="https://hdmu.github.io/MickeyMausName.jpg" class="img-responsive" alt="Mickey Maus Name"></a><div class="img-overlay"><i class="fa fa-plus-circle"></i></div></div></div>
-          <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12 image" data-category="christbaum"><div class="img-wrapper"><a href="https://hdmu.github.io/Naruto.jpg"><img src="https://hdmu.github.io/Naruto.jpg" class="img-responsive" alt="Naruto"></a><div class="img-overlay"><i class="fa fa-plus-circle"></i></div></div></div>
-          <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12 image" data-category="christbaum"><div class="img-wrapper"><a href="https://hdmu.github.io/NormaleKugel.jpg"><img src="https://hdmu.github.io/NormaleKugel.jpg" class="img-responsive" alt="Normale Kugel"></a><div class="img-overlay"><i class="fa fa-plus-circle"></i></div></div></div>
-          <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12 image" data-category="christbaum"><div class="img-wrapper"><a href="https://hdmu.github.io/Pikachu.jpg"><img src="https://hdmu.github.io/Pikachu.jpg" class="img-responsive" alt="Pikachu"></a><div class="img-overlay"><i class="fa fa-plus-circle"></i></div></div></div>
-          <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12 image" data-category="christbaum"><div class="img-wrapper"><a href="https://hdmu.github.io/Schalke.jpg"><img src="https://hdmu.github.io/Schalke.jpg" class="img-responsive" alt="Schalke"></a><div class="img-overlay"><i class="fa fa-plus-circle"></i></div></div></div>
-          <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12 image" data-category="christbaum"><div class="img-wrapper"><a href="https://hdmu.github.io/Stitch.jpg"><img src="https://hdmu.github.io/Stitch.jpg" class="img-responsive" alt="Stitch"></a><div class="img-overlay"><i class="fa fa-plus-circle"></i></div></div></div>
-          <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12 image" data-category="christbaum"><div class="img-wrapper"><a href="https://hdmu.github.io/Supernatural.jpg"><img src="https://hdmu.github.io/Supernatural.jpg" class="img-responsive" alt="Supernatural"></a><div class="img-overlay"><i class="fa fa-plus-circle"></i></div></div></div>
-          <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12 image" data-category="christbaum"><div class="img-wrapper"><a href="https://hdmu.github.io/islandpferd.jpg"><img src="https://hdmu.github.io/islandpferd.jpg" class="img-responsive" alt="Islandpferd"></a><div class="img-overlay"><i class="fa fa-plus-circle"></i></div></div></div>
-          <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12 image" data-category="christbaum"><div class="img-wrapper"><a href="https://hdmu.github.io/lionking.jpg"><img src="https://hdmu.github.io/lionking.jpg" class="img-responsive" alt="Lion King"></a><div class="img-overlay"><i class="fa fa-plus-circle"></i></div></div></div>
-          <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12 image" data-category="christbaum"><div class="img-wrapper"><a href="https://hdmu.github.io/onkelz.jpg"><img src="https://hdmu.github.io/onkelz.jpg" class="img-responsive" alt="Onkelz"></a><div class="img-overlay"><i class="fa fa-plus-circle"></i></div></div></div>
-          <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12 image" data-category="christbaum"><div class="img-wrapper"><a href="https://hdmu.github.io/vfl.jpg"><img src="https://hdmu.github.io/vfl.jpg" class="img-responsive" alt="VfL"></a><div class="img-overlay"><i class="fa fa-plus-circle"></i></div></div></div>
-          <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12 image" data-category="christbaum"><div class="img-wrapper"><a href="https://hdmu.github.io/herz.jpg"><img src="https://hdmu.github.io/herz.jpg" class="img-responsive" alt="Herz"></a><div class="img-overlay"><i class="fa fa-plus-circle"></i></div></div></div>
-          <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12 image" data-category="christbaum"><div class="img-wrapper"><a href="https://hdmu.github.io/tennis.jpg"><img src="https://hdmu.github.io/tennis.jpg" class="img-responsive" alt="Tennis"></a><div class="img-overlay"><i class="fa fa-plus-circle"></i></div></div></div>
-          <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12 image" data-category="christbaum"><div class="img-wrapper"><a href="https://hdmu.github.io/mickey2.jpg"><img src="https://hdmu.github.io/mickey2.jpg" class="img-responsive" alt="Mickey 2"></a><div class="img-overlay"><i class="fa fa-plus-circle"></i></div></div></div>
-          <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12 image" data-category="christbaum"><div class="img-wrapper"><a href="https://hdmu.github.io/arielle.jpg"><img src="https://hdmu.github.io/arielle.jpg" class="img-responsive" alt="Arielle"></a><div class="img-overlay"><i class="fa fa-plus-circle"></i></div></div></div>
-          <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12 image" data-category="christbaum"><div class="img-wrapper"><a href="https://hdmu.github.io/spidey.jpg"><img src="https://hdmu.github.io/spidey.jpg" class="img-responsive" alt="Spidey"></a><div class="img-overlay"><i class="fa fa-plus-circle"></i></div></div></div>
-          <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12 image" data-category="christbaum"><div class="img-wrapper"><a href="https://hdmu.github.io/spidermaus.jpg"><img src="https://hdmu.github.io/spidermaus.jpg" class="img-responsive" alt="Spidermaus"></a><div class="img-overlay"><i class="fa fa-plus-circle"></i></div></div></div>
-          <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12 image" data-category="christbaum"><div class="img-wrapper"><a href="https://hdmu.github.io/vaiana.jpg"><img src="https://hdmu.github.io/vaiana.jpg" class="img-responsive" alt="Vaiana"></a><div class="img-overlay"><i class="fa fa-plus-circle"></i></div></div></div>
+          <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12 image" data-category="christbaum" data-price="3.50"><div class="img-wrapper"><a href="https://hdmu.github.io/Bisasam.jpg"><img src="https://hdmu.github.io/Bisasam.jpg" class="img-responsive" alt="Bisasam"></a><div class="img-overlay"><i class="fa fa-plus-circle"></i></div></div></div>
+          <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12 image" data-category="christbaum" data-price="3.50"><div class="img-wrapper"><a href="https://hdmu.github.io/Elsa.jpg"><img src="https://hdmu.github.io/Elsa.jpg" class="img-responsive" alt="Elsa"></a><div class="img-overlay"><i class="fa fa-plus-circle"></i></div></div></div>
+          <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12 image" data-category="christbaum" data-price="3.50"><div class="img-wrapper"><a href="https://hdmu.github.io/Glumanda.jpg"><img src="https://hdmu.github.io/Glumanda.jpg" class="img-responsive" alt="Glumanda"></a><div class="img-overlay"><i class="fa fa-plus-circle"></i></div></div></div>
+          <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12 image" data-category="christbaum" data-price="3.50"><div class="img-wrapper"><a href="https://hdmu.github.io/Harrypotter.jpg"><img src="https://hdmu.github.io/Harrypotter.jpg" class="img-responsive" alt="Harry Potter"></a><div class="img-overlay"><i class="fa fa-plus-circle"></i></div></div></div>
+          <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12 image" data-category="christbaum" data-price="3.50"><div class="img-wrapper"><a href="https://hdmu.github.io/Hund.jpg"><img src="https://hdmu.github.io/Hund.jpg" class="img-responsive" alt="Hund"></a><div class="img-overlay"><i class="fa fa-plus-circle"></i></div></div></div>
+          <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12 image" data-category="christbaum" data-price="3.50"><div class="img-wrapper"><a href="https://hdmu.github.io/HundBulldoge.jpg"><img src="https://hdmu.github.io/HundBulldoge.jpg" class="img-responsive" alt="Hund Bulldogge"></a><div class="img-overlay"><i class="fa fa-plus-circle"></i></div></div></div>
+          <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12 image" data-category="christbaum" data-price="3.50"><div class="img-wrapper"><a href="https://hdmu.github.io/Hundeknochen.jpg"><img src="https://hdmu.github.io/Hundeknochen.jpg" class="img-responsive" alt="Hundeknochen"></a><div class="img-overlay"><i class="fa fa-plus-circle"></i></div></div></div>
+          <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12 image" data-category="christbaum" data-price="3.50"><div class="img-wrapper"><a href="https://hdmu.github.io/Husky.jpg"><img src="https://hdmu.github.io/Husky.jpg" class="img-responsive" alt="Husky"></a><div class="img-overlay"><i class="fa fa-plus-circle"></i></div></div></div>
+          <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12 image" data-category="christbaum" data-price="3.50"><div class="img-wrapper"><a href="https://hdmu.github.io/Katze.jpg"><img src="https://hdmu.github.io/Katze.jpg" class="img-responsive" alt="Katze"></a><div class="img-overlay"><i class="fa fa-plus-circle"></i></div></div></div>
+          <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12 image" data-category="christbaum" data-price="3.50"><div class="img-wrapper"><a href="https://hdmu.github.io/Mario.jpg"><img src="https://hdmu.github.io/Mario.jpg" class="img-responsive" alt="Mario"></a><div class="img-overlay"><i class="fa fa-plus-circle"></i></div></div></div>
+          <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12 image" data-category="christbaum" data-price="3.50"><div class="img-wrapper"><a href="https://hdmu.github.io/MickeyMausName.jpg"><img src="https://hdmu.github.io/MickeyMausName.jpg" class="img-responsive" alt="Mickey Maus Name"></a><div class="img-overlay"><i class="fa fa-plus-circle"></i></div></div></div>
+          <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12 image" data-category="christbaum" data-price="3.50"><div class="img-wrapper"><a href="https://hdmu.github.io/Naruto.jpg"><img src="https://hdmu.github.io/Naruto.jpg" class="img-responsive" alt="Naruto"></a><div class="img-overlay"><i class="fa fa-plus-circle"></i></div></div></div>
+          <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12 image" data-category="christbaum" data-price="3.50"><div class="img-wrapper"><a href="https://hdmu.github.io/NormaleKugel.jpg"><img src="https://hdmu.github.io/NormaleKugel.jpg" class="img-responsive" alt="Normale Kugel"></a><div class="img-overlay"><i class="fa fa-plus-circle"></i></div></div></div>
+          <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12 image" data-category="christbaum" data-price="3.50"><div class="img-wrapper"><a href="https://hdmu.github.io/Pikachu.jpg"><img src="https://hdmu.github.io/Pikachu.jpg" class="img-responsive" alt="Pikachu"></a><div class="img-overlay"><i class="fa fa-plus-circle"></i></div></div></div>
+          <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12 image" data-category="christbaum" data-price="3.50"><div class="img-wrapper"><a href="https://hdmu.github.io/Schalke.jpg"><img src="https://hdmu.github.io/Schalke.jpg" class="img-responsive" alt="Schalke"></a><div class="img-overlay"><i class="fa fa-plus-circle"></i></div></div></div>
+          <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12 image" data-category="christbaum" data-price="3.50"><div class="img-wrapper"><a href="https://hdmu.github.io/Stitch.jpg"><img src="https://hdmu.github.io/Stitch.jpg" class="img-responsive" alt="Stitch"></a><div class="img-overlay"><i class="fa fa-plus-circle"></i></div></div></div>
+          <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12 image" data-category="christbaum" data-price="3.50"><div class="img-wrapper"><a href="https://hdmu.github.io/Supernatural.jpg"><img src="https://hdmu.github.io/Supernatural.jpg" class="img-responsive" alt="Supernatural"></a><div class="img-overlay"><i class="fa fa-plus-circle"></i></div></div></div>
+          <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12 image" data-category="christbaum" data-price="3.50"><div class="img-wrapper"><a href="https://hdmu.github.io/islandpferd.jpg"><img src="https://hdmu.github.io/islandpferd.jpg" class="img-responsive" alt="Islandpferd"></a><div class="img-overlay"><i class="fa fa-plus-circle"></i></div></div></div>
+          <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12 image" data-category="christbaum" data-price="3.50"><div class="img-wrapper"><a href="https://hdmu.github.io/lionking.jpg"><img src="https://hdmu.github.io/lionking.jpg" class="img-responsive" alt="Lion King"></a><div class="img-overlay"><i class="fa fa-plus-circle"></i></div></div></div>
+          <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12 image" data-category="christbaum" data-price="3.50"><div class="img-wrapper"><a href="https://hdmu.github.io/onkelz.jpg"><img src="https://hdmu.github.io/onkelz.jpg" class="img-responsive" alt="Onkelz"></a><div class="img-overlay"><i class="fa fa-plus-circle"></i></div></div></div>
+          <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12 image" data-category="christbaum" data-price="3.50"><div class="img-wrapper"><a href="https://hdmu.github.io/vfl.jpg"><img src="https://hdmu.github.io/vfl.jpg" class="img-responsive" alt="VfL"></a><div class="img-overlay"><i class="fa fa-plus-circle"></i></div></div></div>
+          <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12 image" data-category="christbaum" data-price="3.50"><div class="img-wrapper"><a href="https://hdmu.github.io/herz.jpg"><img src="https://hdmu.github.io/herz.jpg" class="img-responsive" alt="Herz"></a><div class="img-overlay"><i class="fa fa-plus-circle"></i></div></div></div>
+          <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12 image" data-category="christbaum" data-price="3.50"><div class="img-wrapper"><a href="https://hdmu.github.io/tennis.jpg"><img src="https://hdmu.github.io/tennis.jpg" class="img-responsive" alt="Tennis"></a><div class="img-overlay"><i class="fa fa-plus-circle"></i></div></div></div>
+          <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12 image" data-category="christbaum" data-price="3.50"><div class="img-wrapper"><a href="https://hdmu.github.io/mickey2.jpg"><img src="https://hdmu.github.io/mickey2.jpg" class="img-responsive" alt="Mickey 2"></a><div class="img-overlay"><i class="fa fa-plus-circle"></i></div></div></div>
+          <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12 image" data-category="christbaum" data-price="3.50"><div class="img-wrapper"><a href="https://hdmu.github.io/arielle.jpg"><img src="https://hdmu.github.io/arielle.jpg" class="img-responsive" alt="Arielle"></a><div class="img-overlay"><i class="fa fa-plus-circle"></i></div></div></div>
+          <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12 image" data-category="christbaum" data-price="3.50"><div class="img-wrapper"><a href="https://hdmu.github.io/spidey.jpg"><img src="https://hdmu.github.io/spidey.jpg" class="img-responsive" alt="Spidey"></a><div class="img-overlay"><i class="fa fa-plus-circle"></i></div></div></div>
+          <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12 image" data-category="christbaum" data-price="3.50"><div class="img-wrapper"><a href="https://hdmu.github.io/spidermaus.jpg"><img src="https://hdmu.github.io/spidermaus.jpg" class="img-responsive" alt="Spidermaus"></a><div class="img-overlay"><i class="fa fa-plus-circle"></i></div></div></div>
+          <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12 image" data-category="christbaum" data-price="3.50"><div class="img-wrapper"><a href="https://hdmu.github.io/vaiana.jpg"><img src="https://hdmu.github.io/vaiana.jpg" class="img-responsive" alt="Vaiana"></a><div class="img-overlay"><i class="fa fa-plus-circle"></i></div></div></div>
 
           <!-- Schriftzüge -->
-          <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12 image" data-category="schriftzuege">
-            <div class="img-wrapper">
-              <a href="https://hdmu.github.io/Ergotherapeutinschriftzug.jpg">
-                <img src="https://hdmu.github.io/Ergotherapeutinschriftzug.jpg" class="img-responsive" alt="Ergotherapeutin Schriftzug">
-              </a>
-              <div class="img-overlay"><i class="fa fa-plus-circle"></i></div>
-            </div>
-          </div>
-<div class="col-lg-3 col-md-6 col-sm-6 col-xs-12 image" data-category="schriftzuege">
-  <div class="img-wrapper">
-    <a href="https://hdmu.github.io/schriftkonfetti.jpg">
-      <img src="https://hdmu.github.io/schriftkonfetti.jpg" class="img-responsive" alt="Schriftkonfetti Schriftzug">
-    </a>
-    <div class="img-overlay"><i class="fa fa-plus-circle"></i></div>
-  </div>
-</div>
-  <!-- Einschulung -->
-<div class="col-lg-3 col-md-6 col-sm-6 col-xs-12 image" data-category="einschulung">
-  <div class="img-wrapper">
-    <a href="https://hdmu.github.io/schriftschulkind2026.jpg">
-      <img src="https://hdmu.github.io/schriftschulkind2026.jpg" class="img-responsive" alt="Schulkind 2026">
-    </a>
-    <div class="img-overlay"><i class="fa fa-plus-circle"></i></div>
-  </div>
-</div>
-          <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12 image" data-category="einschulung">
-  <div class="img-wrapper">
-    <a href="https://hdmu.github.io/schulkind2026rund.jpg">
-      <img src="https://hdmu.github.io/schulkind2026rund.jpg" class="img-responsive" alt="Schulkind 2026">
-    </a>
-    <div class="img-overlay"><i class="fa fa-plus-circle"></i></div>
-  </div>
-</div>
+          <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12 image" data-category="schriftzuege" data-price="5.00-10.00"><div class="img-wrapper"><a href="https://hdmu.github.io/Ergotherapeutinschriftzug.jpg"><img src="https://hdmu.github.io/Ergotherapeutinschriftzug.jpg" class="img-responsive" alt="Ergotherapeutin Schriftzug"></a><div class="img-overlay"><i class="fa fa-plus-circle"></i></div></div></div>
+          <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12 image" data-category="schriftzuege" data-price="5.00-10.00"><div class="img-wrapper"><a href="https://hdmu.github.io/schriftkonfetti.jpg"><img src="https://hdmu.github.io/schriftkonfetti.jpg" class="img-responsive" alt="Schriftkonfetti Schriftzug"></a><div class="img-overlay"><i class="fa fa-plus-circle"></i></div></div></div>
 
-<!-- Kommunion -->
-<div class="col-lg-3 col-md-6 col-sm-6 col-xs-12 image" data-category="kommunion">
-  <div class="img-wrapper">
-    <a href="https://hdmu.github.io/kommuninrund.jpg">
-      <img src="https://hdmu.github.io/kommuninrund.jpg" class="img-responsive" alt="Kommunion rund">
-    </a>
-    <div class="img-overlay"><i class="fa fa-plus-circle"></i></div>
-  </div>
-</div>
-          
-<!-- Schlüsselanhänger -->
-<div class="col-lg-3 col-md-6 col-sm-6 col-xs-12 image" data-category="schluessel">
-  <div class="img-wrapper">
-    <a href="https://hdmu.github.io/keyringkennzeichen.jpg">
-      <img src="https://hdmu.github.io/keyringkennzeichen.jpg" class="img-responsive" alt="Schlüsselanhänger Kennzeichen">
-    </a>
-    <div class="img-overlay"><i class="fa fa-plus-circle"></i></div>
-  </div>
-</div>
+          <!-- Einschulung -->
+          <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12 image" data-category="einschulung" data-price="4.50"><div class="img-wrapper"><a href="https://hdmu.github.io/schriftschulkind2026.jpg"><img src="https://hdmu.github.io/schriftschulkind2026.jpg" class="img-responsive" alt="Schulkind 2026"></a><div class="img-overlay"><i class="fa fa-plus-circle"></i></div></div></div>
+          <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12 image" data-category="einschulung" data-price="4,50"><div class="img-wrapper"><a href="https://hdmu.github.io/schulkind2026rund.jpg"><img src="https://hdmu.github.io/schulkind2026rund.jpg" class="img-responsive" alt="Schulkind 2026 rund"></a><div class="img-overlay"><i class="fa fa-plus-circle"></i></div></div></div>
 
-<div class="col-lg-3 col-md-6 col-sm-6 col-xs-12 image" data-category="schluessel">
-  <div class="img-wrapper">
-    <a href="https://hdmu.github.io/keylieblingslehrerin.jpg">
-      <img src="https://hdmu.github.io/keylieblingslehrerin.jpg" class="img-responsive" alt="Schlüsselanhänger Lieblingslehrerin">
-    </a>
-    <div class="img-overlay"><i class="fa fa-plus-circle"></i></div>
-  </div>
-</div>
+          <!-- Kommunion -->
+          <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12 image" data-category="kommunion" data-price="4,50"><div class="img-wrapper"><a href="https://hdmu.github.io/kommuninrund.jpg"><img src="https://hdmu.github.io/kommuninrund.jpg" class="img-responsive" alt="Kommunion rund"></a><div class="img-overlay"><i class="fa fa-plus-circle"></i></div></div></div>
 
-<div class="col-lg-3 col-md-6 col-sm-6 col-xs-12 image" data-category="schluessel">
-  <div class="img-wrapper">
-    <a href="https://hdmu.github.io/keybesteerzieherin.jpg">
-      <img src="https://hdmu.github.io/keybesteerzieherin.jpg" class="img-responsive" alt="Schlüsselanhänger Beste Erzieherin">
-    </a>
-    <div class="img-overlay"><i class="fa fa-plus-circle"></i></div>
-  </div>
-</div>
-
-<div class="col-lg-3 col-md-6 col-sm-6 col-xs-12 image" data-category="schluessel">
-  <div class="img-wrapper">
-    <a href="https://hdmu.github.io/keybestelehrerin.jpg">
-      <img src="https://hdmu.github.io/keybestelehrerin.jpg" class="img-responsive" alt="Schlüsselanhänger Beste Lehrerin">
-    </a>
-    <div class="img-overlay"><i class="fa fa-plus-circle"></i></div>
-  </div>
-</div>
-
-<div class="col-lg-3 col-md-6 col-sm-6 col-xs-12 image" data-category="schluessel">
-  <div class="img-wrapper">
-    <a href="https://hdmu.github.io/keybestererzieher.jpg">
-      <img src="https://hdmu.github.io/keybestererzieher.jpg" class="img-responsive" alt="Schlüsselanhänger Bester Erzieher">
-    </a>
-    <div class="img-overlay"><i class="fa fa-plus-circle"></i></div>
-  </div>
-</div>
-
-<div class="col-lg-3 col-md-6 col-sm-6 col-xs-12 image" data-category="schluessel">
-  <div class="img-wrapper">
-    <a href="https://hdmu.github.io/keybesterlehrer.jpg">
-      <img src="https://hdmu.github.io/keybesterlehrer.jpg" class="img-responsive" alt="Schlüsselanhänger Bester Lehrer">
-    </a>
-    <div class="img-overlay"><i class="fa fa-plus-circle"></i></div>
-  </div>
-</div>
-
-<div class="col-lg-3 col-md-6 col-sm-6 col-xs-12 image" data-category="schluessel">
-  <div class="img-wrapper">
-    <a href="https://hdmu.github.io/keylieblingserzieher.jpg">
-      <img src="https://hdmu.github.io/keylieblingserzieher.jpg" class="img-responsive" alt="Schlüsselanhänger Lieblingserzieher">
-    </a>
-    <div class="img-overlay"><i class="fa fa-plus-circle"></i></div>
-  </div>
-</div>
-
-<div class="col-lg-3 col-md-6 col-sm-6 col-xs-12 image" data-category="schluessel">
-  <div class="img-wrapper">
-    <a href="https://hdmu.github.io/keylieblingserzieherin.jpg">
-      <img src="https://hdmu.github.io/keylieblingserzieherin.jpg" class="img-responsive" alt="Schlüsselanhänger Lieblingserzieherin">
-    </a>
-    <div class="img-overlay"><i class="fa fa-plus-circle"></i></div>
-  </div>
-</div>
-
-<div class="col-lg-3 col-md-6 col-sm-6 col-xs-12 image" data-category="schluessel">
-  <div class="img-wrapper">
-    <a href="https://hdmu.github.io/keylieblingslehrer.jpg">
-      <img src="https://hdmu.github.io/keylieblingslehrer.jpg" class="img-responsive" alt="Schlüsselanhänger Lieblingslehrer">
-    </a>
-    <div class="img-overlay"><i class="fa fa-plus-circle"></i></div>
-  </div>
-</div>
+          <!-- Schlüsselanhänger (individuell) -->
+          <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12 image" data-category="schluessel" data-price="1,80"><div class="img-wrapper"><a href="https://hdmu.github.io/keyringkennzeichen.jpg"><img src="https://hdmu.github.io/keyringkennzeichen.jpg" class="img-responsive" alt="Schlüsselanhänger Kennzeichen"></a><div class="img-overlay"><i class="fa fa-plus-circle"></i></div></div></div>
+          <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12 image" data-category="schluessel" data-price="2.00"><div class="img-wrapper"><a href="https://hdmu.github.io/keylieblingslehrerin.jpg"><img src="https://hdmu.github.io/keylieblingslehrerin.jpg" class="img-responsive" alt="Schlüsselanhänger Lieblingslehrerin"></a><div class="img-overlay"><i class="fa fa-plus-circle"></i></div></div></div>
+          <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12 image" data-category="schluessel" data-price="2.00"><div class="img-wrapper"><a href="https://hdmu.github.io/keybesteerzieherin.jpg"><img src="https://hdmu.github.io/keybesteerzieherin.jpg" class="img-responsive" alt="Schlüsselanhänger Beste Erzieherin"></a><div class="img-overlay"><i class="fa fa-plus-circle"></i></div></div></div>
+          <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12 image" data-category="schluessel" data-price="2.00"><div class="img-wrapper"><a href="https://hdmu.github.io/keybestelehrerin.jpg"><img src="https://hdmu.github.io/keybestelehrerin.jpg" class="img-responsive" alt="Schlüsselanhänger Beste Lehrerin"></a><div class="img-overlay"><i class="fa fa-plus-circle"></i></div></div></div>
+          <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12 image" data-category="schluessel" data-price="2.00"><div class="img-wrapper"><a href="https://hdmu.github.io/keybestererzieher.jpg"><img src="https://hdmu.github.io/keybestererzieher.jpg" class="img-responsive" alt="Schlüsselanhänger Bester Erzieher"></a><div class="img-overlay"><i class="fa fa-plus-circle"></i></div></div></div>
+          <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12 image" data-category="schluessel" data-price="2.00"><div class="img-wrapper"><a href="https://hdmu.github.io/keybesterlehrer.jpg"><img src="https://hdmu.github.io/keybesterlehrer.jpg" class="img-responsive" alt="Schlüsselanhänger Bester Lehrer"></a><div class="img-overlay"><i class="fa fa-plus-circle"></i></div></div></div>
+          <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12 image" data-category="schluessel" data-price="2.00"><div class="img-wrapper"><a href="https://hdmu.github.io/keylieblingserzieher.jpg"><img src="https://hdmu.github.io/keylieblingserzieher.jpg" class="img-responsive" alt="Schlüsselanhänger Lieblingserzieher"></a><div class="img-overlay"><i class="fa fa-plus-circle"></i></div></div></div>
+          <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12 image" data-category="schluessel" data-price="2.00"><div class="img-wrapper"><a href="https://hdmu.github.io/keylieblingserzieherin.jpg"><img src="https://hdmu.github.io/keylieblingserzieherin.jpg" class="img-responsive" alt="Schlüsselanhänger Lieblingserzieherin"></a><div class="img-overlay"><i class="fa fa-plus-circle"></i></div></div></div>
+          <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12 image" data-category="schluessel" data-price="2.00"><div class="img-wrapper"><a href="https://hdmu.github.io/keylieblingslehrer.jpg"><img src="https://hdmu.github.io/keylieblingslehrer.jpg" class="img-responsive" alt="Schlüsselanhänger Lieblingslehrer"></a><div class="img-overlay"><i class="fa fa-plus-circle"></i></div></div></div>
 
           <!-- Geburt -->
-<div class="col-lg-3 col-md-6 col-sm-6 col-xs-12 image" data-category="geburt">
-  <div class="img-wrapper">
-    <a href="https://hdmu.github.io/geburtsbilderrahmen.jpg">
-      <img src="https://hdmu.github.io/geburtsbilderrahmen.jpg" class="img-responsive" alt="Geburt – Name & Datum">
-    </a>
-    <div class="img-overlay"><i class="fa fa-plus-circle"></i></div>
-  </div>
-</div>
-          
-<!-- Geburtstag -->
-<div class="col-lg-3 col-md-6 col-sm-6 col-xs-12 image" data-category="geburtstag">
-  <div class="img-wrapper">
-    <a href="https://hdmu.github.io/geburtsagshalter.jpg">
-      <img src="https://hdmu.github.io/geburtsagshalter.jpg" class="img-responsive" alt="Geburtstagshalter">
-    </a>
-    <div class="img-overlay"><i class="fa fa-plus-circle"></i></div>
-  </div>
-</div>
+          <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12 image" data-category="geburt" data-price="10.00"><div class="img-wrapper"><a href="https://hdmu.github.io/geburtsbilderrahmen.jpg"><img src="https://hdmu.github.io/geburtsbilderrahmen.jpg" class="img-responsive" alt="Geburt – Name & Datum"></a><div class="img-overlay"><i class="fa fa-plus-circle"></i></div></div></div>
 
-          <!-- Zaubertonie -->
-<div class="col-lg-3 col-md-6 col-sm-6 col-xs-12 image" data-category="zaubertonie">
-  <div class="img-wrapper">
-    <a href="https://hdmu.github.io/kleinewirtonie.jpg">
-      <img src="https://hdmu.github.io/kleinewirtonie.jpg" class="img-responsive" alt="Zaubertonie – Kleine Wir Tonie">
-    </a>
-    <div class="img-overlay"><i class="fa fa-plus-circle"></i></div>
-  </div>
-</div>
+          <!-- Geburtstag -->
+          <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12 image" data-category="geburtstag" data-price="6.00"><div class="img-wrapper"><a href="https://hdmu.github.io/geburtsagshalter.jpg"><img src="https://hdmu.github.io/geburtsagshalter.jpg" class="img-responsive" alt="Geburtstagshalter"></a><div class="img-overlay"><i class="fa fa-plus-circle"></i></div></div></div>
 
-<div class="col-lg-3 col-md-6 col-sm-6 col-xs-12 image" data-category="zaubertonie">
-  <div class="img-wrapper">
-    <a href="https://hdmu.github.io/stockmanntonie.jpg">
-      <img src="https://hdmu.github.io/stockmanntonie.jpg" class="img-responsive" alt="Zaubertonie – Stockmann Tonie">
-    </a>
-    <div class="img-overlay"><i class="fa fa-plus-circle"></i></div>
-  </div>
-</div>
           <!-- Türrahmen-Deko -->
-          <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12 image" data-category="tuerrahmen"><div class="img-wrapper"><a href="https://hdmu.github.io/wichteltür.jpg"><img src="https://hdmu.github.io/wichteltür.jpg" class="img-responsive" alt="Wichteltür"></a><div class="img-overlay"><i class="fa fa-plus-circle"></i></div></div></div>
-          <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12 image" data-category="tuerrahmen"><div class="img-wrapper"><a href="https://hdmu.github.io/weihnachtenkatzetür.jpg"><img src="https://hdmu.github.io/weihnachtenkatzetür.jpg" class="img-responsive" alt="Weihnachten Katze Tür"></a><div class="img-overlay"><i class="fa fa-plus-circle"></i></div></div></div>
-          <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12 image" data-category="tuerrahmen"><div class="img-wrapper"><a href="https://hdmu.github.io/pawpatroltuerrahmen.jpg"><img src="https://hdmu.github.io/pawpatroltuerrahmen.jpg" class="img-responsive" alt="Paw Patrol Türrahmen"></a><div class="img-overlay"><i class="fa fa-plus-circle"></i></div></div></div>
-          <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12 image" data-category="tuerrahmen"><div class="img-wrapper"><a href="https://hdmu.github.io/lambotuerrahmen Kopie.jpg"><img src="https://hdmu.github.io/lambotuerrahmen Kopie.jpg" class="img-responsive" alt="Lambo"></a><div class="img-overlay"><i class="fa fa-plus-circle"></i></div></div></div>
-          <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12 image" data-category="tuerrahmen"><div class="img-wrapper"><a href="https://hdmu.github.io/pferdltuerrahmen Kopie.jpg"><img src="https://hdmu.github.io/pferdltuerrahmen Kopie.jpg" class="img-responsive" alt="Pferd"></a><div class="img-overlay"><i class="fa fa-plus-circle"></i></div></div></div>
+          <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12 image" data-category="tuerrahmen" data-price="3.50"><div class="img-wrapper"><a href="https://hdmu.github.io/wichteltür.jpg"><img src="https://hdmu.github.io/wichteltür.jpg" class="img-responsive" alt="Wichteltür"></a><div class="img-overlay"><i class="fa fa-plus-circle"></i></div></div></div>
+          <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12 image" data-category="tuerrahmen" data-price="4.00"><div class="img-wrapper"><a href="https://hdmu.github.io/weihnachtenkatzetür.jpg"><img src="https://hdmu.github.io/weihnachtenkatzetür.jpg" class="img-responsive" alt="Weihnachten Katze Tür"></a><div class="img-overlay"><i class="fa fa-plus-circle"></i></div></div></div>
+          <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12 image" data-category="tuerrahmen" data-price="4.00"><div class="img-wrapper"><a href="https://hdmu.github.io/pawpatroltuerrahmen.jpg"><img src="https://hdmu.github.io/pawpatroltuerrahmen.jpg" class="img-responsive" alt="Paw Patrol Türrahmen"></a><div class="img-overlay"><i class="fa fa-plus-circle"></i></div></div></div>
+          <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12 image" data-category="tuerrahmen" data-price="4.00"><div class="img-wrapper"><a href="https://hdmu.github.io/lambotuerrahmen Kopie.jpg"><img src="https://hdmu.github.io/lambotuerrahmen Kopie.jpg" class="img-responsive" alt="Lambo"></a><div class="img-overlay"><i class="fa fa-plus-circle"></i></div></div></div>
+          <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12 image" data-category="tuerrahmen" data-price="4.00"><div class="img-wrapper"><a href="https://hdmu.github.io/pferdltuerrahmen Kopie.jpg"><img src="https://hdmu.github.io/pferdltuerrahmen Kopie.jpg" class="img-responsive" alt="Pferd"></a><div class="img-overlay"><i class="fa fa-plus-circle"></i></div></div></div>
+
+          <!-- Zaubertonie (mit Preis 5.00) -->
+          <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12 image" data-category="zaubertonie" data-price="5.00"><div class="img-wrapper"><a href="https://hdmu.github.io/kleinewirtonie.jpg"><img src="https://hdmu.github.io/kleinewirtonie.jpg" class="img-responsive" alt="Zaubertonie – Kleine Wir Tonie"></a><div class="img-overlay"><i class="fa fa-plus-circle"></i></div></div></div>
+          <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12 image" data-category="zaubertonie" data-price="5.00"><div class="img-wrapper"><a href="https://hdmu.github.io/stockmanntonie.jpg"><img src="https://hdmu.github.io/stockmanntonie.jpg" class="img-responsive" alt="Zaubertonie – Stockmann Tonie"></a><div class="img-overlay"><i class="fa fa-plus-circle"></i></div></div></div>
         </div><!-- row -->
       </div><!-- image-gallery -->
     </div>
@@ -485,6 +352,50 @@ document.addEventListener('DOMContentLoaded', function(){
       activateCategory(category);
       return;
     }
+  });
+
+  // ---------- SPIELERISCHE PREISSCHILDER (nur individuell per data-price) ----------
+  function makeChipText(n){
+    return '✨ ' + Number(n).toFixed(2).replace('.', ',') + ' Glitzersterne';
+  }
+  function addChip(wrapper, n){
+    if(!wrapper || wrapper.querySelector('.price-chip')) return;
+    var chip = document.createElement('span');
+    chip.className = 'price-chip';
+    chip.innerHTML = '<i class="fa fa-star"></i> ' + makeChipText(n);
+    wrapper.appendChild(chip);
+  }
+
+  // Chip nur anzeigen, wenn data-price am Artikel vorhanden ist
+  document.querySelectorAll('#image-gallery .image').forEach(function(imageEl){
+    var wrapper = imageEl.querySelector('.img-wrapper');
+    var attr = imageEl.getAttribute('data-price');
+    if(attr !== null && attr !== ''){
+      var price = parseFloat(attr);
+      if(!isNaN(price)) addChip(wrapper, price);
+    }
+  });
+
+  // Live-Update, falls data-price später geändert wird
+  var obs = new MutationObserver(function(mutations){
+    mutations.forEach(function(m){
+      if(m.type === 'attributes' && m.attributeName === 'data-price'){
+        var imageEl = m.target;
+        var wrapper = imageEl.querySelector('.img-wrapper');
+        var chip = wrapper.querySelector('.price-chip');
+        var v = imageEl.getAttribute('data-price');
+        var price = parseFloat(v);
+        if(!isNaN(price)){
+          if(!chip){ addChip(wrapper, price); }
+          else { chip.innerHTML = '<i class="fa fa-star"></i> ' + makeChipText(price); }
+        }else{
+          if(chip) chip.remove();
+        }
+      }
+    });
+  });
+  document.querySelectorAll('#image-gallery .image').forEach(function(el){
+    obs.observe(el, { attributes:true, attributeFilter:['data-price'] });
   });
 });
 </script>
