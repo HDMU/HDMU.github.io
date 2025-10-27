@@ -252,39 +252,18 @@
 </div>
 <script>
 document.addEventListener('DOMContentLoaded', function(){
+  // Jahr
   var yearEl = document.getElementById('year');
   if (yearEl) { yearEl.textContent = new Date().getFullYear(); }
 
-  // Lightbox Elemente
-  var overlay = document.createElement('div'); overlay.id = 'overlay';
-  var img = document.createElement('img');
-  var prevBtn = document.createElement('div'); prevBtn.id = 'prevButton'; prevBtn.innerHTML = '<i class="fa fa-chevron-left"></i>';
-  var nextBtn = document.createElement('div'); nextBtn.id = 'nextButton'; nextBtn.innerHTML = '<i class="fa fa-chevron-right"></i>';
-  var closeBtn= document.createElement('div'); closeBtn.id = 'exitButton'; closeBtn.innerHTML = '<i class="fa fa-times"></i>';
-  overlay.appendChild(img); overlay.insertBefore(prevBtn, overlay.firstChild); overlay.appendChild(nextBtn); overlay.appendChild(closeBtn);
-  document.body.appendChild(overlay);
-  overlay.style.display = 'none';
-
-  function visibleImgs(){
-    var gallery = document.getElementById('image-gallery');
-    var cat = gallery.getAttribute('data-active');
-    var list = gallery.querySelectorAll('.image[data-category="'+cat+'"] img');
-    return Array.prototype.filter.call(list, function(el){ return el.offsetParent !== null; });
-  }
-  function setImg(newImg){ img.setAttribute('src', newImg.getAttribute('src')); }
-  function nextImg(){ var imgs = visibleImgs(); if(!imgs.length) return; var cur = img.getAttribute('src'); var idx = imgs.findIndex(function(e){ return e.getAttribute('src')===cur; }); var nxt = imgs[(idx+1+imgs.length)%imgs.length]; setImg(nxt); }
-  function prevImg(){ var imgs = visibleImgs(); if(!imgs.length) return; var cur = img.getAttribute('src'); var idx = imgs.findIndex(function(e){ return e.getAttribute('src')===cur; }); var prv = imgs[(idx-1+imgs.length)%imgs.length]; setImg(prv); }
-
-  // --------- Deep-Link-Logik ----------
+  // ---------------- Galerie-Aktivierung (Deep-Link) ----------------
   var gallerySection = document.getElementById('gallery');
   var gallery = document.getElementById('image-gallery');
   var pill = document.getElementById('gallery-category');
 
-  // Alle gültigen Kategorien aus den Karten lesen
   var cards = document.querySelectorAll('.show-gallery');
   var validCategories = Array.prototype.map.call(cards, function(el){ return el.getAttribute('data-category'); });
 
-  // Karten bekommen ein korrektes href (#kategoriename)
   Array.prototype.forEach.call(cards, function(el){
     var cat = el.getAttribute('data-category');
     el.setAttribute('href', '#' + encodeURIComponent(cat));
@@ -292,24 +271,16 @@ document.addEventListener('DOMContentLoaded', function(){
 
   function activateCategory(category){
     if(!category || validCategories.indexOf(category) === -1) return;
-
-    // Galerie sichtbar machen
     gallerySection.style.display = 'block';
-
-    // Pill-Text setzen (liest Titel aus Karte gleicher Kategorie)
     var card = document.querySelector('.show-gallery[data-category="'+category+'"]');
     var titleEl = card ? card.querySelector('.category-title') : null;
     if (titleEl && pill) { pill.textContent = titleEl.textContent; }
-
-    // CSS-Filter aktivieren und zusätzlich inline absichern
     gallery.setAttribute('data-active', category);
     var items = gallery.querySelectorAll('.image');
     for (var i=0; i<items.length; i++) {
       var it = items[i];
       it.style.display = (it.getAttribute('data-category')===category) ? 'block' : 'none';
     }
-
-    // sanft zur Galerie scrollen
     var top = gallerySection.getBoundingClientRect().top + window.pageYOffset - 50;
     window.scrollTo({ top: top, behavior: 'smooth' });
   }
@@ -317,124 +288,102 @@ document.addEventListener('DOMContentLoaded', function(){
   function readHashAndActivate(){
     var raw = window.location.hash.replace(/^#/, '');
     if(!raw) return;
-
-    // #kategorien -> nur zum Kategorien-Bereich scrollen
     if (raw.toLowerCase() === 'kategorien') {
       var kat = document.getElementById('kategorien');
       var top = kat.getBoundingClientRect().top + window.pageYOffset - 50;
       window.scrollTo({ top: top, behavior: 'smooth' });
       return;
     }
-
-    // Kategorie aktivieren (Hash kann URL-encodiert sein)
     var cat = decodeURIComponent(raw);
     activateCategory(cat);
   }
-
-  // Beim Laden ggf. Hash auswerten
   readHashAndActivate();
-
-  // Hash-Änderungen (Back/Forward) beachten
   window.addEventListener('hashchange', readHashAndActivate);
 
-  // Delegierte Klicks
+  // ---------------- Lightbox (NUR vorhandenes Overlay nutzen) ----------------
+  var overlay = document.getElementById('overlay');
+  var overlayImg = overlay ? overlay.querySelector('img') : null;
+
   document.addEventListener('click', function(e){
-    var overlayIcon = e.target.closest('.img-overlay');
-    if(overlayIcon){ e.preventDefault(); var href = overlayIcon.previousElementSibling.getAttribute('href'); img.setAttribute('src', href); overlay.style.display='flex'; return; }
-
-    if(e.target.closest('#exitButton')){ overlay.style.display='none'; return; }
-    if(e.target.closest('#nextButton')){ e.stopPropagation(); nextImg(); return; }
-    if(e.target.closest('#prevButton')){ e.stopPropagation(); prevImg(); return; }
-
-    // Kategorie-Karten: Hash setzen + direkt aktivieren (schnellere Reaktion)
+    // Bild klicken (Overlay öffnen) – fängt Klicks auf .img-overlay ODER <a> im Wrapper ab
+    var trigger = e.target.closest('.img-overlay, .img-wrapper a');
+    if(trigger){
+      e.preventDefault();
+      var imgTag = trigger.closest('.img-wrapper').querySelector('img');
+      if(overlay && overlayImg && imgTag){
+        overlayImg.setAttribute('src', imgTag.getAttribute('src'));
+        overlay.style.display = 'flex';
+      }
+      return;
+    }
+    // Overlay schließen
+    if(e.target.closest('#exitButton')){
+      if(overlay){ overlay.style.display = 'none'; }
+      return;
+    }
+    // Kategorie sofort aktivieren
     var catBtn = e.target.closest('.show-gallery');
     if(catBtn){
       var category = catBtn.getAttribute('data-category');
-      // Kein preventDefault -> Browser setzt den Hash selbst.
-      // Für sofortige UI-Reaktion zusätzlich direkt aktivieren:
       activateCategory(category);
+      // kein preventDefault -> Hash wird gesetzt
       return;
     }
   });
 
-  // ---------- SPIELERISCHE PREISSCHILDER (Einzelpreis, Bereich oder Text) ----------
-function fmt(n){ return Number(n).toFixed(2).replace('.', ','); }
-function chipHtml(text){ return '<i class="fa fa-star"></i> ✨ ' + text + ' Glitzersterne'; }
+  // ---------------- Preisschilder (Einzelpreis, Bereich oder Text) ----------------
+  function fmt(n){ return Number(n).toFixed(2).replace('.', ','); }
+  function chipHtml(text){ return '<i class="fa fa-star"></i> ✨ ' + text + ' Glitzersterne'; }
 
-function ensureChip(wrapper){
-  var chip = wrapper.querySelector('.price-chip');
-  if(!chip){ chip = document.createElement('span'); chip.className = 'price-chip'; wrapper.appendChild(chip); }
-  return chip;
-}
-
-function parsePriceAttr(v){
-  if(v === null || v === undefined) return null;
-  var s = String(v).trim();
-  if(!s) return null;
-
-  // Bereich: 5-10 oder 5.00-10.00
-  var m = s.match(/^(\d+(?:\.\d{1,2})?)\s*-\s*(\d+(?:\.\d{1,2})?)$/);
-  if(m){
-    return { type:'range', min: parseFloat(m[1]), max: parseFloat(m[2]) };
+  function ensureChip(wrapper){
+    var chip = wrapper.querySelector('.price-chip');
+    if(!chip){ chip = document.createElement('span'); chip.className = 'price-chip'; wrapper.appendChild(chip); }
+    return chip;
   }
-  // Einzelpreis (nur Zahl)
-  if(/^\d+(?:\.\d{1,2})?$/.test(s)){
-    return { type:'single', value: parseFloat(s) };
+
+  function parsePriceAttr(v){
+    if(v === null || v === undefined) return null;
+    var s = String(v).trim();
+    if(!s) return null;
+    // Bereich: 5-10 oder 5.00-10.00
+    var m = s.match(/^(\d+(?:\.\d{1,2})?)\s*-\s*(\d+(?:\.\d{1,2})?)$/);
+    if(m){ return { type:'range', min: parseFloat(m[1]), max: parseFloat(m[2]) }; }
+    // Einzelpreis
+    if(/^\d+(?:\.\d{1,2})?$/.test(s)){ return { type:'single', value: parseFloat(s) }; }
+    // Freitext (z. B. "auf Anfrage" oder Zahl mit Komma)
+    return { type:'text', text: s };
   }
-  // Freitext (z.B. "auf Anfrage")
-  return { type:'text', text: s };
-}
 
-function applyPrice(imageEl){
-  var wrapper = imageEl.querySelector('.img-wrapper');
-  if(!wrapper) return;
-  var chip = wrapper.querySelector('.price-chip');
-  var v = imageEl.getAttribute('data-price');
-  var parsed = parsePriceAttr(v);
+  function applyPrice(imageEl){
+    var wrapper = imageEl.querySelector('.img-wrapper');
+    if(!wrapper) return;
+    var chip = wrapper.querySelector('.price-chip');
+    var v = imageEl.getAttribute('data-price');
+    var parsed = parsePriceAttr(v);
+    if(!parsed){ if(chip) chip.remove(); return; }
 
-  if(!parsed){ if(chip) chip.remove(); return; }
+    var display;
+    if(parsed.type === 'single')      display = fmt(parsed.value);
+    else if(parsed.type === 'range')  display = fmt(parsed.min) + '–' + fmt(parsed.max);
+    else                              display = parsed.text;
 
-  var display;
-  if(parsed.type === 'single')      display = fmt(parsed.value);
-  else if(parsed.type === 'range')  display = fmt(parsed.min) + '–' + fmt(parsed.max);
-  else                              display = parsed.text;
+    ensureChip(wrapper).innerHTML = chipHtml(display);
+  }
 
-  ensureChip(wrapper).innerHTML = chipHtml(display);
-}
+  // Initial anwenden
+  document.querySelectorAll('#image-gallery .image').forEach(applyPrice);
 
-// Initial anwenden
-document.querySelectorAll('#image-gallery .image').forEach(applyPrice);
-
-// Live-Update wenn data-price geändert wird
-var priceObs = new MutationObserver(function(mutations){
-  mutations.forEach(function(m){
-    if(m.type === 'attributes' && m.attributeName === 'data-price'){
-      applyPrice(m.target);
-    }
+  // Live-Update bei Änderung von data-price
+  var priceObs = new MutationObserver(function(mutations){
+    mutations.forEach(function(m){
+      if(m.type === 'attributes' && m.attributeName === 'data-price'){
+        applyPrice(m.target);
+      }
+    });
   });
-});
-document.querySelectorAll('#image-gallery .image').forEach(function(el){
-  priceObs.observe(el, { attributes:true, attributeFilter:['data-price'] });
-});
   document.querySelectorAll('#image-gallery .image').forEach(function(el){
-    obs.observe(el, { attributes:true, attributeFilter:['data-price'] });
+    priceObs.observe(el, { attributes:true, attributeFilter:['data-price'] });
   });
-});
-  document.addEventListener('click', function(e){
-  var overlayIcon = e.target.closest('.img-overlay, .img-wrapper a');
-  if(overlayIcon){
-    e.preventDefault(); // verhindert, dass der Link im Browser geöffnet wird
-    var imgTag = overlayIcon.closest('.img-wrapper').querySelector('img');
-    var bigSrc = imgTag.getAttribute('src');
-    var overlay = document.getElementById('overlay');
-    var overlayImg = overlay.querySelector('img');
-    overlayImg.setAttribute('src', bigSrc);
-    overlay.style.display = 'flex';
-  }
-
-  if(e.target.closest('#exitButton')){
-    document.getElementById('overlay').style.display='none';
-  }
 });
 </script>
 
