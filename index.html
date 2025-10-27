@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="de">
+<html lang="de" data-theme="dark">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -27,12 +27,6 @@
       --brand:#3949ab; --brand-2:#22c55e; --border:rgba(0,0,0,.08);
       --shadow:0 8px 24px rgba(0,0,0,.06); --chip-bg:rgba(255,255,255,.92);
     }
-    @media (prefers-color-scheme: light){
-      html:not([data-theme]){ --bg:#fafafa; --bg-elev:#ffffff; --bg-elev-2:#f6f7fb; --txt:#222; --txt-dim:#666;
-        --brand:#3949ab; --brand-2:#22c55e; --border:rgba(0,0,0,.08);
-        --shadow:0 8px 24px rgba(0,0,0,.06); --chip-bg:rgba(255,255,255,.92);
-      }
-    }
 
     body { background:var(--bg); color:var(--txt); }
     a { color:var(--txt); }
@@ -42,11 +36,6 @@
     .navbar-brand { font-weight:700; letter-spacing:.3px; color:var(--txt)!important; }
     .navbar-default .navbar-nav>li>a{ color:var(--txt-dim); }
     .navbar-default .navbar-nav>li>a:hover{ color:var(--brand); }
-
-    .theme-toggle{ margin-left:10px; border:1px solid var(--border); background:transparent; color:var(--txt-dim);
-      padding:6px 10px; border-radius:999px; transition:all .2s ease;
-    }
-    .theme-toggle:hover{ color:var(--txt); border-color:var(--txt-dim); }
 
     .categories { padding:35px 0 10px; }
     .category-card { background:linear-gradient(180deg,var(--bg-elev),var(--bg-elev-2)); border-radius:16px; box-shadow:var(--shadow);
@@ -104,6 +93,14 @@
 
     /* Overlay (Lightbox) im Dark-Theme */
     #overlay{ background:rgba(0,0,0,0.85); }
+
+    /* Floating Theme Toggle Button */
+    #themeToggle{
+      position:fixed; right:16px; bottom:16px; z-index:10000;
+      border:1px solid var(--border); background:var(--bg-elev); color:var(--txt);
+      padding:10px 12px; border-radius:999px; box-shadow:var(--shadow); cursor:pointer;
+    }
+    #themeToggle:hover{ color:var(--brand); }
   </style>
 </head>
 <body>
@@ -121,10 +118,12 @@
         <ul class="nav navbar-nav navbar-right">
           <li><a href="#kategorien">Kategorien</a></li>
         </ul>
-        <button id="themeToggle" class="theme-toggle navbar-btn" type="button" title="Theme wechseln">🌙</button>
       </div>
     </div>
   </nav>
+
+  <!-- Immer sichtbarer Theme-Button -->
+  <button id="themeToggle" title="Theme wechseln">🌙</button>
 
   <section id="kategorien" class="categories">
     <div class="container">
@@ -297,20 +296,23 @@
 
   <script>
   document.addEventListener('DOMContentLoaded', function(){
-    // ---- Theme init + Toggle ----
+    // ---- Theme init + Toggle (immer sichtbarer Button) ----
     var root = document.documentElement;
     var key = 'theme';
     var saved = localStorage.getItem(key);
     if(saved){ root.setAttribute('data-theme', saved); }
     var toggle = document.getElementById('themeToggle');
     if(toggle){
-      toggle.textContent = (root.getAttribute('data-theme')==='light') ? '☀️' : '🌙';
+      function setIcon(){
+        toggle.textContent = (root.getAttribute('data-theme')==='light') ? '☀️' : '🌙';
+      }
+      setIcon();
       toggle.addEventListener('click', function(){
         var cur = root.getAttribute('data-theme') || 'dark';
         var next = (cur==='dark') ? 'light' : 'dark';
         root.setAttribute('data-theme', next);
         localStorage.setItem(key, next);
-        toggle.textContent = (next==='light') ? '☀️' : '🌙';
+        setIcon();
       });
     }
 
