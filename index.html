@@ -1,104 +1,121 @@
+
 <!DOCTYPE html>
-<html lang="de">
+<html lang="de" data-theme="dark">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>3D Druck Onkel</title>
 
+  <!-- Libs -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
   <style>
-    /* ---------- Design-Token (Dark-Mode Default) ---------- */
+    /* -------------------- THEME TOKENS -------------------- */
     :root{
       --bg: #0b0f16;
-      --surface: #121826;
-      --card: #0f172a;
-      --txt: #e5e7eb;
-      --txt-dim: #9aa4b2;
-      --border: #203047;
-      --brand: #7c99ff;
-      --brand-2: #8ef8c8;
-      --shadow: 0 12px 32px rgba(0,0,0,.35);
+      --bg-elev: #111827;
+      --text: #e5e7eb;
+      --muted: #9aa5b1;
+      --accent: #8cf7c6;
+      --accent-2:#7c99ff;
+      --card: #0f1623;
+      --border: rgba(255,255,255,.06);
+      --pill-bg:#1f2937;
+      --pill-text:#dbe3f0;
+      --chip-bg:#111827;
+      --chip-text:#fff;
+      --overlay:#000000cc;
     }
     [data-theme="light"]{
-      --bg:#fafafa; --surface:#fff; --card:#fff; --txt:#222; --txt-dim:#777;
-      --border:rgba(0,0,0,.08); --brand:#3949ab; --brand-2:#5cc7a6; --shadow:0 8px 24px rgba(0,0,0,.08);
+      --bg:#f5f7fb;
+      --bg-elev:#ffffff;
+      --text:#0f172a;
+      --muted:#4b5563;
+      --accent:#0ea5e9;
+      --accent-2:#22c55e;
+      --card:#ffffff;
+      --border:rgba(0,0,0,.08);
+      --pill-bg:#eef2ff;
+      --pill-text:#3949ab;
+      --chip-bg:#111827; /* dunkel damit im Light gut lesbar! */
+      --chip-text:#ffffff;
+      --overlay:#000000cc;
     }
 
-    /* ---------- Grundlayout ---------- */
+    /* -------------------- BASE -------------------- */
     html,body{ height:100%; }
-    body { background:var(--bg); color:var(--txt); font-family:system-ui,-apple-system,Segoe UI,Roboto,Inter,Helvetica,Arial,sans-serif; }
-    a { color:var(--txt); }
-    a:hover, a:focus { color:var(--txt-dim); text-decoration:none; }
+    body { background:var(--bg); color:var(--text); -webkit-font-smoothing:antialiased; }
+    a { color:inherit; }
+    a:hover, a:focus { color:inherit; text-decoration:none; }
 
-    /* ---------- Navbar ---------- */
-    .navbar { border:none; background:var(--surface); box-shadow:var(--shadow); }
-    .navbar-default .navbar-brand,
-    .navbar-default .navbar-nav>li>a{ color:var(--txt); }
-    .navbar-default .navbar-brand:hover,
-    .navbar-default .navbar-nav>li>a:hover{ color:var(--brand); }
-    .navbar-brand { font-weight:800; letter-spacing:.3px; }
+    .navbar { border:none; background:var(--bg-elev); box-shadow:0 6px 28px rgba(0,0,0,.25); }
+    .navbar-brand { font-weight:700; letter-spacing:.3px; }
 
-    /* ---------- Hero mit „Aurora“-Glow ---------- */
+    /* -------------------- HERO (WOW) -------------------- */
     .hero{
-      position:relative; overflow:hidden; padding:64px 0 56px;
-      background:linear-gradient(180deg, rgba(124,153,255,.10), rgba(0,0,0,0));
-      border-bottom:1px solid var(--border);
+      position:relative; overflow:hidden;
+      background: radial-gradient(1200px 500px at 10% -10%, rgba(124,153,255,.22), transparent 55%),
+                  radial-gradient(900px 480px at 100% 0%, rgba(142,248,200,.18), transparent 60%);
+      padding:44px 0 26px;
     }
-    .hero .container{ position:relative; z-index:1; text-align:center; }
-    .hero-title{ font-weight:900; letter-spacing:.4px; font-size:34px; margin:0 0 8px; }
-    .hero-sub{ color:var(--txt-dim); margin:0; }
+    .hero .title{ font-size:28px; font-weight:800; letter-spacing:.2px; }
+    .hero .sub{ color:var(--muted); margin-top:6px; }
+
     .hero-glow{
-      position:absolute; inset:-30%;
-      background:
-        radial-gradient(60% 40% at 20% 20%, rgba(124,153,255,.25), transparent 60%),
-        radial-gradient(55% 45% at 80% 30%, rgba(142,248,200,.22), transparent 60%),
-        radial-gradient(50% 50% at 50% 80%, rgba(124,153,255,.18), transparent 60%);
-      filter: blur(40px);
-      animation: heroFloat 14s ease-in-out infinite alternate;
-      opacity:.85;
-    }
-    @keyframes heroFloat { 
-      0%{ transform:translate3d(-2%, -2%, 0) scale(1.05); }
-      100%{ transform:translate3d(2%, 2%, 0) scale(1.08); }
+      position:absolute; inset:-30% -10% auto -10%; height:320px;
+      background: radial-gradient(closest-side, rgba(124,153,255,.18), transparent 70%),
+                  radial-gradient(closest-side, rgba(142,248,200,.16), transparent 70%);
+      filter: blur(32px);
+      z-index:0; transform:scale(1.06);
     }
 
-    /* ---------- Kategorien ---------- */
-    .categories { padding:35px 0 10px; }
+    /* -------------------- CATEGORIES -------------------- */
+    .categories { padding:20px 0 6px; position:relative; z-index:1; }
     .category-card {
-      background:var(--card);
-      color:var(--txt);
-      border-radius:16px;
-      box-shadow:var(--shadow);
-      transition:transform .25s ease, box-shadow .25s ease, border-color .25s ease;
-      border:1px solid var(--border);
-      display:block; padding:26px 22px; height:140px;
-      transform-style: preserve-3d; perspective: 800px; position:relative;
+      background:var(--card); border-radius:16px; border:1px solid var(--border);
+      box-shadow:0 10px 22px rgba(0,0,0,.22); transition:transform .25s ease, box-shadow .25s ease;
+      display:block; padding:22px 18px; height:140px;
     }
-    .category-card:hover { transform: translateY(-4px) rotateX(2deg) rotateY(-2deg); box-shadow:0 16px 40px rgba(0,0,0,.45); }
-    .category-card::after{
-      content:""; position:absolute; inset:0; border-radius:16px;
-      background: conic-gradient(from 180deg at 50% 50%, rgba(124,153,255,.15), rgba(142,248,200,.08), rgba(124,153,255,.15));
-      opacity:0; transition:opacity .25s ease;
-      mask: linear-gradient(#000, transparent 60%);
-      pointer-events:none;
-    }
-    .category-card:hover::after{ opacity:1; }
-    .category-icon { font-size:28px; margin-bottom:12px; line-height:1; color:var(--brand); }
+    .category-card:hover { transform:translateY(-3px); box-shadow:0 16px 34px rgba(0,0,0,.32); }
+    .category-icon { font-size:28px; margin-bottom:12px; line-height:1; color:var(--accent); }
     .category-title { font-size:18px; font-weight:700; }
-    .category-sub { color:var(--txt-dim); font-size:13px; }
+    .category-sub { color:var(--muted); font-size:13px; }
 
-    /* ---------- Galerie ---------- */
-    #gallery { padding:40px 0; display:none; }
-    .img-wrapper { position:relative; margin-top:15px; border-radius:12px; overflow:hidden; box-shadow:var(--shadow); background:var(--card); border:1px solid var(--border); }
+    /* -------------------- GALLERY -------------------- */
+    #gallery { padding:30px 0; display:none; position:relative; z-index:1; }
+
+    .section-header { margin:10px 0 20px; display:flex; align-items:center; justify-content:space-between; }
+    .section-header h2 { margin:0; font-weight:800; font-size:22px; }
+    .pill { display:inline-block; padding:6px 10px; border-radius:999px; background:var(--pill-bg); color:var(--pill-text); font-size:12px; font-weight:700; }
+
+    .img-wrapper { 
+      position:relative; margin-top:15px; border-radius:14px; overflow:hidden; 
+      background:var(--card); border:1px solid var(--border); 
+      box-shadow:0 12px 26px rgba(0,0,0,.28);
+    }
     .img-wrapper img { width:100%; display:block; }
-    .img-overlay { background:rgba(0,0,0,.5); width:100%; height:100%; position:absolute; top:0; left:0; display:flex; justify-content:center; align-items:center; opacity:0; transition:opacity .25s ease; }
-    .img-overlay i { color:#fff; font-size:3em; transition: transform .12s ease; }
-    .img-wrapper:hover .img-overlay{ opacity:1; }
-    .img-overlay:hover i{ transform: scale(1.08); }
 
-    /* Nur aktive Kategorie anzeigen */
+    /* Glow-Rand + Shine */
+    .img-wrapper::before{
+      content:""; position:absolute; inset:0; border-radius:14px; padding:1px; pointer-events:none;
+      background: linear-gradient(135deg, rgba(124,153,255,.35), rgba(142,248,200,.25));
+      -webkit-mask:linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+      -webkit-mask-composite:xor; mask-composite:exclude; opacity:.55;
+    }
+    .img-wrapper::after{
+      content:""; position:absolute; top:-120%; left:-30%;
+      width:60%; height:300%; transform: rotate(20deg);
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,.25), transparent);
+      transition: transform .7s ease, opacity .3s ease; opacity:0;
+    }
+    .img-wrapper:hover::after{ transform: translateX(220%) rotate(20deg); opacity:1; }
+
+    .img-overlay { background:rgba(0,0,0,.45); width:100%; height:100%; position:absolute; top:0; left:0; display:flex; justify-content:center; align-items:center; opacity:0; transition:opacity .25s ease; }
+    .img-overlay i { color:#fff; font-size:3em; }
+    .img-wrapper:hover .img-overlay{ opacity:1; }
+
+    /* nur aktive Kategorie anzeigen */
     #image-gallery[data-active] .image { display:none !important; }
     #image-gallery[data-active="christbaum"] .image[data-category="christbaum"],
     #image-gallery[data-active="tuerrahmen"] .image[data-category="tuerrahmen"],
@@ -110,56 +127,58 @@
     #image-gallery[data-active="geburtstag"] .image[data-category="geburtstag"],
     #image-gallery[data-active="zaubertonie"] .image[data-category="zaubertonie"] { display:block !important; }
 
-    /* Stagger Reveal */
-    .image{ opacity:0; transform:translateY(10px) scale(.98); transition:all .35s cubic-bezier(.2,.7,.2,1); }
-    .image.is-in{ opacity:1; transform:translateY(0) scale(1); }
-
-    /* Preis-Chip (Fantasiewährung) */
+    /* -------------------- PRICE CHIP -------------------- */
     .price-chip{
       position:absolute; left:10px; bottom:10px;
-      background:rgba(18,24,38,.78);
-      backdrop-filter:saturate(1.4) blur(2px);
+      background:var(--chip-bg);
+      color:var(--chip-text);
       border:1px solid var(--border);
       border-radius:999px; padding:6px 10px;
-      font-size:12px; font-weight:800; color:var(--txt);
-      box-shadow:0 6px 16px rgba(0,0,0,.28);
-      display:flex; align-items:center; gap:6px;
+      font-size:12px; font-weight:800;
+      box-shadow:0 10px 24px rgba(0,0,0,.35);
+      display:flex; align-items:center; gap:6px; text-shadow:0 1px 0 rgba(0,0,0,.35);
     }
-    .price-chip i{ font-size:12px; color:var(--brand); }
-    .price-chip.range { box-shadow: 0 0 0 0 rgba(124,153,255,.35); animation: pulseGlow 2.6s infinite; }
-    @keyframes pulseGlow{
-      0%{ box-shadow: 0 0 0 0 rgba(124,153,255,.35); }
-      70%{ box-shadow: 0 0 0 14px rgba(124,153,255,0); }
-      100%{ box-shadow: 0 0 0 0 rgba(124,153,255,0); }
-    }
+    .price-chip i{ font-size:12px; color:var(--chip-text); }
 
-    .section-header { margin:10px 0 20px; display:flex; align-items:center; justify-content:space-between; }
-    .section-header h2 { margin:0; font-weight:900; font-size:22px; letter-spacing:.3px; }
-    .pill { display:inline-block; padding:6px 10px; border-radius:999px; background:rgba(124,153,255,.18); color:var(--txt); font-size:12px; font-weight:700; border:1px solid var(--border); }
-
-    /* ---------- Footer ---------- */
-    .site-footer { padding:40px 0 30px; color:var(--txt-dim); text-align:center; font-size:13px; border-top:1px solid var(--border); background:linear-gradient(180deg, rgba(124,153,255,.05), rgba(0,0,0,0)); }
-
-    /* ---------- Theme Toggle ---------- */
+    /* -------------------- FLOATING THEME TOGGLE -------------------- */
     .theme-toggle{
-      position:fixed; right:16px; bottom:18px; z-index:99999;
-      background:var(--card); color:var(--txt);
-      border:1px solid var(--border);
-      border-radius:999px; padding:10px 12px; line-height:1;
-      box-shadow:var(--shadow); cursor:pointer; font-weight:800;
-      display:flex; align-items:center; gap:8px;
+      position:fixed; right:16px; bottom:16px; z-index:9999;
+      background:var(--bg-elev); color:var(--text);
+      border:1px solid var(--border); border-radius:999px;
+      padding:10px 14px; font-weight:700; display:flex; align-items:center; gap:8px;
+      box-shadow:0 14px 32px rgba(0,0,0,.35);
     }
-    .theme-toggle i{ color:var(--brand); }
+    .theme-toggle .icon{ width:20px; text-align:center; }
+
+    .site-footer { padding:40px 0 30px; color:var(--muted); text-align:center; font-size:13px; }
+
+    /* Overlay */
+    #overlay{ display:none; position:fixed; top:0; left:0; width:100%; height:100%;
+      background:var(--overlay); justify-content:center; align-items:center; z-index:9999; }
+    #overlay img{ max-width:90%; max-height:90%; border-radius:12px; box-shadow:0 30px 70px rgba(0,0,0,.65); }
+    #exitButton{ position:absolute; top:20px; right:30px; font-size:30px; color:#fff; cursor:pointer; }
   </style>
 </head>
 <body>
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-glow"></div>
+    <div class="container">
+      <div class="row">
+        <div class="col-xs-12">
+          <div class="title">3D Druck Onkel</div>
+          <div class="sub">Handgemachte Deko & Geschenkideen – mit Glitzersterne-Preisen ✨</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- NAV -->
   <nav class="navbar navbar-default">
     <div class="container">
       <div class="navbar-header">
         <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#nav-main">
-          <span class="icon-bar"></span>
-          <span class="icon-bar"></span>
-          <span class="icon-bar"></span>
+          <span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span>
         </button>
         <a class="navbar-brand" href="#">3D Druck Onkel</a>
       </div>
@@ -171,15 +190,7 @@
     </div>
   </nav>
 
-  <!-- Hero -->
-  <header class="hero">
-    <div class="hero-glow"></div>
-    <div class="container">
-      <h1 class="hero-title">3D Druck Onkel</h1>
-      <p class="hero-sub">Handgemachte Deko – mit Extra-Glitzer ✨</p>
-    </div>
-  </header>
-
+  <!-- CATEGORIES -->
   <section id="kategorien" class="categories">
     <div class="container">
       <div class="row">
@@ -241,7 +252,6 @@
           </a>
         </div>
 
-        <!-- Neue Kategorie: Zaubertonie -->
         <div class="col-sm-6 col-md-3">
           <a href="#" class="category-card show-gallery" data-category="zaubertonie">
             <div class="category-icon"><i class="fa fa-magic"></i></div>
@@ -261,6 +271,7 @@
     </div>
   </section>
 
+  <!-- GALLERY -->
   <section id="gallery">
     <div class="container">
       <div class="section-header">
@@ -269,74 +280,74 @@
       </div>
       <div id="image-gallery">
         <div class="row">
-          <!-- Christbaumdeko / Geschenkschmuck -->
-          <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12 image" data-category="christbaum" data-price="3.50"><div class="img-wrapper"><a href="https://hdmu.github.io/Bisasam.jpg"><img src="https://hdmu.github.io/Bisasam.jpg" class="img-responsive" alt="Bisasam"></a><div class="img-overlay"><i class="fa fa-plus-circle"></i></div></div></div>
-          <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12 image" data-category="christbaum" data-price="3.50"><div class="img-wrapper"><a href="https://hdmu.github.io/Elsa.jpg"><img src="https://hdmu.github.io/Elsa.jpg" class="img-responsive" alt="Elsa"></a><div class="img-overlay"><i class="fa fa-plus-circle"></i></div></div></div>
-          <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12 image" data-category="christbaum" data-price="3.50"><div class="img-wrapper"><a href="https://hdmu.github.io/Glumanda.jpg"><img src="https://hdmu.github.io/Glumanda.jpg" class="img-responsive" alt="Glumanda"></a><div class="img-overlay"><i class="fa fa-plus-circle"></i></div></div></div>
-          <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12 image" data-category="christbaum" data-price="3.50"><div class="img-wrapper"><a href="https://hdmu.github.io/Harrypotter.jpg"><img src="https://hdmu.github.io/Harrypotter.jpg" class="img-responsive" alt="Harry Potter"></a><div class="img-overlay"><i class="fa fa-plus-circle"></i></div></div></div>
-          <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12 image" data-category="christbaum" data-price="3.50"><div class="img-wrapper"><a href="https://hdmu.github.io/Hund.jpg"><img src="https://hdmu.github.io/Hund.jpg" class="img-responsive" alt="Hund"></a><div class="img-overlay"><i class="fa fa-plus-circle"></i></div></div></div>
-          <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12 image" data-category="christbaum" data-price="3.50"><div class="img-wrapper"><a href="https://hdmu.github.io/HundBulldoge.jpg"><img src="https://hdmu.github.io/HundBulldoge.jpg" class="img-responsive" alt="Hund Bulldogge"></a><div class="img-overlay"><i class="fa fa-plus-circle"></i></div></div></div>
-          <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12 image" data-category="christbaum" data-price="3.50"><div class="img-wrapper"><a href="https://hdmu.github.io/Hundeknochen.jpg"><img src="https://hdmu.github.io/Hundeknochen.jpg" class="img-responsive" alt="Hundeknochen"></a><div class="img-overlay"><i class="fa fa-plus-circle"></i></div></div></div>
-          <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12 image" data-category="christbaum" data-price="3.50"><div class="img-wrapper"><a href="https://hdmu.github.io/Husky.jpg"><img src="https://hdmu.github.io/Husky.jpg" class="img-responsive" alt="Husky"></a><div class="img-overlay"><i class="fa fa-plus-circle"></i></div></div></div>
-          <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12 image" data-category="christbaum" data-price="3.50"><div class="img-wrapper"><a href="https://hdmu.github.io/Katze.jpg"><img src="https://hdmu.github.io/Katze.jpg" class="img-responsive" alt="Katze"></a><div class="img-overlay"><i class="fa fa-plus-circle"></i></div></div></div>
-          <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12 image" data-category="christbaum" data-price="3.50"><div class="img-wrapper"><a href="https://hdmu.github.io/Mario.jpg"><img src="https://hdmu.github.io/Mario.jpg" class="img-responsive" alt="Mario"></a><div class="img-overlay"><i class="fa fa-plus-circle"></i></div></div></div>
-          <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12 image" data-category="christbaum" data-price="3.50"><div class="img-wrapper"><a href="https://hdmu.github.io/MickeyMausName.jpg"><img src="https://hdmu.github.io/MickeyMausName.jpg" class="img-responsive" alt="Mickey Maus Name"></a><div class="img-overlay"><i class="fa fa-plus-circle"></i></div></div></div>
-          <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12 image" data-category="christbaum" data-price="3.50"><div class="img-wrapper"><a href="https://hdmu.github.io/Naruto.jpg"><img src="https://hdmu.github.io/Naruto.jpg" class="img-responsive" alt="Naruto"></a><div class="img-overlay"><i class="fa fa-plus-circle"></i></div></div></div>
-          <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12 image" data-category="christbaum" data-price="3.50"><div class="img-wrapper"><a href="https://hdmu.github.io/NormaleKugel.jpg"><img src="https://hdmu.github.io/NormaleKugel.jpg" class="img-responsive" alt="Normale Kugel"></a><div class="img-overlay"><i class="fa fa-plus-circle"></i></div></div></div>
-          <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12 image" data-category="christbaum" data-price="3.50"><div class="img-wrapper"><a href="https://hdmu.github.io/Pikachu.jpg"><img src="https://hdmu.github.io/Pikachu.jpg" class="img-responsive" alt="Pikachu"></a><div class="img-overlay"><i class="fa fa-plus-circle"></i></div></div></div>
-          <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12 image" data-category="christbaum" data-price="3.50"><div class="img-wrapper"><a href="https://hdmu.github.io/Schalke.jpg"><img src="https://hdmu.github.io/Schalke.jpg" class="img-responsive" alt="Schalke"></a><div class="img-overlay"><i class="fa fa-plus-circle"></i></div></div></div>
-          <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12 image" data-category="christbaum" data-price="3.50"><div class="img-wrapper"><a href="https://hdmu.github.io/Stitch.jpg"><img src="https://hdmu.github.io/Stitch.jpg" class="img-responsive" alt="Stitch"></a><div class="img-overlay"><i class="fa fa-plus-circle"></i></div></div></div>
-          <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12 image" data-category="christbaum" data-price="3.50"><div class="img-wrapper"><a href="https://hdmu.github.io/Supernatural.jpg"><img src="https://hdmu.github.io/Supernatural.jpg" class="img-responsive" alt="Supernatural"></a><div class="img-overlay"><i class="fa fa-plus-circle"></i></div></div></div>
-          <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12 image" data-category="christbaum" data-price="3.50"><div class="img-wrapper"><a href="https://hdmu.github.io/islandpferd.jpg"><img src="https://hdmu.github.io/islandpferd.jpg" class="img-responsive" alt="Islandpferd"></a><div class="img-overlay"><i class="fa fa-plus-circle"></i></div></div></div>
-          <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12 image" data-category="christbaum" data-price="3.50"><div class="img-wrapper"><a href="https://hdmu.github.io/lionking.jpg"><img src="https://hdmu.github.io/lionking.jpg" class="img-responsive" alt="Lion King"></a><div class="img-overlay"><i class="fa fa-plus-circle"></i></div></div></div>
-          <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12 image" data-category="christbaum" data-price="3.50"><div class="img-wrapper"><a href="https://hdmu.github.io/onkelz.jpg"><img src="https://hdmu.github.io/onkelz.jpg" class="img-responsive" alt="Onkelz"></a><div class="img-overlay"><i class="fa fa-plus-circle"></i></div></div></div>
-          <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12 image" data-category="christbaum" data-price="3.50"><div class="img-wrapper"><a href="https://hdmu.github.io/vfl.jpg"><img src="https://hdmu.github.io/vfl.jpg" class="img-responsive" alt="VfL"></a><div class="img-overlay"><i class="fa fa-plus-circle"></i></div></div></div>
-          <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12 image" data-category="christbaum" data-price="3.50"><div class="img-wrapper"><a href="https://hdmu.github.io/herz.jpg"><img src="https://hdmu.github.io/herz.jpg" class="img-responsive" alt="Herz"></a><div class="img-overlay"><i class="fa fa-plus-circle"></i></div></div></div>
-          <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12 image" data-category="christbaum" data-price="3.50"><div class="img-wrapper"><a href="https://hdmu.github.io/tennis.jpg"><img src="https://hdmu.github.io/tennis.jpg" class="img-responsive" alt="Tennis"></a><div class="img-overlay"><i class="fa fa-plus-circle"></i></div></div></div>
-          <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12 image" data-category="christbaum" data-price="3.50"><div class="img-wrapper"><a href="https://hdmu.github.io/mickey2.jpg"><img src="https://hdmu.github.io/mickey2.jpg" class="img-responsive" alt="Mickey 2"></a><div class="img-overlay"><i class="fa fa-plus-circle"></i></div></div></div>
-          <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12 image" data-category="christbaum" data-price="3.50"><div class="img-wrapper"><a href="https://hdmu.github.io/arielle.jpg"><img src="https://hdmu.github.io/arielle.jpg" class="img-responsive" alt="Arielle"></a><div class="img-overlay"><i class="fa fa-plus-circle"></i></div></div></div>
-          <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12 image" data-category="christbaum" data-price="3.50"><div class="img-wrapper"><a href="https://hdmu.github.io/spidey.jpg"><img src="https://hdmu.github.io/spidey.jpg" class="img-responsive" alt="Spidey"></a><div class="img-overlay"><i class="fa fa-plus-circle"></i></div></div></div>
-          <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12 image" data-category="christbaum" data-price="3.50"><div class="img-wrapper"><a href="https://hdmu.github.io/spidermaus.jpg"><img src="https://hdmu.github.io/spidermaus.jpg" class="img-responsive" alt="Spidermaus"></a><div class="img-overlay"><i class="fa fa-plus-circle"></i></div></div></div>
-          <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12 image" data-category="christbaum" data-price="3.50"><div class="img-wrapper"><a href="https://hdmu.github.io/vaiana.jpg"><img src="https://hdmu.github.io/vaiana.jpg" class="img-responsive" alt="Vaiana"></a><div class="img-overlay"><i class="fa fa-plus-circle"></i></div></div></div>
+          <!-- Christbaumdeko / Geschenkschmuck (Preis fix 3,50) -->
+          <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12 image" data-category="christbaum" data-price="3.50"><div class="img-wrapper"><a href="https://hdmu.github.io/Bisasam.jpg"><img src="https://hdmu.github.io/Bisasam.jpg" alt="Bisasam"></a><div class="img-overlay"><i class="fa fa-plus-circle"></i></div></div></div>
+          <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12 image" data-category="christbaum" data-price="3.50"><div class="img-wrapper"><a href="https://hdmu.github.io/Elsa.jpg"><img src="https://hdmu.github.io/Elsa.jpg" alt="Elsa"></a><div class="img-overlay"><i class="fa fa-plus-circle"></i></div></div></div>
+          <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12 image" data-category="christbaum" data-price="3.50"><div class="img-wrapper"><a href="https://hdmu.github.io/Glumanda.jpg"><img src="https://hdmu.github.io/Glumanda.jpg" alt="Glumanda"></a><div class="img-overlay"><i class="fa fa-plus-circle"></i></div></div></div>
+          <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12 image" data-category="christbaum" data-price="3.50"><div class="img-wrapper"><a href="https://hdmu.github.io/Harrypotter.jpg"><img src="https://hdmu.github.io/Harrypotter.jpg" alt="Harry Potter"></a><div class="img-overlay"><i class="fa fa-plus-circle"></i></div></div></div>
+          <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12 image" data-category="christbaum" data-price="3.50"><div class="img-wrapper"><a href="https://hdmu.github.io/Hund.jpg"><img src="https://hdmu.github.io/Hund.jpg" alt="Hund"></a><div class="img-overlay"><i class="fa fa-plus-circle"></i></div></div></div>
+          <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12 image" data-category="christbaum" data-price="3.50"><div class="img-wrapper"><a href="https://hdmu.github.io/HundBulldoge.jpg"><img src="https://hdmu.github.io/HundBulldoge.jpg" alt="Hund Bulldogge"></a><div class="img-overlay"><i class="fa fa-plus-circle"></i></div></div></div>
+          <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12 image" data-category="christbaum" data-price="3.50"><div class="img-wrapper"><a href="https://hdmu.github.io/Hundeknochen.jpg"><img src="https://hdmu.github.io/Hundeknochen.jpg" alt="Hundeknochen"></a><div class="img-overlay"><i class="fa fa-plus-circle"></i></div></div></div>
+          <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12 image" data-category="christbaum" data-price="3.50"><div class="img-wrapper"><a href="https://hdmu.github.io/Husky.jpg"><img src="https://hdmu.github.io/Husky.jpg" alt="Husky"></a><div class="img-overlay"><i class="fa fa-plus-circle"></i></div></div></div>
+          <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12 image" data-category="christbaum" data-price="3.50"><div class="img-wrapper"><a href="https://hdmu.github.io/Katze.jpg"><img src="https://hdmu.github.io/Katze.jpg" alt="Katze"></a><div class="img-overlay"><i class="fa fa-plus-circle"></i></div></div></div>
+          <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12 image" data-category="christbaum" data-price="3.50"><div class="img-wrapper"><a href="https://hdmu.github.io/Mario.jpg"><img src="https://hdmu.github.io/Mario.jpg" alt="Mario"></a><div class="img-overlay"><i class="fa fa-plus-circle"></i></div></div></div>
+          <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12 image" data-category="christbaum" data-price="3.50"><div class="img-wrapper"><a href="https://hdmu.github.io/MickeyMausName.jpg"><img src="https://hdmu.github.io/MickeyMausName.jpg" alt="Mickey Maus Name"></a><div class="img-overlay"><i class="fa fa-plus-circle"></i></div></div></div>
+          <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12 image" data-category="christbaum" data-price="3.50"><div class="img-wrapper"><a href="https://hdmu.github.io/Naruto.jpg"><img src="https://hdmu.github.io/Naruto.jpg" alt="Naruto"></a><div class="img-overlay"><i class="fa fa-plus-circle"></i></div></div></div>
+          <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12 image" data-category="christbaum" data-price="3.50"><div class="img-wrapper"><a href="https://hdmu.github.io/NormaleKugel.jpg"><img src="https://hdmu.github.io/NormaleKugel.jpg" alt="Normale Kugel"></a><div class="img-overlay"><i class="fa fa-plus-circle"></i></div></div></div>
+          <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12 image" data-category="christbaum" data-price="3.50"><div class="img-wrapper"><a href="https://hdmu.github.io/Pikachu.jpg"><img src="https://hdmu.github.io/Pikachu.jpg" alt="Pikachu"></a><div class="img-overlay"><i class="fa fa-plus-circle"></i></div></div></div>
+          <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12 image" data-category="christbaum" data-price="3.50"><div class="img-wrapper"><a href="https://hdmu.github.io/Schalke.jpg"><img src="https://hdmu.github.io/Schalke.jpg" alt="Schalke"></a><div class="img-overlay"><i class="fa fa-plus-circle"></i></div></div></div>
+          <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12 image" data-category="christbaum" data-price="3.50"><div class="img-wrapper"><a href="https://hdmu.github.io/Stitch.jpg"><img src="https://hdmu.github.io/Stitch.jpg" alt="Stitch"></a><div class="img-overlay"><i class="fa fa-plus-circle"></i></div></div></div>
+          <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12 image" data-category="christbaum" data-price="3.50"><div class="img-wrapper"><a href="https://hdmu.github.io/Supernatural.jpg"><img src="https://hdmu.github.io/Supernatural.jpg" alt="Supernatural"></a><div class="img-overlay"><i class="fa fa-plus-circle"></i></div></div></div>
+          <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12 image" data-category="christbaum" data-price="3.50"><div class="img-wrapper"><a href="https://hdmu.github.io/islandpferd.jpg"><img src="https://hdmu.github.io/islandpferd.jpg" alt="Islandpferd"></a><div class="img-overlay"><i class="fa fa-plus-circle"></i></div></div></div>
+          <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12 image" data-category="christbaum" data-price="3.50"><div class="img-wrapper"><a href="https://hdmu.github.io/lionking.jpg"><img src="https://hdmu.github.io/lionking.jpg" alt="Lion King"></a><div class="img-overlay"><i class="fa fa-plus-circle"></i></div></div></div>
+          <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12 image" data-category="christbaum" data-price="3.50"><div class="img-wrapper"><a href="https://hdmu.github.io/onkelz.jpg"><img src="https://hdmu.github.io/onkelz.jpg" alt="Onkelz"></a><div class="img-overlay"><i class="fa fa-plus-circle"></i></div></div></div>
+          <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12 image" data-category="christbaum" data-price="3.50"><div class="img-wrapper"><a href="https://hdmu.github.io/vfl.jpg"><img src="https://hdmu.github.io/vfl.jpg" alt="VfL Bochum"></a><div class="img-overlay"><i class="fa fa-plus-circle"></i></div></div></div>
+          <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12 image" data-category="christbaum" data-price="3.50"><div class="img-wrapper"><a href="https://hdmu.github.io/herz.jpg"><img src="https://hdmu.github.io/herz.jpg" alt="Herz"></a><div class="img-overlay"><i class="fa fa-plus-circle"></i></div></div></div>
+          <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12 image" data-category="christbaum" data-price="3.50"><div class="img-wrapper"><a href="https://hdmu.github.io/tennis.jpg"><img src="https://hdmu.github.io/tennis.jpg" alt="Tennis"></a><div class="img-overlay"><i class="fa fa-plus-circle"></i></div></div></div>
+          <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12 image" data-category="christbaum" data-price="3.50"><div class="img-wrapper"><a href="https://hdmu.github.io/mickey2.jpg"><img src="https://hdmu.github.io/mickey2.jpg" alt="Mickey 2"></a><div class="img-overlay"><i class="fa fa-plus-circle"></i></div></div></div>
+          <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12 image" data-category="christbaum" data-price="3.50"><div class="img-wrapper"><a href="https://hdmu.github.io/arielle.jpg"><img src="https://hdmu.github.io/arielle.jpg" alt="Arielle"></a><div class="img-overlay"><i class="fa fa-plus-circle"></i></div></div></div>
+          <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12 image" data-category="christbaum" data-price="3.50"><div class="img-wrapper"><a href="https://hdmu.github.io/spidey.jpg"><img src="https://hdmu.github.io/spidey.jpg" alt="Spidey"></a><div class="img-overlay"><i class="fa fa-plus-circle"></i></div></div></div>
+          <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12 image" data-category="christbaum" data-price="3.50"><div class="img-wrapper"><a href="https://hdmu.github.io/spidermaus.jpg"><img src="https://hdmu.github.io/spidermaus.jpg" alt="Spidermaus"></a><div class="img-overlay"><i class="fa fa-plus-circle"></i></div></div></div>
+          <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12 image" data-category="christbaum" data-price="3.50"><div class="img-wrapper"><a href="https://hdmu.github.io/vaiana.jpg"><img src="https://hdmu.github.io/vaiana.jpg" alt="Vaiana"></a><div class="img-overlay"><i class="fa fa-plus-circle"></i></div></div></div>
 
-          <!-- Schriftzüge (mit Preisbereich 5–10) -->
-          <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12 image" data-category="schriftzuege" data-price="5-10"><div class="img-wrapper"><a href="https://hdmu.github.io/Ergotherapeutinschriftzug.jpg"><img src="https://hdmu.github.io/Ergotherapeutinschriftzug.jpg" class="img-responsive" alt="Ergotherapeutin Schriftzug"></a><div class="img-overlay"><i class="fa fa-plus-circle"></i></div></div></div>
-          <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12 image" data-category="schriftzuege" data-price="5-10"><div class="img-wrapper"><a href="https://hdmu.github.io/schriftkonfetti.jpg"><img src="https://hdmu.github.io/schriftkonfetti.jpg" class="img-responsive" alt="Schriftkonfetti Schriftzug"></a><div class="img-overlay"><i class="fa fa-plus-circle"></i></div></div></div>
+          <!-- Schriftzüge (Preis-Bereich 5–10) -->
+          <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12 image" data-category="schriftzuege" data-price="5-10"><div class="img-wrapper"><a href="https://hdmu.github.io/Ergotherapeutinschriftzug.jpg"><img src="https://hdmu.github.io/Ergotherapeutinschriftzug.jpg" alt="Ergotherapeutin Schriftzug"></a><div class="img-overlay"><i class="fa fa-plus-circle"></i></div></div></div>
+          <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12 image" data-category="schriftzuege" data-price="5-10"><div class="img-wrapper"><a href="https://hdmu.github.io/schriftkonfetti.jpg"><img src="https://hdmu.github.io/schriftkonfetti.jpg" alt="Schriftkonfetti Schriftzug"></a><div class="img-overlay"><i class="fa fa-plus-circle"></i></div></div></div>
 
           <!-- Einschulung -->
-          <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12 image" data-category="einschulung" data-price="4.50"><div class="img-wrapper"><a href="https://hdmu.github.io/schriftschulkind2026.jpg"><img src="https://hdmu.github.io/schriftschulkind2026.jpg" class="img-responsive" alt="Schulkind 2026"></a><div class="img-overlay"><i class="fa fa-plus-circle"></i></div></div></div>
-          <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12 image" data-category="einschulung" data-price="4.50"><div class="img-wrapper"><a href="https://hdmu.github.io/schulkind2026rund.jpg"><img src="https://hdmu.github.io/schulkind2026rund.jpg" class="img-responsive" alt="Schulkind 2026 rund"></a><div class="img-overlay"><i class="fa fa-plus-circle"></i></div></div></div>
+          <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12 image" data-category="einschulung" data-price="4.50"><div class="img-wrapper"><a href="https://hdmu.github.io/schriftschulkind2026.jpg"><img src="https://hdmu.github.io/schriftschulkind2026.jpg" alt="Schulkind 2026"></a><div class="img-overlay"><i class="fa fa-plus-circle"></i></div></div></div>
+          <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12 image" data-category="einschulung" data-price="4.50"><div class="img-wrapper"><a href="https://hdmu.github.io/schulkind2026rund.jpg"><img src="https://hdmu.github.io/schulkind2026rund.jpg" alt="Schulkind 2026 rund"></a><div class="img-overlay"><i class="fa fa-plus-circle"></i></div></div></div>
 
           <!-- Kommunion -->
-          <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12 image" data-category="kommunion" data-price="4,50"><div class="img-wrapper"><a href="https://hdmu.github.io/kommuninrund.jpg"><img src="https://hdmu.github.io/kommuninrund.jpg" class="img-responsive" alt="Kommunion rund"></a><div class="img-overlay"><i class="fa fa-plus-circle"></i></div></div></div>
+          <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12 image" data-category="kommunion" data-price="4.50"><div class="img-wrapper"><a href="https://hdmu.github.io/kommuninrund.jpg"><img src="https://hdmu.github.io/kommuninrund.jpg" alt="Kommunion rund"></a><div class="img-overlay"><i class="fa fa-plus-circle"></i></div></div></div>
 
           <!-- Schlüsselanhänger (individuell) -->
-          <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12 image" data-category="schluessel" data-price="1.80"><div class="img-wrapper"><a href="https://hdmu.github.io/keyringkennzeichen.jpg"><img src="https://hdmu.github.io/keyringkennzeichen.jpg" class="img-responsive" alt="Schlüsselanhänger Kennzeichen"></a><div class="img-overlay"><i class="fa fa-plus-circle"></i></div></div></div>
-          <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12 image" data-category="schluessel" data-price="2.00"><div class="img-wrapper"><a href="https://hdmu.github.io/keylieblingslehrerin.jpg"><img src="https://hdmu.github.io/keylieblingslehrerin.jpg" class="img-responsive" alt="Schlüsselanhänger Lieblingslehrerin"></a><div class="img-overlay"><i class="fa fa-plus-circle"></i></div></div></div>
-          <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12 image" data-category="schluessel" data-price="2.00"><div class="img-wrapper"><a href="https://hdmu.github.io/keybesteerzieherin.jpg"><img src="https://hdmu.github.io/keybesteerzieherin.jpg" class="img-responsive" alt="Schlüsselanhänger Beste Erzieherin"></a><div class="img-overlay"><i class="fa fa-plus-circle"></i></div></div></div>
-          <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12 image" data-category="schluessel" data-price="2.00"><div class="img-wrapper"><a href="https://hdmu.github.io/keybestelehrerin.jpg"><img src="https://hdmu.github.io/keybestelehrerin.jpg" class="img-responsive" alt="Schlüsselanhänger Beste Lehrerin"></a><div class="img-overlay"><i class="fa fa-plus-circle"></i></div></div></div>
-          <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12 image" data-category="schluessel" data-price="2.00"><div class="img-wrapper"><a href="https://hdmu.github.io/keybestererzieher.jpg"><img src="https://hdmu.github.io/keybestererzieher.jpg" class="img-responsive" alt="Schlüsselanhänger Bester Erzieher"></a><div class="img-overlay"><i class="fa fa-plus-circle"></i></div></div></div>
-          <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12 image" data-category="schluessel" data-price="2.00"><div class="img-wrapper"><a href="https://hdmu.github.io/keybesterlehrer.jpg"><img src="https://hdmu.github.io/keybesterlehrer.jpg" class="img-responsive" alt="Schlüsselanhänger Bester Lehrer"></a><div class="img-overlay"><i class="fa fa-plus-circle"></i></div></div></div>
-          <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12 image" data-category="schluessel" data-price="2.00"><div class="img-wrapper"><a href="https://hdmu.github.io/keylieblingserzieher.jpg"><img src="https://hdmu.github.io/keylieblingserzieher.jpg" class="img-responsive" alt="Schlüsselanhänger Lieblingserzieher"></a><div class="img-overlay"><i class="fa fa-plus-circle"></i></div></div></div>
-          <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12 image" data-category="schluessel" data-price="2.00"><div class="img-wrapper"><a href="https://hdmu.github.io/keylieblingserzieherin.jpg"><img src="https://hdmu.github.io/keylieblingserzieherin.jpg" class="img-responsive" alt="Schlüsselanhänger Lieblingserzieherin"></a><div class="img-overlay"><i class="fa fa-plus-circle"></i></div></div></div>
-          <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12 image" data-category="schluessel" data-price="2.00"><div class="img-wrapper"><a href="https://hdmu.github.io/keylieblingslehrer.jpg"><img src="https://hdmu.github.io/keylieblingslehrer.jpg" class="img-responsive" alt="Schlüsselanhänger Lieblingslehrer"></a><div class="img-overlay"><i class="fa fa-plus-circle"></i></div></div></div>
+          <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12 image" data-category="schluessel" data-price="1.80"><div class="img-wrapper"><a href="https://hdmu.github.io/keyringkennzeichen.jpg"><img src="https://hdmu.github.io/keyringkennzeichen.jpg" alt="Schlüsselanhänger Kennzeichen"></a><div class="img-overlay"><i class="fa fa-plus-circle"></i></div></div></div>
+          <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12 image" data-category="schluessel" data-price="2.00"><div class="img-wrapper"><a href="https://hdmu.github.io/keylieblingslehrerin.jpg"><img src="https://hdmu.github.io/keylieblingslehrerin.jpg" alt="Schlüsselanhänger Lieblingslehrerin"></a><div class="img-overlay"><i class="fa fa-plus-circle"></i></div></div></div>
+          <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12 image" data-category="schluessel" data-price="2.00"><div class="img-wrapper"><a href="https://hdmu.github.io/keybesteerzieherin.jpg"><img src="https://hdmu.github.io/keybesteerzieherin.jpg" alt="Schlüsselanhänger Beste Erzieherin"></a><div class="img-overlay"><i class="fa fa-plus-circle"></i></div></div></div>
+          <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12 image" data-category="schluessel" data-price="2.00"><div class="img-wrapper"><a href="https://hdmu.github.io/keybestelehrerin.jpg"><img src="https://hdmu.github.io/keybestelehrerin.jpg" alt="Schlüsselanhänger Beste Lehrerin"></a><div class="img-overlay"><i class="fa fa-plus-circle"></i></div></div></div>
+          <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12 image" data-category="schluessel" data-price="2.00"><div class="img-wrapper"><a href="https://hdmu.github.io/keybestererzieher.jpg"><img src="https://hdmu.github.io/keybestererzieher.jpg" alt="Schlüsselanhänger Bester Erzieher"></a><div class="img-overlay"><i class="fa fa-plus-circle"></i></div></div></div>
+          <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12 image" data-category="schluessel" data-price="2.00"><div class="img-wrapper"><a href="https://hdmu.github.io/keybesterlehrer.jpg"><img src="https://hdmu.github.io/keybesterlehrer.jpg" alt="Schlüsselanhänger Bester Lehrer"></a><div class="img-overlay"><i class="fa fa-plus-circle"></i></div></div></div>
+          <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12 image" data-category="schluessel" data-price="2.00"><div class="img-wrapper"><a href="https://hdmu.github.io/keylieblingserzieher.jpg"><img src="https://hdmu.github.io/keylieblingserzieher.jpg" alt="Schlüsselanhänger Lieblingserzieher"></a><div class="img-overlay"><i class="fa fa-plus-circle"></i></div></div></div>
+          <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12 image" data-category="schluessel" data-price="2.00"><div class="img-wrapper"><a href="https://hdmu.github.io/keylieblingserzieherin.jpg"><img src="https://hdmu.github.io/keylieblingserzieherin.jpg" alt="Schlüsselanhänger Lieblingserzieherin"></a><div class="img-overlay"><i class="fa fa-plus-circle"></i></div></div></div>
+          <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12 image" data-category="schluessel" data-price="2.00"><div class="img-wrapper"><a href="https://hdmu.github.io/keylieblingslehrer.jpg"><img src="https://hdmu.github.io/keylieblingslehrer.jpg" alt="Schlüsselanhänger Lieblingslehrer"></a><div class="img-overlay"><i class="fa fa-plus-circle"></i></div></div></div>
 
           <!-- Geburt -->
-          <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12 image" data-category="geburt" data-price="10.00"><div class="img-wrapper"><a href="https://hdmu.github.io/geburtsbilderrahmen.jpg"><img src="https://hdmu.github.io/geburtsbilderrahmen.jpg" class="img-responsive" alt="Geburt – Name & Datum"></a><div class="img-overlay"><i class="fa fa-plus-circle"></i></div></div></div>
+          <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12 image" data-category="geburt" data-price="10.00"><div class="img-wrapper"><a href="https://hdmu.github.io/geburtsbilderrahmen.jpg"><img src="https://hdmu.github.io/geburtsbilderrahmen.jpg" alt="Geburt – Name & Datum"></a><div class="img-overlay"><i class="fa fa-plus-circle"></i></div></div></div>
 
           <!-- Geburtstag -->
-          <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12 image" data-category="geburtstag" data-price="6.00"><div class="img-wrapper"><a href="https://hdmu.github.io/geburtsagshalter.jpg"><img src="https://hdmu.github.io/geburtsagshalter.jpg" class="img-responsive" alt="Geburtstagshalter"></a><div class="img-overlay"><i class="fa fa-plus-circle"></i></div></div></div>
+          <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12 image" data-category="geburtstag" data-price="6.00"><div class="img-wrapper"><a href="https://hdmu.github.io/geburtsagshalter.jpg"><img src="https://hdmu.github.io/geburtsagshalter.jpg" alt="Geburtstagshalter"></a><div class="img-overlay"><i class="fa fa-plus-circle"></i></div></div></div>
 
           <!-- Türrahmen-Deko -->
-          <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12 image" data-category="tuerrahmen" data-price="3.50"><div class="img-wrapper"><a href="https://hdmu.github.io/wichteltür.jpg"><img src="https://hdmu.github.io/wichteltür.jpg" class="img-responsive" alt="Wichteltür"></a><div class="img-overlay"><i class="fa fa-plus-circle"></i></div></div></div>
-          <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12 image" data-category="tuerrahmen" data-price="4.00"><div class="img-wrapper"><a href="https://hdmu.github.io/weihnachtenkatzetür.jpg"><img src="https://hdmu.github.io/weihnachtenkatzetür.jpg" class="img-responsive" alt="Weihnachten Katze Tür"></a><div class="img-overlay"><i class="fa fa-plus-circle"></i></div></div></div>
-          <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12 image" data-category="tuerrahmen" data-price="4.00"><div class="img-wrapper"><a href="https://hdmu.github.io/pawpatroltuerrahmen.jpg"><img src="https://hdmu.github.io/pawpatroltuerrahmen.jpg" class="img-responsive" alt="Paw Patrol Türrahmen"></a><div class="img-overlay"><i class="fa fa-plus-circle"></i></div></div></div>
-          <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12 image" data-category="tuerrahmen" data-price="4.00"><div class="img-wrapper"><a href="https://hdmu.github.io/lambotuerrahmen Kopie.jpg"><img src="https://hdmu.github.io/lambotuerrahmen Kopie.jpg" class="img-responsive" alt="Lambo"></a><div class="img-overlay"><i class="fa fa-plus-circle"></i></div></div></div>
-          <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12 image" data-category="tuerrahmen" data-price="4.00"><div class="img-wrapper"><a href="https://hdmu.github.io/pferdltuerrahmen Kopie.jpg"><img src="https://hdmu.github.io/pferdltuerrahmen Kopie.jpg" class="img-responsive" alt="Pferd"></a><div class="img-overlay"><i class="fa fa-plus-circle"></i></div></div></div>
+          <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12 image" data-category="tuerrahmen" data-price="3.50"><div class="img-wrapper"><a href="https://hdmu.github.io/wichteltür.jpg"><img src="https://hdmu.github.io/wichteltür.jpg" alt="Wichteltür"></a><div class="img-overlay"><i class="fa fa-plus-circle"></i></div></div></div>
+          <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12 image" data-category="tuerrahmen" data-price="4.00"><div class="img-wrapper"><a href="https://hdmu.github.io/weihnachtenkatzetür.jpg"><img src="https://hdmu.github.io/weihnachtenkatzetür.jpg" alt="Weihnachten Katze Tür"></a><div class="img-overlay"><i class="fa fa-plus-circle"></i></div></div></div>
+          <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12 image" data-category="tuerrahmen" data-price="4.00"><div class="img-wrapper"><a href="https://hdmu.github.io/pawpatroltuerrahmen.jpg"><img src="https://hdmu.github.io/pawpatroltuerrahmen.jpg" alt="Paw Patrol Türrahmen"></a><div class="img-overlay"><i class="fa fa-plus-circle"></i></div></div></div>
+          <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12 image" data-category="tuerrahmen" data-price="4.00"><div class="img-wrapper"><a href="https://hdmu.github.io/lambotuerrahmen Kopie.jpg"><img src="https://hdmu.github.io/lambotuerrahmen Kopie.jpg" alt="Lambo"></a><div class="img-overlay"><i class="fa fa-plus-circle"></i></div></div></div>
+          <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12 image" data-category="tuerrahmen" data-price="4.00"><div class="img-wrapper"><a href="https://hdmu.github.io/pferdltuerrahmen Kopie.jpg"><img src="https://hdmu.github.io/pferdltuerrahmen Kopie.jpg" alt="Pferd"></a><div class="img-overlay"><i class="fa fa-plus-circle"></i></div></div></div>
 
           <!-- Zaubertonie -->
-          <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12 image" data-category="zaubertonie" data-price="5.00"><div class="img-wrapper"><a href="https://hdmu.github.io/kleinewirtonie.jpg"><img src="https://hdmu.github.io/kleinewirtonie.jpg" class="img-responsive" alt="Zaubertonie – Kleine Wir Tonie"></a><div class="img-overlay"><i class="fa fa-plus-circle"></i></div></div></div>
-          <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12 image" data-category="zaubertonie" data-price="5.00"><div class="img-wrapper"><a href="https://hdmu.github.io/stockmanntonie.jpg"><img src="https://hdmu.github.io/stockmanntonie.jpg" class="img-responsive" alt="Zaubertonie – Stockmann Tonie"></a><div class="img-overlay"><i class="fa fa-plus-circle"></i></div></div></div>
+          <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12 image" data-category="zaubertonie" data-price="5.00"><div class="img-wrapper"><a href="https://hdmu.github.io/kleinewirtonie.jpg"><img src="https://hdmu.github.io/kleinewirtonie.jpg" alt="Zaubertonie – Kleine Wir Tonie"></a><div class="img-overlay"><i class="fa fa-plus-circle"></i></div></div></div>
+          <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12 image" data-category="zaubertonie" data-price="5.00"><div class="img-wrapper"><a href="https://hdmu.github.io/stockmanntonie.jpg"><img src="https://hdmu.github.io/stockmanntonie.jpg" alt="Zaubertonie – Stockmann Tonie"></a><div class="img-overlay"><i class="fa fa-plus-circle"></i></div></div></div>
         </div><!-- row -->
       </div><!-- image-gallery -->
     </div>
@@ -344,41 +355,21 @@
 
   <footer class="site-footer"><div class="container">© <span id="year"></span> 3D Druck Onkel</div></footer>
 
-  <!-- Lightbox Overlay (ein einziges, globales) -->
-  <div id="overlay" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.85);justify-content:center;align-items:center;z-index:9999;">
-    <img src="" style="max-width:90%;max-height:90%;box-shadow:0 20px 60px rgba(0,0,0,.6);border:1px solid var(--border);border-radius:12px;" />
-    <div id="exitButton" style="position:absolute;top:20px;right:30px;font-size:30px;color:#fff;cursor:pointer;">&times;</div>
-  </div>
+  <!-- Lightbox Overlay -->
+  <div id="overlay"><img src="" alt=""><div id="exitButton">&times;</div></div>
 
-  <!-- Theme Toggle Button -->
-  <button class="theme-toggle" id="themeToggle"><i class="fa fa-moon-o"></i><span id="themeLabel">Dark</span></button>
+  <!-- Floating Theme Toggle -->
+  <button class="theme-toggle" id="themeBtn" aria-label="Theme umschalten">
+    <span class="icon">🌙</span><span class="txt">Dark</span>
+  </button>
 
 <script>
 document.addEventListener('DOMContentLoaded', function(){
-  /* ---------- Jahr ---------- */
+  // Jahr
   var yearEl = document.getElementById('year');
   if (yearEl) { yearEl.textContent = new Date().getFullYear(); }
 
-  /* ---------- Theme Handling (Dark default) ---------- */
-  var pref = localStorage.getItem('theme') || 'dark';
-  document.documentElement.setAttribute('data-theme', pref === 'light' ? 'light' : 'dark');
-  var themeToggle = document.getElementById('themeToggle');
-  var themeLabel = document.getElementById('themeLabel');
-  function updateThemeLabel(){
-    var isLight = document.documentElement.getAttribute('data-theme') === 'light';
-    themeLabel.textContent = isLight ? 'Light' : 'Dark';
-    themeToggle.querySelector('i').className = isLight ? 'fa fa-sun-o' : 'fa fa-moon-o';
-  }
-  updateThemeLabel();
-  themeToggle.addEventListener('click', function(){
-    var cur = document.documentElement.getAttribute('data-theme');
-    var next = (cur === 'light') ? 'dark' : 'light';
-    document.documentElement.setAttribute('data-theme', next);
-    localStorage.setItem('theme', next);
-    updateThemeLabel();
-  });
-
-  /* ---------- Galerie-Aktivierung (Deep-Link) ---------- */
+  // ---------------- Galerie-Aktivierung (Deep-Link) ----------------
   var gallerySection = document.getElementById('gallery');
   var gallery = document.getElementById('image-gallery');
   var pill = document.getElementById('gallery-category');
@@ -391,7 +382,7 @@ document.addEventListener('DOMContentLoaded', function(){
     el.setAttribute('href', '#' + encodeURIComponent(cat));
   });
 
-  function baseActivateCategory(category){
+  function activateCategory(category){
     if(!category || validCategories.indexOf(category) === -1) return;
     gallerySection.style.display = 'block';
     var card = document.querySelector('.show-gallery[data-category="'+category+'"]');
@@ -402,26 +393,9 @@ document.addEventListener('DOMContentLoaded', function(){
     for (var i=0; i<items.length; i++) {
       var it = items[i];
       it.style.display = (it.getAttribute('data-category')===category) ? 'block' : 'none';
-      it.classList.remove('is-in'); // reset Animation
     }
     var top = gallerySection.getBoundingClientRect().top + window.pageYOffset - 50;
     window.scrollTo({ top: top, behavior: 'smooth' });
-  }
-
-  // Stagger Reveal nach Aktivierung
-  function revealImages(){
-    var activeCat = gallery.getAttribute('data-active');
-    var items = Array.prototype.slice.call(document.querySelectorAll('.image'))
-                 .filter(function(el){ return el.style.display !== 'none' && el.getAttribute('data-category')===activeCat; });
-    items.forEach(function(el, i){
-      el.classList.remove('is-in');
-      setTimeout(function(){ el.classList.add('is-in'); }, 40 + i*40);
-    });
-  }
-
-  function activateCategory(category){
-    baseActivateCategory(category);
-    revealImages();
   }
 
   function readHashAndActivate(){
@@ -439,65 +413,30 @@ document.addEventListener('DOMContentLoaded', function(){
   readHashAndActivate();
   window.addEventListener('hashchange', readHashAndActivate);
 
-  /* ---------- Lightbox mit Konfetti ---------- */
+  // ---------------- Lightbox ----------------
   var overlay = document.getElementById('overlay');
-  var overlayImg = overlay ? overlay.querySelector('img') : null;
-
-  function miniConfetti(x,y){
-    var N = 16;
-    for(var i=0;i<N;i++){
-      var s = document.createElement('span');
-      s.style.position='fixed';
-      s.style.left = x + 'px';
-      s.style.top = y + 'px';
-      s.style.width = s.style.height = (6 + Math.random()*6) + 'px';
-      s.style.background = (Math.random()>.5) ? 'var(--brand)' : 'var(--brand-2)';
-      s.style.borderRadius = Math.random()>.5 ? '2px' : '50%';
-      s.style.zIndex = 10001;
-      s.style.pointerEvents='none';
-      document.body.appendChild(s);
-      (function(el){
-        var dx = (Math.random()*2-1)*120;
-        var dy = (Math.random()*-1-0.5)*160 - Math.random()*60;
-        var rot = (Math.random()*360|0);
-        el.animate([
-          { transform:'translate(0,0) rotate(0deg)', opacity:1 },
-          { transform:'translate('+dx+'px,'+dy+'px) rotate('+rot+'deg)', opacity:0 }
-        ], { duration: 900 + Math.random()*600, easing:'cubic-bezier(.2,.7,.2,1)', fill:'forwards' })
-        .onfinish = function(){ el.remove(); };
-      })(s);
-    }
-  }
+  var overlayImg = overlay.querySelector('img');
 
   document.addEventListener('click', function(e){
-    // Bild klicken (Overlay öffnen)
     var trigger = e.target.closest('.img-overlay, .img-wrapper a');
     if(trigger){
       e.preventDefault();
       var imgTag = trigger.closest('.img-wrapper').querySelector('img');
-      if(overlay && overlayImg && imgTag){
+      if(imgTag){
         overlayImg.setAttribute('src', imgTag.getAttribute('src'));
         overlay.style.display = 'flex';
-        // konfetti
-        miniConfetti(e.clientX || (window.innerWidth/2), e.clientY || (window.innerHeight/2));
       }
       return;
     }
-    // Overlay schließen
     if(e.target.closest('#exitButton')){
-      if(overlay){ overlay.style.display = 'none'; }
+      overlay.style.display = 'none';
       return;
     }
-    // Kategorie sofort aktivieren
     var catBtn = e.target.closest('.show-gallery');
-    if(catBtn){
-      var category = catBtn.getAttribute('data-category');
-      activateCategory(category);
-      return;
-    }
+    if(catBtn){ activateCategory(catBtn.getAttribute('data-category')); return; }
   });
 
-  /* ---------- Preisschilder (Einzelpreis, Bereich oder Text) ---------- */
+  // ---------------- Preisschilder (Einzelpreis, Bereich oder Text) ----------------
   function fmt(n){ return Number(n).toFixed(2).replace('.', ','); }
   function chipHtml(text){ return '<i class="fa fa-star"></i> ✨ ' + text + ' Glitzersterne'; }
 
@@ -511,38 +450,30 @@ document.addEventListener('DOMContentLoaded', function(){
     if(v === null || v === undefined) return null;
     var s = String(v).trim();
     if(!s) return null;
-    // Bereich: 5-10 oder 5.00-10.00
     var m = s.match(/^(\d+(?:\.\d{1,2})?)\s*-\s*(\d+(?:\.\d{1,2})?)$/);
     if(m){ return { type:'range', min: parseFloat(m[1]), max: parseFloat(m[2]) }; }
-    // Einzelpreis
     if(/^\d+(?:\.\d{1,2})?$/.test(s)){ return { type:'single', value: parseFloat(s) }; }
-    // Freitext
     return { type:'text', text: s };
   }
 
   function applyPrice(imageEl){
     var wrapper = imageEl.querySelector('.img-wrapper');
     if(!wrapper) return;
+    var chip = wrapper.querySelector('.price-chip');
     var v = imageEl.getAttribute('data-price');
     var parsed = parsePriceAttr(v);
-    var chip = wrapper.querySelector('.price-chip');
-
     if(!parsed){ if(chip) chip.remove(); return; }
 
-    var display, cls = 'price-chip';
-    if(parsed.type === 'single'){ display = fmt(parsed.value); }
-    else if(parsed.type === 'range'){ display = fmt(parsed.min) + '–' + fmt(parsed.max); cls += ' range'; }
-    else { display = parsed.text; }
+    var display;
+    if(parsed.type === 'single')      display = fmt(parsed.value);
+    else if(parsed.type === 'range')  display = fmt(parsed.min) + '–' + fmt(parsed.max);
+    else                              display = parsed.text;
 
-    var node = ensureChip(wrapper);
-    node.className = cls;
-    node.innerHTML = chipHtml(display);
+    ensureChip(wrapper).innerHTML = chipHtml(display);
   }
 
-  // Initial anwenden
   document.querySelectorAll('#image-gallery .image').forEach(applyPrice);
 
-  // Live-Update bei Änderung von data-price
   var priceObs = new MutationObserver(function(mutations){
     mutations.forEach(function(m){
       if(m.type === 'attributes' && m.attributeName === 'data-price'){
@@ -553,6 +484,34 @@ document.addEventListener('DOMContentLoaded', function(){
   document.querySelectorAll('#image-gallery .image').forEach(function(el){
     priceObs.observe(el, { attributes:true, attributeFilter:['data-price'] });
   });
+
+  // ---------------- Theme Toggle + Persistenz ----------------
+  var btn = document.getElementById('themeBtn');
+  function setTheme(t){
+    document.documentElement.setAttribute('data-theme', t);
+    localStorage.setItem('theme', t);
+    btn.querySelector('.txt').textContent = t === 'dark' ? 'Dark' : 'Light';
+    btn.querySelector('.icon').textContent = t === 'dark' ? '🌙' : '☀️';
+  }
+  btn.addEventListener('click', function(){
+    var cur = document.documentElement.getAttribute('data-theme') || 'dark';
+    setTheme(cur === 'dark' ? 'light' : 'dark');
+  });
+  // Startzustand
+  var saved = localStorage.getItem('theme');
+  if(saved){ setTheme(saved); } else { setTheme('dark'); }
+
+  // ---------------- Mini-Parallax für Hero-Glow ----------------
+  (function(){
+    var glow = document.querySelector('.hero-glow');
+    if(!glow) return;
+    var lastY = 0;
+    window.addEventListener('scroll', function(){
+      var y = window.scrollY || 0;
+      var t = 'translate3d(0,' + (y * 0.04).toFixed(2) + 'px,0) scale(1.06)';
+      if (y !== lastY){ glow.style.transform = t; lastY = y; }
+    }, { passive:true });
+  })();
 });
 </script>
 </body>
