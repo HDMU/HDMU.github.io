@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="de" data-theme="dark">
+<html lang="de">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -9,57 +9,96 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
   <style>
-    /* ===== Modernes Dark-Theme (mit optionalem Light-Mode) ===== */
+    /* ---------- Design-Token (Dark-Mode Default) ---------- */
     :root{
-      --bg:#0b0f14;           /* Haupt-Hintergrund */
-      --bg-elev:#111721;      /* Karten/Navigations-Hintergrund */
-      --bg-elev-2:#0e141d;    /* leichte Abhebung */
-      --txt:#e5e7eb;          /* Primär-Text */
-      --txt-dim:#aab2c0;      /* Sekundär-Text */
-      --brand:#7c99ff;        /* Akzent */
-      --brand-2:#8ef8c8;      /* zarter zweiter Akzent */
-      --border:rgba(255,255,255,.08);
-      --shadow:0 8px 24px rgba(0,0,0,.35);
-      --chip-bg:rgba(17,23,33,.9);
+      --bg: #0b0f16;
+      --surface: #121826;
+      --card: #0f172a;
+      --txt: #e5e7eb;
+      --txt-dim: #9aa4b2;
+      --border: #203047;
+      --brand: #7c99ff;
+      --brand-2: #8ef8c8;
+      --shadow: 0 12px 32px rgba(0,0,0,.35);
     }
-    html[data-theme="light"]{
-      --bg:#fafafa; --bg-elev:#ffffff; --bg-elev-2:#f6f7fb; --txt:#222; --txt-dim:#666;
-      --brand:#3949ab; --brand-2:#22c55e; --border:rgba(0,0,0,.08);
-      --shadow:0 8px 24px rgba(0,0,0,.06); --chip-bg:rgba(255,255,255,.92);
+    [data-theme="light"]{
+      --bg:#fafafa; --surface:#fff; --card:#fff; --txt:#222; --txt-dim:#777;
+      --border:rgba(0,0,0,.08); --brand:#3949ab; --brand-2:#5cc7a6; --shadow:0 8px 24px rgba(0,0,0,.08);
     }
 
-    body { background:var(--bg); color:var(--txt); }
+    /* ---------- Grundlayout ---------- */
+    html,body{ height:100%; }
+    body { background:var(--bg); color:var(--txt); font-family:system-ui,-apple-system,Segoe UI,Roboto,Inter,Helvetica,Arial,sans-serif; }
     a { color:var(--txt); }
     a:hover, a:focus { color:var(--txt-dim); text-decoration:none; }
 
-    .navbar { border:none; background:var(--bg-elev); box-shadow:var(--shadow); }
-    .navbar-brand { font-weight:700; letter-spacing:.3px; color:var(--txt)!important; }
-    .navbar-default .navbar-nav>li>a{ color:var(--txt-dim); }
+    /* ---------- Navbar ---------- */
+    .navbar { border:none; background:var(--surface); box-shadow:var(--shadow); }
+    .navbar-default .navbar-brand,
+    .navbar-default .navbar-nav>li>a{ color:var(--txt); }
+    .navbar-default .navbar-brand:hover,
     .navbar-default .navbar-nav>li>a:hover{ color:var(--brand); }
+    .navbar-brand { font-weight:800; letter-spacing:.3px; }
 
-    .categories { padding:35px 0 10px; }
-    .category-card { background:linear-gradient(180deg,var(--bg-elev),var(--bg-elev-2)); border-radius:16px; box-shadow:var(--shadow);
-      transition:transform .25s ease, box-shadow .25s ease; border:1px solid var(--border); display:block; padding:26px 22px; height:140px;
+    /* ---------- Hero mit „Aurora“-Glow ---------- */
+    .hero{
+      position:relative; overflow:hidden; padding:64px 0 56px;
+      background:linear-gradient(180deg, rgba(124,153,255,.10), rgba(0,0,0,0));
+      border-bottom:1px solid var(--border);
     }
-    .category-card:hover { transform:translateY(-3px); box-shadow:0 16px 40px rgba(0,0,0,.45); }
+    .hero .container{ position:relative; z-index:1; text-align:center; }
+    .hero-title{ font-weight:900; letter-spacing:.4px; font-size:34px; margin:0 0 8px; }
+    .hero-sub{ color:var(--txt-dim); margin:0; }
+    .hero-glow{
+      position:absolute; inset:-30%;
+      background:
+        radial-gradient(60% 40% at 20% 20%, rgba(124,153,255,.25), transparent 60%),
+        radial-gradient(55% 45% at 80% 30%, rgba(142,248,200,.22), transparent 60%),
+        radial-gradient(50% 50% at 50% 80%, rgba(124,153,255,.18), transparent 60%);
+      filter: blur(40px);
+      animation: heroFloat 14s ease-in-out infinite alternate;
+      opacity:.85;
+    }
+    @keyframes heroFloat { 
+      0%{ transform:translate3d(-2%, -2%, 0) scale(1.05); }
+      100%{ transform:translate3d(2%, 2%, 0) scale(1.08); }
+    }
+
+    /* ---------- Kategorien ---------- */
+    .categories { padding:35px 0 10px; }
+    .category-card {
+      background:var(--card);
+      color:var(--txt);
+      border-radius:16px;
+      box-shadow:var(--shadow);
+      transition:transform .25s ease, box-shadow .25s ease, border-color .25s ease;
+      border:1px solid var(--border);
+      display:block; padding:26px 22px; height:140px;
+      transform-style: preserve-3d; perspective: 800px; position:relative;
+    }
+    .category-card:hover { transform: translateY(-4px) rotateX(2deg) rotateY(-2deg); box-shadow:0 16px 40px rgba(0,0,0,.45); }
+    .category-card::after{
+      content:""; position:absolute; inset:0; border-radius:16px;
+      background: conic-gradient(from 180deg at 50% 50%, rgba(124,153,255,.15), rgba(142,248,200,.08), rgba(124,153,255,.15));
+      opacity:0; transition:opacity .25s ease;
+      mask: linear-gradient(#000, transparent 60%);
+      pointer-events:none;
+    }
+    .category-card:hover::after{ opacity:1; }
     .category-icon { font-size:28px; margin-bottom:12px; line-height:1; color:var(--brand); }
-    .category-title { font-size:18px; font-weight:700; color:var(--txt); }
+    .category-title { font-size:18px; font-weight:700; }
     .category-sub { color:var(--txt-dim); font-size:13px; }
 
+    /* ---------- Galerie ---------- */
     #gallery { padding:40px 0; display:none; }
-
-    .img-wrapper { position:relative; margin-top:15px; border-radius:12px; overflow:hidden; box-shadow:var(--shadow);
-      background:var(--bg-elev); border:1px solid var(--border);
-    }
+    .img-wrapper { position:relative; margin-top:15px; border-radius:12px; overflow:hidden; box-shadow:var(--shadow); background:var(--card); border:1px solid var(--border); }
     .img-wrapper img { width:100%; display:block; }
-
-    .img-overlay { background:rgba(0,0,0,.45); width:100%; height:100%; position:absolute; top:0; left:0; display:flex;
-      justify-content:center; align-items:center; opacity:0; transition:opacity .25s ease;
-    }
-    .img-overlay i { color:#fff; font-size:3em; }
+    .img-overlay { background:rgba(0,0,0,.5); width:100%; height:100%; position:absolute; top:0; left:0; display:flex; justify-content:center; align-items:center; opacity:0; transition:opacity .25s ease; }
+    .img-overlay i { color:#fff; font-size:3em; transition: transform .12s ease; }
     .img-wrapper:hover .img-overlay{ opacity:1; }
+    .img-overlay:hover i{ transform: scale(1.08); }
 
-    /* CSS-Filter: nur aktive Kategorie anzeigen */
+    /* Nur aktive Kategorie anzeigen */
     #image-gallery[data-active] .image { display:none !important; }
     #image-gallery[data-active="christbaum"] .image[data-category="christbaum"],
     #image-gallery[data-active="tuerrahmen"] .image[data-category="tuerrahmen"],
@@ -71,36 +110,46 @@
     #image-gallery[data-active="geburtstag"] .image[data-category="geburtstag"],
     #image-gallery[data-active="zaubertonie"] .image[data-category="zaubertonie"] { display:block !important; }
 
+    /* Stagger Reveal */
+    .image{ opacity:0; transform:translateY(10px) scale(.98); transition:all .35s cubic-bezier(.2,.7,.2,1); }
+    .image.is-in{ opacity:1; transform:translateY(0) scale(1); }
+
     /* Preis-Chip (Fantasiewährung) */
     .price-chip{
       position:absolute; left:10px; bottom:10px;
-      background:var(--chip-bg);
+      background:rgba(18,24,38,.78);
+      backdrop-filter:saturate(1.4) blur(2px);
       border:1px solid var(--border);
       border-radius:999px; padding:6px 10px;
       font-size:12px; font-weight:800; color:var(--txt);
-      box-shadow:var(--shadow);
+      box-shadow:0 6px 16px rgba(0,0,0,.28);
       display:flex; align-items:center; gap:6px;
     }
-    .price-chip i{ font-size:12px; color:var(--brand-2); }
+    .price-chip i{ font-size:12px; color:var(--brand); }
+    .price-chip.range { box-shadow: 0 0 0 0 rgba(124,153,255,.35); animation: pulseGlow 2.6s infinite; }
+    @keyframes pulseGlow{
+      0%{ box-shadow: 0 0 0 0 rgba(124,153,255,.35); }
+      70%{ box-shadow: 0 0 0 14px rgba(124,153,255,0); }
+      100%{ box-shadow: 0 0 0 0 rgba(124,153,255,0); }
+    }
 
     .section-header { margin:10px 0 20px; display:flex; align-items:center; justify-content:space-between; }
-    .section-header h2 { margin:0; font-weight:800; font-size:22px; color:var(--txt); }
-    .pill { display:inline-block; padding:6px 10px; border-radius:999px; background:rgba(124,153,255,.15); color:var(--brand);
-      font-size:12px; font-weight:700; border:1px solid var(--border);
+    .section-header h2 { margin:0; font-weight:900; font-size:22px; letter-spacing:.3px; }
+    .pill { display:inline-block; padding:6px 10px; border-radius:999px; background:rgba(124,153,255,.18); color:var(--txt); font-size:12px; font-weight:700; border:1px solid var(--border); }
+
+    /* ---------- Footer ---------- */
+    .site-footer { padding:40px 0 30px; color:var(--txt-dim); text-align:center; font-size:13px; border-top:1px solid var(--border); background:linear-gradient(180deg, rgba(124,153,255,.05), rgba(0,0,0,0)); }
+
+    /* ---------- Theme Toggle ---------- */
+    .theme-toggle{
+      position:fixed; right:16px; bottom:18px; z-index:99999;
+      background:var(--card); color:var(--txt);
+      border:1px solid var(--border);
+      border-radius:999px; padding:10px 12px; line-height:1;
+      box-shadow:var(--shadow); cursor:pointer; font-weight:800;
+      display:flex; align-items:center; gap:8px;
     }
-
-    .site-footer { padding:40px 0 30px; color:var(--txt-dim); text-align:center; font-size:13px; border-top:1px solid var(--border); }
-
-    /* Overlay (Lightbox) im Dark-Theme */
-    #overlay{ background:rgba(0,0,0,0.85); }
-
-    /* Floating Theme Toggle Button */
-    #themeToggle{
-      position:fixed; right:16px; bottom:16px; z-index:10000;
-      border:1px solid var(--border); background:var(--bg-elev); color:var(--txt);
-      padding:10px 12px; border-radius:999px; box-shadow:var(--shadow); cursor:pointer;
-    }
-    #themeToggle:hover{ color:var(--brand); }
+    .theme-toggle i{ color:var(--brand); }
   </style>
 </head>
 <body>
@@ -122,8 +171,14 @@
     </div>
   </nav>
 
-  <!-- Immer sichtbarer Theme-Button -->
-  <button id="themeToggle" title="Theme wechseln">🌙</button>
+  <!-- Hero -->
+  <header class="hero">
+    <div class="hero-glow"></div>
+    <div class="container">
+      <h1 class="hero-title">3D Druck Onkel</h1>
+      <p class="hero-sub">Handgemachte Deko – mit Extra-Glitzer ✨</p>
+    </div>
+  </header>
 
   <section id="kategorien" class="categories">
     <div class="container">
@@ -244,7 +299,7 @@
           <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12 image" data-category="christbaum" data-price="3.50"><div class="img-wrapper"><a href="https://hdmu.github.io/spidermaus.jpg"><img src="https://hdmu.github.io/spidermaus.jpg" class="img-responsive" alt="Spidermaus"></a><div class="img-overlay"><i class="fa fa-plus-circle"></i></div></div></div>
           <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12 image" data-category="christbaum" data-price="3.50"><div class="img-wrapper"><a href="https://hdmu.github.io/vaiana.jpg"><img src="https://hdmu.github.io/vaiana.jpg" class="img-responsive" alt="Vaiana"></a><div class="img-overlay"><i class="fa fa-plus-circle"></i></div></div></div>
 
-          <!-- Schriftzüge -->
+          <!-- Schriftzüge (mit Preisbereich 5–10) -->
           <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12 image" data-category="schriftzuege" data-price="5-10"><div class="img-wrapper"><a href="https://hdmu.github.io/Ergotherapeutinschriftzug.jpg"><img src="https://hdmu.github.io/Ergotherapeutinschriftzug.jpg" class="img-responsive" alt="Ergotherapeutin Schriftzug"></a><div class="img-overlay"><i class="fa fa-plus-circle"></i></div></div></div>
           <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12 image" data-category="schriftzuege" data-price="5-10"><div class="img-wrapper"><a href="https://hdmu.github.io/schriftkonfetti.jpg"><img src="https://hdmu.github.io/schriftkonfetti.jpg" class="img-responsive" alt="Schriftkonfetti Schriftzug"></a><div class="img-overlay"><i class="fa fa-plus-circle"></i></div></div></div>
 
@@ -279,7 +334,7 @@
           <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12 image" data-category="tuerrahmen" data-price="4.00"><div class="img-wrapper"><a href="https://hdmu.github.io/lambotuerrahmen Kopie.jpg"><img src="https://hdmu.github.io/lambotuerrahmen Kopie.jpg" class="img-responsive" alt="Lambo"></a><div class="img-overlay"><i class="fa fa-plus-circle"></i></div></div></div>
           <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12 image" data-category="tuerrahmen" data-price="4.00"><div class="img-wrapper"><a href="https://hdmu.github.io/pferdltuerrahmen Kopie.jpg"><img src="https://hdmu.github.io/pferdltuerrahmen Kopie.jpg" class="img-responsive" alt="Pferd"></a><div class="img-overlay"><i class="fa fa-plus-circle"></i></div></div></div>
 
-          <!-- Zaubertonie (mit Preis 5.00) -->
+          <!-- Zaubertonie -->
           <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12 image" data-category="zaubertonie" data-price="5.00"><div class="img-wrapper"><a href="https://hdmu.github.io/kleinewirtonie.jpg"><img src="https://hdmu.github.io/kleinewirtonie.jpg" class="img-responsive" alt="Zaubertonie – Kleine Wir Tonie"></a><div class="img-overlay"><i class="fa fa-plus-circle"></i></div></div></div>
           <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12 image" data-category="zaubertonie" data-price="5.00"><div class="img-wrapper"><a href="https://hdmu.github.io/stockmanntonie.jpg"><img src="https://hdmu.github.io/stockmanntonie.jpg" class="img-responsive" alt="Zaubertonie – Stockmann Tonie"></a><div class="img-overlay"><i class="fa fa-plus-circle"></i></div></div></div>
         </div><!-- row -->
@@ -289,165 +344,216 @@
 
   <footer class="site-footer"><div class="container">© <span id="year"></span> 3D Druck Onkel</div></footer>
 
+  <!-- Lightbox Overlay (ein einziges, globales) -->
   <div id="overlay" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.85);justify-content:center;align-items:center;z-index:9999;">
-    <img src="" style="max-width:90%;max-height:90%;" />
+    <img src="" style="max-width:90%;max-height:90%;box-shadow:0 20px 60px rgba(0,0,0,.6);border:1px solid var(--border);border-radius:12px;" />
     <div id="exitButton" style="position:absolute;top:20px;right:30px;font-size:30px;color:#fff;cursor:pointer;">&times;</div>
   </div>
 
-  <script>
-  document.addEventListener('DOMContentLoaded', function(){
-    // ---- Theme init + Toggle (immer sichtbarer Button) ----
-    var root = document.documentElement;
-    var key = 'theme';
-    var saved = localStorage.getItem(key);
-    if(saved){ root.setAttribute('data-theme', saved); }
-    var toggle = document.getElementById('themeToggle');
-    if(toggle){
-      function setIcon(){
-        toggle.textContent = (root.getAttribute('data-theme')==='light') ? '☀️' : '🌙';
-      }
-      setIcon();
-      toggle.addEventListener('click', function(){
-        var cur = root.getAttribute('data-theme') || 'dark';
-        var next = (cur==='dark') ? 'light' : 'dark';
-        root.setAttribute('data-theme', next);
-        localStorage.setItem(key, next);
-        setIcon();
-      });
+  <!-- Theme Toggle Button -->
+  <button class="theme-toggle" id="themeToggle"><i class="fa fa-moon-o"></i><span id="themeLabel">Dark</span></button>
+
+<script>
+document.addEventListener('DOMContentLoaded', function(){
+  /* ---------- Jahr ---------- */
+  var yearEl = document.getElementById('year');
+  if (yearEl) { yearEl.textContent = new Date().getFullYear(); }
+
+  /* ---------- Theme Handling (Dark default) ---------- */
+  var pref = localStorage.getItem('theme') || 'dark';
+  document.documentElement.setAttribute('data-theme', pref === 'light' ? 'light' : 'dark');
+  var themeToggle = document.getElementById('themeToggle');
+  var themeLabel = document.getElementById('themeLabel');
+  function updateThemeLabel(){
+    var isLight = document.documentElement.getAttribute('data-theme') === 'light';
+    themeLabel.textContent = isLight ? 'Light' : 'Dark';
+    themeToggle.querySelector('i').className = isLight ? 'fa fa-sun-o' : 'fa fa-moon-o';
+  }
+  updateThemeLabel();
+  themeToggle.addEventListener('click', function(){
+    var cur = document.documentElement.getAttribute('data-theme');
+    var next = (cur === 'light') ? 'dark' : 'light';
+    document.documentElement.setAttribute('data-theme', next);
+    localStorage.setItem('theme', next);
+    updateThemeLabel();
+  });
+
+  /* ---------- Galerie-Aktivierung (Deep-Link) ---------- */
+  var gallerySection = document.getElementById('gallery');
+  var gallery = document.getElementById('image-gallery');
+  var pill = document.getElementById('gallery-category');
+
+  var cards = document.querySelectorAll('.show-gallery');
+  var validCategories = Array.prototype.map.call(cards, function(el){ return el.getAttribute('data-category'); });
+
+  Array.prototype.forEach.call(cards, function(el){
+    var cat = el.getAttribute('data-category');
+    el.setAttribute('href', '#' + encodeURIComponent(cat));
+  });
+
+  function baseActivateCategory(category){
+    if(!category || validCategories.indexOf(category) === -1) return;
+    gallerySection.style.display = 'block';
+    var card = document.querySelector('.show-gallery[data-category="'+category+'"]');
+    var titleEl = card ? card.querySelector('.category-title') : null;
+    if (titleEl && pill) { pill.textContent = titleEl.textContent; }
+    gallery.setAttribute('data-active', category);
+    var items = gallery.querySelectorAll('.image');
+    for (var i=0; i<items.length; i++) {
+      var it = items[i];
+      it.style.display = (it.getAttribute('data-category')===category) ? 'block' : 'none';
+      it.classList.remove('is-in'); // reset Animation
     }
+    var top = gallerySection.getBoundingClientRect().top + window.pageYOffset - 50;
+    window.scrollTo({ top: top, behavior: 'smooth' });
+  }
 
-    // Jahr
-    var yearEl = document.getElementById('year');
-    if (yearEl) { yearEl.textContent = new Date().getFullYear(); }
-
-    // ---------------- Galerie-Aktivierung (Deep-Link) ----------------
-    var gallerySection = document.getElementById('gallery');
-    var gallery = document.getElementById('image-gallery');
-    var pill = document.getElementById('gallery-category');
-
-    var cards = document.querySelectorAll('.show-gallery');
-    var validCategories = Array.prototype.map.call(cards, function(el){ return el.getAttribute('data-category'); });
-
-    Array.prototype.forEach.call(cards, function(el){
-      var cat = el.getAttribute('data-category');
-      el.setAttribute('href', '#' + encodeURIComponent(cat));
+  // Stagger Reveal nach Aktivierung
+  function revealImages(){
+    var activeCat = gallery.getAttribute('data-active');
+    var items = Array.prototype.slice.call(document.querySelectorAll('.image'))
+                 .filter(function(el){ return el.style.display !== 'none' && el.getAttribute('data-category')===activeCat; });
+    items.forEach(function(el, i){
+      el.classList.remove('is-in');
+      setTimeout(function(){ el.classList.add('is-in'); }, 40 + i*40);
     });
+  }
 
-    function activateCategory(category){
-      if(!category || validCategories.indexOf(category) === -1) return;
-      gallerySection.style.display = 'block';
-      var card = document.querySelector('.show-gallery[data-category="'+category+'"]');
-      var titleEl = card ? card.querySelector('.category-title') : null;
-      if (titleEl && pill) { pill.textContent = titleEl.textContent; }
-      gallery.setAttribute('data-active', category);
-      var items = gallery.querySelectorAll('.image');
-      for (var i=0; i<items.length; i++) {
-        var it = items[i];
-        it.style.display = (it.getAttribute('data-category')===category) ? 'block' : 'none';
-      }
-      var top = gallerySection.getBoundingClientRect().top + window.pageYOffset - 50;
+  function activateCategory(category){
+    baseActivateCategory(category);
+    revealImages();
+  }
+
+  function readHashAndActivate(){
+    var raw = window.location.hash.replace(/^#/, '');
+    if(!raw) return;
+    if (raw.toLowerCase() === 'kategorien') {
+      var kat = document.getElementById('kategorien');
+      var top = kat.getBoundingClientRect().top + window.pageYOffset - 50;
       window.scrollTo({ top: top, behavior: 'smooth' });
+      return;
     }
+    var cat = decodeURIComponent(raw);
+    activateCategory(cat);
+  }
+  readHashAndActivate();
+  window.addEventListener('hashchange', readHashAndActivate);
 
-    function readHashAndActivate(){
-      var raw = window.location.hash.replace(/^#/, '');
-      if(!raw) return;
-      if (raw.toLowerCase() === 'kategorien') {
-        var kat = document.getElementById('kategorien');
-        var top = kat.getBoundingClientRect().top + window.pageYOffset - 50;
-        window.scrollTo({ top: top, behavior: 'smooth' });
-        return;
+  /* ---------- Lightbox mit Konfetti ---------- */
+  var overlay = document.getElementById('overlay');
+  var overlayImg = overlay ? overlay.querySelector('img') : null;
+
+  function miniConfetti(x,y){
+    var N = 16;
+    for(var i=0;i<N;i++){
+      var s = document.createElement('span');
+      s.style.position='fixed';
+      s.style.left = x + 'px';
+      s.style.top = y + 'px';
+      s.style.width = s.style.height = (6 + Math.random()*6) + 'px';
+      s.style.background = (Math.random()>.5) ? 'var(--brand)' : 'var(--brand-2)';
+      s.style.borderRadius = Math.random()>.5 ? '2px' : '50%';
+      s.style.zIndex = 10001;
+      s.style.pointerEvents='none';
+      document.body.appendChild(s);
+      (function(el){
+        var dx = (Math.random()*2-1)*120;
+        var dy = (Math.random()*-1-0.5)*160 - Math.random()*60;
+        var rot = (Math.random()*360|0);
+        el.animate([
+          { transform:'translate(0,0) rotate(0deg)', opacity:1 },
+          { transform:'translate('+dx+'px,'+dy+'px) rotate('+rot+'deg)', opacity:0 }
+        ], { duration: 900 + Math.random()*600, easing:'cubic-bezier(.2,.7,.2,1)', fill:'forwards' })
+        .onfinish = function(){ el.remove(); };
+      })(s);
+    }
+  }
+
+  document.addEventListener('click', function(e){
+    // Bild klicken (Overlay öffnen)
+    var trigger = e.target.closest('.img-overlay, .img-wrapper a');
+    if(trigger){
+      e.preventDefault();
+      var imgTag = trigger.closest('.img-wrapper').querySelector('img');
+      if(overlay && overlayImg && imgTag){
+        overlayImg.setAttribute('src', imgTag.getAttribute('src'));
+        overlay.style.display = 'flex';
+        // konfetti
+        miniConfetti(e.clientX || (window.innerWidth/2), e.clientY || (window.innerHeight/2));
       }
-      var cat = decodeURIComponent(raw);
-      activateCategory(cat);
+      return;
     }
-    readHashAndActivate();
-    window.addEventListener('hashchange', readHashAndActivate);
+    // Overlay schließen
+    if(e.target.closest('#exitButton')){
+      if(overlay){ overlay.style.display = 'none'; }
+      return;
+    }
+    // Kategorie sofort aktivieren
+    var catBtn = e.target.closest('.show-gallery');
+    if(catBtn){
+      var category = catBtn.getAttribute('data-category');
+      activateCategory(category);
+      return;
+    }
+  });
 
-    // ---------------- Lightbox (vorhandenes Overlay nutzen) ----------------
-    var overlay = document.getElementById('overlay');
-    var overlayImg = overlay ? overlay.querySelector('img') : null;
+  /* ---------- Preisschilder (Einzelpreis, Bereich oder Text) ---------- */
+  function fmt(n){ return Number(n).toFixed(2).replace('.', ','); }
+  function chipHtml(text){ return '<i class="fa fa-star"></i> ✨ ' + text + ' Glitzersterne'; }
 
-    document.addEventListener('click', function(e){
-      // Bild klicken (Overlay öffnen)
-      var trigger = e.target.closest('.img-overlay, .img-wrapper a');
-      if(trigger){
-        e.preventDefault();
-        var imgTag = trigger.closest('.img-wrapper').querySelector('img');
-        if(overlay && overlayImg && imgTag){
-          overlayImg.setAttribute('src', imgTag.getAttribute('src'));
-          overlay.style.display = 'flex';
-        }
-        return;
+  function ensureChip(wrapper){
+    var chip = wrapper.querySelector('.price-chip');
+    if(!chip){ chip = document.createElement('span'); chip.className = 'price-chip'; wrapper.appendChild(chip); }
+    return chip;
+  }
+
+  function parsePriceAttr(v){
+    if(v === null || v === undefined) return null;
+    var s = String(v).trim();
+    if(!s) return null;
+    // Bereich: 5-10 oder 5.00-10.00
+    var m = s.match(/^(\d+(?:\.\d{1,2})?)\s*-\s*(\d+(?:\.\d{1,2})?)$/);
+    if(m){ return { type:'range', min: parseFloat(m[1]), max: parseFloat(m[2]) }; }
+    // Einzelpreis
+    if(/^\d+(?:\.\d{1,2})?$/.test(s)){ return { type:'single', value: parseFloat(s) }; }
+    // Freitext
+    return { type:'text', text: s };
+  }
+
+  function applyPrice(imageEl){
+    var wrapper = imageEl.querySelector('.img-wrapper');
+    if(!wrapper) return;
+    var v = imageEl.getAttribute('data-price');
+    var parsed = parsePriceAttr(v);
+    var chip = wrapper.querySelector('.price-chip');
+
+    if(!parsed){ if(chip) chip.remove(); return; }
+
+    var display, cls = 'price-chip';
+    if(parsed.type === 'single'){ display = fmt(parsed.value); }
+    else if(parsed.type === 'range'){ display = fmt(parsed.min) + '–' + fmt(parsed.max); cls += ' range'; }
+    else { display = parsed.text; }
+
+    var node = ensureChip(wrapper);
+    node.className = cls;
+    node.innerHTML = chipHtml(display);
+  }
+
+  // Initial anwenden
+  document.querySelectorAll('#image-gallery .image').forEach(applyPrice);
+
+  // Live-Update bei Änderung von data-price
+  var priceObs = new MutationObserver(function(mutations){
+    mutations.forEach(function(m){
+      if(m.type === 'attributes' && m.attributeName === 'data-price'){
+        applyPrice(m.target);
       }
-      // Overlay schließen
-      if(e.target.closest('#exitButton')){
-        if(overlay){ overlay.style.display = 'none'; }
-        return;
-      }
-      // Kategorie sofort aktivieren
-      var catBtn = e.target.closest('.show-gallery');
-      if(catBtn){
-        var category = catBtn.getAttribute('data-category');
-        activateCategory(category);
-        return; // Hash wird gesetzt
-      }
-    });
-
-    // ---------------- Preisschilder (Einzelpreis, Bereich oder Text) ----------------
-    function fmt(n){ return Number(n).toFixed(2).replace('.', ','); }
-    function chipHtml(text){ return '<i class="fa fa-star"></i> ✨ ' + text + ' Glitzersterne'; }
-
-    function ensureChip(wrapper){
-      var chip = wrapper.querySelector('.price-chip');
-      if(!chip){ chip = document.createElement('span'); chip.className = 'price-chip'; wrapper.appendChild(chip); }
-      return chip;
-    }
-
-    function parsePriceAttr(v){
-      if(v === null || v === undefined) return null;
-      var s = String(v).trim();
-      if(!s) return null;
-      // Bereich: 5-10 oder 5.00-10.00
-      var m = s.match(/^(\d+(?:\.\d{1,2})?)\s*-\s*(\d+(?:\.\d{1,2})?)$/);
-      if(m){ return { type:'range', min: parseFloat(m[1]), max: parseFloat(m[2]) }; }
-      // Einzelpreis
-      if(/^\d+(?:\.\d{1,2})?$/.test(s)){ return { type:'single', value: parseFloat(s) }; }
-      // Freitext (z. B. "auf Anfrage" oder Zahl mit Komma)
-      return { type:'text', text: s };
-    }
-
-    function applyPrice(imageEl){
-      var wrapper = imageEl.querySelector('.img-wrapper');
-      if(!wrapper) return;
-      var chip = wrapper.querySelector('.price-chip');
-      var v = imageEl.getAttribute('data-price');
-      var parsed = parsePriceAttr(v);
-      if(!parsed){ if(chip) chip.remove(); return; }
-
-      var display;
-      if(parsed.type === 'single')      display = fmt(parsed.value);
-      else if(parsed.type === 'range')  display = fmt(parsed.min) + '–' + fmt(parsed.max);
-      else                              display = parsed.text;
-
-      ensureChip(wrapper).innerHTML = chipHtml(display);
-    }
-
-    // Initial anwenden
-    document.querySelectorAll('#image-gallery .image').forEach(applyPrice);
-
-    // Live-Update bei Änderung von data-price
-    var priceObs = new MutationObserver(function(mutations){
-      mutations.forEach(function(m){
-        if(m.type === 'attributes' && m.attributeName === 'data-price'){
-          applyPrice(m.target);
-        }
-      });
-    });
-    document.querySelectorAll('#image-gallery .image').forEach(function(el){
-      priceObs.observe(el, { attributes:true, attributeFilter:['data-price'] });
     });
   });
-  </script>
+  document.querySelectorAll('#image-gallery .image').forEach(function(el){
+    priceObs.observe(el, { attributes:true, attributeFilter:['data-price'] });
+  });
+});
+</script>
 </body>
 </html>
