@@ -203,8 +203,8 @@
           <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12 image" data-category="christbaum" data-price="3.50"><div class="img-wrapper"><a href="https://hdmu.github.io/vaiana.jpg"><img src="https://hdmu.github.io/vaiana.jpg" class="img-responsive" alt="Vaiana"></a><div class="img-overlay"><i class="fa fa-plus-circle"></i></div></div></div>
 
           <!-- Schriftzüge -->
-          <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12 image" data-category="schriftzuege" data-price="5.00-10.00"><div class="img-wrapper"><a href="https://hdmu.github.io/Ergotherapeutinschriftzug.jpg"><img src="https://hdmu.github.io/Ergotherapeutinschriftzug.jpg" class="img-responsive" alt="Ergotherapeutin Schriftzug"></a><div class="img-overlay"><i class="fa fa-plus-circle"></i></div></div></div>
-          <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12 image" data-category="schriftzuege" data-price="5.00-10.00"><div class="img-wrapper"><a href="https://hdmu.github.io/schriftkonfetti.jpg"><img src="https://hdmu.github.io/schriftkonfetti.jpg" class="img-responsive" alt="Schriftkonfetti Schriftzug"></a><div class="img-overlay"><i class="fa fa-plus-circle"></i></div></div></div>
+          <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12 image" data-category="schriftzuege" data-price="5-10"><div class="img-wrapper"><a href="https://hdmu.github.io/Ergotherapeutinschriftzug.jpg"><img src="https://hdmu.github.io/Ergotherapeutinschriftzug.jpg" class="img-responsive" alt="Ergotherapeutin Schriftzug"></a><div class="img-overlay"><i class="fa fa-plus-circle"></i></div></div></div>
+          <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12 image" data-category="schriftzuege" data-price="5-10"><div class="img-wrapper"><a href="https://hdmu.github.io/schriftkonfetti.jpg"><img src="https://hdmu.github.io/schriftkonfetti.jpg" class="img-responsive" alt="Schriftkonfetti Schriftzug"></a><div class="img-overlay"><i class="fa fa-plus-circle"></i></div></div></div>
 
           <!-- Einschulung -->
           <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12 image" data-category="einschulung" data-price="4.50"><div class="img-wrapper"><a href="https://hdmu.github.io/schriftschulkind2026.jpg"><img src="https://hdmu.github.io/schriftschulkind2026.jpg" class="img-responsive" alt="Schulkind 2026"></a><div class="img-overlay"><i class="fa fa-plus-circle"></i></div></div></div>
@@ -357,46 +357,65 @@ document.addEventListener('DOMContentLoaded', function(){
     }
   });
 
-  // ---------- SPIELERISCHE PREISSCHILDER (nur individuell per data-price) ----------
-  function makeChipText(n){
-    return '✨ ' + Number(n).toFixed(2).replace('.', ',') + ' Glitzersterne';
-  }
-  function addChip(wrapper, n){
-    if(!wrapper || wrapper.querySelector('.price-chip')) return;
-    var chip = document.createElement('span');
-    chip.className = 'price-chip';
-    chip.innerHTML = '<i class="fa fa-star"></i> ' + makeChipText(n);
-    wrapper.appendChild(chip);
-  }
+  // ---------- SPIELERISCHE PREISSCHILDER (Einzelpreis, Bereich oder Text) ----------
+function fmt(n){ return Number(n).toFixed(2).replace('.', ','); }
+function chipHtml(text){ return '<i class="fa fa-star"></i> ✨ ' + text + ' Glitzersterne'; }
 
-  // Chip nur anzeigen, wenn data-price am Artikel vorhanden ist
-  document.querySelectorAll('#image-gallery .image').forEach(function(imageEl){
-    var wrapper = imageEl.querySelector('.img-wrapper');
-    var attr = imageEl.getAttribute('data-price');
-    if(attr !== null && attr !== ''){
-      var price = parseFloat(attr);
-      if(!isNaN(price)) addChip(wrapper, price);
+function ensureChip(wrapper){
+  var chip = wrapper.querySelector('.price-chip');
+  if(!chip){ chip = document.createElement('span'); chip.className = 'price-chip'; wrapper.appendChild(chip); }
+  return chip;
+}
+
+function parsePriceAttr(v){
+  if(v === null || v === undefined) return null;
+  var s = String(v).trim();
+  if(!s) return null;
+
+  // Bereich: 5-10 oder 5.00-10.00
+  var m = s.match(/^(\d+(?:\.\d{1,2})?)\s*-\s*(\d+(?:\.\d{1,2})?)$/);
+  if(m){
+    return { type:'range', min: parseFloat(m[1]), max: parseFloat(m[2]) };
+  }
+  // Einzelpreis (nur Zahl)
+  if(/^\d+(?:\.\d{1,2})?$/.test(s)){
+    return { type:'single', value: parseFloat(s) };
+  }
+  // Freitext (z.B. "auf Anfrage")
+  return { type:'text', text: s };
+}
+
+function applyPrice(imageEl){
+  var wrapper = imageEl.querySelector('.img-wrapper');
+  if(!wrapper) return;
+  var chip = wrapper.querySelector('.price-chip');
+  var v = imageEl.getAttribute('data-price');
+  var parsed = parsePriceAttr(v);
+
+  if(!parsed){ if(chip) chip.remove(); return; }
+
+  var display;
+  if(parsed.type === 'single')      display = fmt(parsed.value);
+  else if(parsed.type === 'range')  display = fmt(parsed.min) + '–' + fmt(parsed.max);
+  else                              display = parsed.text;
+
+  ensureChip(wrapper).innerHTML = chipHtml(display);
+}
+
+// Initial anwenden
+document.querySelectorAll('#image-gallery .image').forEach(applyPrice);
+
+// Live-Update wenn data-price geändert wird
+var priceObs = new MutationObserver(function(mutations){
+  mutations.forEach(function(m){
+    if(m.type === 'attributes' && m.attributeName === 'data-price'){
+      applyPrice(m.target);
     }
   });
-
-  // Live-Update, falls data-price später geändert wird
-  var obs = new MutationObserver(function(mutations){
-    mutations.forEach(function(m){
-      if(m.type === 'attributes' && m.attributeName === 'data-price'){
-        var imageEl = m.target;
-        var wrapper = imageEl.querySelector('.img-wrapper');
-        var chip = wrapper.querySelector('.price-chip');
-        var v = imageEl.getAttribute('data-price');
-        var price = parseFloat(v);
-        if(!isNaN(price)){
-          if(!chip){ addChip(wrapper, price); }
-          else { chip.innerHTML = '<i class="fa fa-star"></i> ' + makeChipText(price); }
-        }else{
-          if(chip) chip.remove();
-        }
-      }
-    });
-  });
+});
+document.querySelectorAll('#image-gallery .image').forEach(function(el){
+  priceObs.observe(el, { attributes:true, attributeFilter:['data-price'] });
+});
   document.querySelectorAll('#image-gallery .image').forEach(function(el){
     obs.observe(el, { attributes:true, attributeFilter:['data-price'] });
   });
